@@ -1,0 +1,33 @@
+{
+  "name": "cosmic-survivors",
+  "version": "0.1.0",
+  "description": "Bullet Heaven/Roguelite multiplayer game",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:unit": "vitest run --dir tests/unit",
+    "test:integration": "vitest run --dir tests/integration",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["game", "bullet-heaven", "roguelite", "phaser", "multiplayer"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.2",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0"
+  },
+  "dependencies": {
+    "phaser": "^4.0.0-beta.1",
+    "bitecs": "^0.3.40",
+    "@heroiclabs/nakama-js": "^2.7.1"
+  }
+}

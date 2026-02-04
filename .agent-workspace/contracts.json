@@ -1,0 +1,132 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-01T00:00:00Z",
+  "interfaces": {
+    "ISystem": {
+      "file": "/src/shared/interfaces/ISystem.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IWorld": {
+      "file": "/src/shared/interfaces/IWorld.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IEventBus": {
+      "file": "/src/shared/interfaces/IEventBus.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IRenderer": {
+      "file": "/src/shared/interfaces/IRenderer.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IPhysics": {
+      "file": "/src/shared/interfaces/IPhysics.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IAI": {
+      "file": "/src/shared/interfaces/IAI.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IWeapon": {
+      "file": "/src/shared/interfaces/IWeapon.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "INetworking": {
+      "file": "/src/shared/interfaces/INetworking.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IAudio": {
+      "file": "/src/shared/interfaces/IAudio.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IUI": {
+      "file": "/src/shared/interfaces/IUI.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IProcedural": {
+      "file": "/src/shared/interfaces/IProcedural.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IMeta": {
+      "file": "/src/shared/interfaces/IMeta.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    },
+    "IGame": {
+      "file": "/src/shared/interfaces/IGame.ts",
+      "owner": "Agent-Architect",
+      "status": "stable"
+    }
+  },
+  "components": {
+    "Position": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Velocity": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Rotation": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Scale": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Sprite": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Animation": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "ParticleEmitter": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "CircleCollider": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "RectCollider": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Movement": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Health": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "DamageOverTime": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "WeaponSlot": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Projectile": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "AIController": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Flocking": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Pathfinding": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Player": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "PlayerInput": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "StatModifiers": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "NetworkSync": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "NetworkInterpolation": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "XPOrb": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "HealthPickup": { "file": "/src/shared/types/components.ts", "status": "stable" },
+    "Pickup": { "file": "/src/shared/types/components.ts", "status": "stable" }
+  },
+  "events": {
+    "combat": ["DAMAGE", "ENTITY_KILLED", "WEAPON_FIRED"],
+    "progression": ["PLAYER_LEVEL_UP", "UPGRADE_SELECTED", "XP_GAINED"],
+    "waves": ["WAVE_START", "WAVE_COMPLETE", "BOSS_SPAWN"],
+    "network": ["PLAYER_CONNECTED", "PLAYER_DISCONNECTED", "NETWORK_STATE_UPDATE", "NETWORK_LATENCY_UPDATE"],
+    "audio": ["PLAY_SFX", "STOP_SFX", "PLAY_MUSIC", "STOP_MUSIC"],
+    "ui": ["SHOW_DAMAGE_NUMBER", "SHOW_NOTIFICATION", "UPDATE_HUD"],
+    "game": ["GAME_PAUSE", "GAME_RESUME", "GAME_OVER", "GAME_WIN"]
+  },
+  "systems": {
+    "core": ["GameLoop", "EventBus", "AssetLoader", "InputManager"],
+    "ecs": ["World", "QueryManager"],
+    "rendering": ["Renderer", "SpriteSystem", "ParticleSystem", "Camera"],
+    "physics": ["PhysicsSystem", "CollisionSystem", "MovementSystem", "SpatialHash"],
+    "ai": ["AISystem", "SpawnerSystem", "PathfindingSystem"],
+    "combat": ["WeaponSystem", "ProjectileSystem", "DamageSystem"],
+    "networking": ["NetworkManager", "StateSync", "Prediction", "Interpolation"],
+    "ui": ["UIManager", "HUDSystem"],
+    "audio": ["AudioManager"],
+    "procedural": ["WaveGenerator", "LootGenerator", "DifficultyScaler"],
+    "meta": ["ProgressionManager", "TalentTree", "AchievementSystem", "SaveSystem"]
+  },
+  "agentOwnership": {
+    "Agent-Core": ["/src/core/", "/src/ecs/"],
+    "Agent-Rendering": ["/src/rendering/", "/src/effects/"],
+    "Agent-Physics": ["/src/physics/", "/src/spatial/"],
+    "Agent-AI": ["/src/ai/", "/src/behaviors/"],
+    "Agent-Combat": ["/src/weapons/", "/src/combat/"],
+    "Agent-Networking": ["/src/networking/", "/src/multiplayer/"],
+    "Agent-Procedural": ["/src/procedural/", "/src/generation/"],
+    "Agent-UI": ["/src/ui/", "/src/screens/"],
+    "Agent-Audio": ["/src/audio/"],
+    "Agent-Meta": ["/src/meta/", "/src/progression/"]
+  }
+}
