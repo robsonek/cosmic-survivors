@@ -45,10 +45,21 @@ export {
   SFXConfigs,
   getSFXConfig,
   getWeaponSFX,
+  getComboSFX,
   WeaponSFXMap,
   type SFXKey,
   type SFXConfig,
 } from './SFXDefinitions';
+
+// SFX trigger system
+export {
+  SFXTriggers,
+  createSFXTriggers,
+  getSFXTriggers,
+  resetSFXTriggers,
+  ExtendedSFXKeys,
+  type ExtendedSFXKey,
+} from './SFXTriggers';
 
 // Music definitions
 export {

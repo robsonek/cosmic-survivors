@@ -212,6 +212,98 @@ const PASSIVE_ITEMS: IPassiveItem[] = [
     modifiers: {}, // Gold modifier not implemented
     levelScaling: {},
   },
+
+  // ========================================
+  // NEW PASSIVE ITEMS (8 total)
+  // ========================================
+
+  // 1. Thorns - Reflect damage to attackers
+  {
+    id: 'thorns',
+    name: 'Thorns',
+    description: '+20% Damage Reflection',
+    rarity: WeaponRarity.Uncommon,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 2. Life Steal - Heal from damage dealt
+  {
+    id: 'life_steal',
+    name: 'Life Steal',
+    description: '+5% Life Steal',
+    rarity: WeaponRarity.Rare,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 3. Lucky - Chance for double XP
+  {
+    id: 'lucky',
+    name: 'Lucky',
+    description: '+10% Double XP Chance',
+    rarity: WeaponRarity.Uncommon,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 4. Berserker - Damage increases as HP decreases
+  {
+    id: 'berserker',
+    name: 'Berserker',
+    description: '+20% Damage at Low HP',
+    rarity: WeaponRarity.Rare,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 5. Guardian Angel - Revive once
+  {
+    id: 'guardian_angel',
+    name: 'Guardian Angel',
+    description: 'Revive with 25% HP',
+    rarity: WeaponRarity.Epic,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 6. Momentum - Speed increases with kills
+  {
+    id: 'momentum',
+    name: 'Momentum',
+    description: '+2% Speed per Kill',
+    rarity: WeaponRarity.Uncommon,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 7. Glass Cannon - More damage, less HP
+  {
+    id: 'glass_cannon',
+    name: 'Glass Cannon',
+    description: '+50% Damage, -25% HP',
+    rarity: WeaponRarity.Epic,
+    maxLevel: 5,
+    modifiers: {}, // Handled in UpgradeSystem
+    levelScaling: {},
+  },
+
+  // 8. Area Master - Increased AOE size
+  {
+    id: 'area_master',
+    name: 'Area Master',
+    description: '+30% AOE Size',
+    rarity: WeaponRarity.Uncommon,
+    maxLevel: 5,
+    modifiers: { areaMultiplier: 1.3 },
+    levelScaling: { areaMultiplier: 0.3 },
+  },
 ];
 
 /**
@@ -402,6 +494,51 @@ export class UpgradePool implements IUpgradePool {
    */
   getUpgradesByType(type: 'weapon' | 'passive' | 'evolution'): UpgradeEntry[] {
     return Array.from(this.upgrades.values()).filter(u => u.type === type);
+  }
+
+  /**
+   * Register an evolution recipe from WeaponEvolution system.
+   * This allows external systems to add evolution upgrades.
+   */
+  registerEvolutionRecipe(recipe: {
+    id: string;
+    name: string;
+    description: string;
+    baseWeaponId: string;
+    requiredPassiveId: string;
+    evolvedWeaponId: string;
+  }): void {
+    const evolutionEntry: UpgradeEntry = {
+      id: `evolution_${recipe.baseWeaponId}_${recipe.requiredPassiveId}`,
+      name: recipe.name,
+      description: recipe.description,
+      type: 'evolution',
+      rarity: WeaponRarity.Legendary,
+      maxLevel: 1,
+      weaponId: recipe.evolvedWeaponId,
+      evolutionFrom: {
+        weaponId: recipe.baseWeaponId,
+        passiveId: recipe.requiredPassiveId,
+      },
+    };
+
+    this.upgrades.set(evolutionEntry.id, evolutionEntry);
+  }
+
+  /**
+   * Register multiple evolution recipes at once.
+   */
+  registerEvolutionRecipes(recipes: Array<{
+    id: string;
+    name: string;
+    description: string;
+    baseWeaponId: string;
+    requiredPassiveId: string;
+    evolvedWeaponId: string;
+  }>): void {
+    for (const recipe of recipes) {
+      this.registerEvolutionRecipe(recipe);
+    }
   }
 
   // ============================================

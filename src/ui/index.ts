@@ -58,6 +58,15 @@ export {
   GameOverScreen,
   type GameOverScreenConfig,
   type GameOverStats,
+  StatsScreen,
+  type StatsScreenConfig,
+  type GameStats,
+  type BestStats,
+  type EnemyKillRecord,
+  type WeaponUsageRecord,
+  type DPSDataPoint,
+  StatsTracker,
+  createStatsTracker,
 } from './screens';
 
 // Standalone UI Components
@@ -66,3 +75,17 @@ export {
   type UpgradeSelectionUIConfig,
   type IUpgrade,
 } from './UpgradeSelectionUI';
+
+// Wave Announcer
+export {
+  WaveAnnouncer,
+  AnnouncementType,
+  createWaveAnnouncer,
+  type WaveAnnouncerConfig,
+} from './WaveAnnouncer';
+
+// Achievement Popup
+export {
+  AchievementPopup,
+  type AchievementPopupConfig,
+} from './AchievementPopup';

@@ -6,6 +6,7 @@
  * - ParticlePresets: Pre-configured particle effects
  * - ScreenEffects: Screen-wide visual effects (shake, flash, vignette)
  * - TrailRenderer: Motion trails for projectiles and fast entities
+ * - TrailEffects: Advanced trail effects (afterimages, death explosions, XP sparkles)
  * - DamageNumberRenderer: Floating combat text
  * - EffectsManager: Central coordinator for all effects
  */
@@ -13,7 +14,9 @@
 // Core systems
 export { ParticleSystem } from './ParticleSystem';
 export { ScreenEffects } from './ScreenEffects';
+export { GameScreenEffects } from './GameScreenEffects';
 export { TrailRenderer } from './TrailRenderer';
+export { TrailEffects } from './TrailEffects';
 export { DamageNumberRenderer, DamageNumberType } from './DamageNumberRenderer';
 export { EffectsManager } from './EffectsManager';
 
@@ -35,11 +38,22 @@ export type {
   VignetteConfig,
   ChromaticAberrationConfig,
   SlowMotionConfig,
+  HitStopConfig,
+  KillStreakConfig,
 } from './ScreenEffects';
 
 export type {
   TrailConfig,
 } from './TrailRenderer';
+
+export type {
+  PlayerTrailConfig,
+  ProjectileTrailConfig,
+  DeathExplosionConfig,
+  XPAbsorptionConfig,
+  WeaponGlowConfig,
+  CriticalHitConfig,
+} from './TrailEffects';
 
 export type {
   DamageNumberConfig,
@@ -94,5 +108,6 @@ export const EFFECTS_PRIORITIES = {
   PARTICLE_SYSTEM: 105,
   SCREEN_EFFECTS: 110,
   TRAIL_RENDERER: 106,
-  DAMAGE_NUMBERS: 107,
+  TRAIL_EFFECTS: 107,
+  DAMAGE_NUMBERS: 108,
 } as const;

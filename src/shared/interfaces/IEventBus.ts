@@ -136,6 +136,52 @@ export interface BossSpawnEvent {
   entity: number;
 }
 
+/** Boss phase change event */
+export interface BossPhaseChangeEvent {
+  bossEntity: number;
+  oldPhase: number;
+  newPhase: number;
+  phaseName: string;
+}
+
+/** Boss enrage event */
+export interface BossEnrageEvent {
+  bossEntity: number;
+}
+
+/** Boss defeated event */
+export interface BossDefeatedEvent {
+  bossType: string;
+  bossEntity: number;
+  position: { x: number; y: number };
+  xpValue: number;
+}
+
+/** Screen effect events */
+export interface ScreenShakeEvent {
+  intensity: number;
+  duration: number;
+}
+
+export interface ScreenFlashEvent {
+  color: number;
+  duration: number;
+  intensity?: number;
+}
+
+export interface ScreenSlowMotionEvent {
+  factor: number;
+  duration: number;
+}
+
+/** Shockwave visual effect event */
+export interface ShockwaveEffectEvent {
+  x: number;
+  y: number;
+  radius: number;
+  color: number;
+}
+
 /** Network events */
 export interface PlayerConnectedEvent {
   playerId: string;
@@ -191,6 +237,15 @@ export const GameEvents = {
   WAVE_START: 'wave:start',
   WAVE_COMPLETE: 'wave:complete',
   BOSS_SPAWN: 'wave:bossSpawn',
+  BOSS_PHASE_CHANGE: 'boss:phaseChange',
+  BOSS_ENRAGE: 'boss:enrage',
+  BOSS_DEFEATED: 'boss:defeated',
+
+  // Screen Effects
+  SCREEN_SHAKE: 'screen:shake',
+  SCREEN_FLASH: 'screen:flash',
+  SCREEN_SLOW_MOTION: 'screen:slowMotion',
+  EFFECT_SHOCKWAVE: 'effect:shockwave',
 
   // Network
   PLAYER_CONNECTED: 'network:playerConnected',

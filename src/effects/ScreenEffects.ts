@@ -1,6 +1,14 @@
 /**
  * ScreenEffects - Advanced screen-wide visual effects.
  * Extends basic camera effects with more sophisticated options.
+ *
+ * Features:
+ * - Hit Stop: Brief pause on critical hits
+ * - Screen Flash: White/red/gold flashes for various events
+ * - Slow Motion: Time scale manipulation for dramatic moments
+ * - Chromatic Aberration: RGB split effect for impacts
+ * - Vignette Pulse: Low health warning effect
+ * - Kill Streak Effects: Screen border glow on kill streaks
  */
 
 import * as Phaser from 'phaser';
@@ -27,6 +35,8 @@ export interface VignetteConfig {
   color?: number;
   radius?: number;
   fadeIn?: boolean;
+  pulse?: boolean;
+  pulseSpeed?: number;
 }
 
 /**
@@ -46,6 +56,24 @@ export interface SlowMotionConfig {
   duration: number;
   easeIn?: number;
   easeOut?: number;
+}
+
+/**
+ * Hit stop configuration.
+ */
+export interface HitStopConfig {
+  duration: number;
+  timeScale?: number;
+}
+
+/**
+ * Kill streak effect configuration.
+ */
+export interface KillStreakConfig {
+  streakCount: number;
+  duration: number;
+  color?: number;
+  pulseSpeed?: number;
 }
 
 /**
@@ -83,11 +111,24 @@ export class ScreenEffects {
   private targetTimeScale: number = 1;
   private timeScaleTransitionSpeed: number = 0;
 
+  /** Hit stop state */
+  private hitStopActive: boolean = false;
+  private hitStopTimer: number = 0;
+  private hitStopDuration: number = 0;
+  private preHitStopTimeScale: number = 1;
+
   /** Vignette graphics overlay */
   private vignetteGraphics: Phaser.GameObjects.Graphics | null = null;
   private vignetteIntensity: number = 0;
   private vignetteColor: number = 0x000000;
   private vignetteRadius: number = 1.0;
+  private vignettePulse: boolean = false;
+  private vignettePulseSpeed: number = 3;
+  private vignettePulseTime: number = 0;
+
+  /** Low health vignette state */
+  private lowHealthActive: boolean = false;
+  private lowHealthPulsePhase: number = 0;
 
   /** Shake state */
   private shakeState: {
@@ -109,6 +150,24 @@ export class ScreenEffects {
     angle: number;
   } | null = null;
 
+  /** Chromatic aberration graphics (simulated with color overlays) */
+  private chromaticGraphicsR: Phaser.GameObjects.Graphics | null = null;
+  private chromaticGraphicsB: Phaser.GameObjects.Graphics | null = null;
+
+  /** Kill streak state */
+  private killStreakGraphics: Phaser.GameObjects.Graphics | null = null;
+  private killStreakState: {
+    streakCount: number;
+    duration: number;
+    elapsed: number;
+    color: number;
+    pulseSpeed: number;
+    pulsePhase: number;
+  } | null = null;
+
+  /** Screen border glow graphics */
+  private borderGlowGraphics: Phaser.GameObjects.Graphics | null = null;
+
   constructor(renderer: Renderer, camera: Camera) {
     this.camera = camera;
     this.scene = renderer.getScene();
@@ -125,6 +184,27 @@ export class ScreenEffects {
     this.vignetteGraphics = this.scene.add.graphics();
     this.vignetteGraphics.setDepth(1000);
     this.vignetteGraphics.setScrollFactor(0);
+
+    // Create chromatic aberration overlays (red and blue channel offsets)
+    this.chromaticGraphicsR = this.scene.add.graphics();
+    this.chromaticGraphicsR.setDepth(999);
+    this.chromaticGraphicsR.setScrollFactor(0);
+    this.chromaticGraphicsR.setBlendMode(Phaser.BlendModes.ADD);
+
+    this.chromaticGraphicsB = this.scene.add.graphics();
+    this.chromaticGraphicsB.setDepth(999);
+    this.chromaticGraphicsB.setScrollFactor(0);
+    this.chromaticGraphicsB.setBlendMode(Phaser.BlendModes.ADD);
+
+    // Create kill streak border glow overlay
+    this.killStreakGraphics = this.scene.add.graphics();
+    this.killStreakGraphics.setDepth(998);
+    this.killStreakGraphics.setScrollFactor(0);
+
+    // Create border glow overlay
+    this.borderGlowGraphics = this.scene.add.graphics();
+    this.borderGlowGraphics.setDepth(997);
+    this.borderGlowGraphics.setScrollFactor(0);
   }
 
   // ============================================
@@ -307,6 +387,59 @@ export class ScreenEffects {
   }
 
   // ============================================
+  // Hit Stop (Frame Freeze) Effects
+  // ============================================
+
+  /**
+   * Apply hit stop effect - brief pause on critical hits.
+   * This is a hard freeze rather than slow motion.
+   */
+  hitStop(config: HitStopConfig = { duration: 50 }): Promise<void> {
+    return new Promise((resolve) => {
+      const { duration, timeScale = 0 } = config;
+
+      // Store current time scale
+      this.preHitStopTimeScale = this._timeScale;
+
+      // Activate hit stop
+      this.hitStopActive = true;
+      this.hitStopDuration = duration / 1000;
+      this.hitStopTimer = 0;
+      this._timeScale = timeScale;
+
+      const effectId = `hitstop_${++this.effectIdCounter}`;
+      this.activeEffects.set(effectId, {
+        type: 'hitStop',
+        startTime: Date.now(),
+        duration,
+        config,
+        resolve,
+      });
+    });
+  }
+
+  /**
+   * Critical hit stop - 50ms freeze on critical hits.
+   */
+  criticalHitStop(): Promise<void> {
+    return this.hitStop({ duration: 50, timeScale: 0 });
+  }
+
+  /**
+   * Heavy hit stop - longer freeze for powerful attacks.
+   */
+  heavyHitStop(): Promise<void> {
+    return this.hitStop({ duration: 80, timeScale: 0 });
+  }
+
+  /**
+   * Boss kill hit stop - dramatic freeze.
+   */
+  bossKillHitStop(): Promise<void> {
+    return this.hitStop({ duration: 150, timeScale: 0 });
+  }
+
+  // ============================================
   // Vignette Effect
   // ============================================
 
@@ -352,12 +485,34 @@ export class ScreenEffects {
   }
 
   /**
-   * Low health vignette pulse.
+   * Low health vignette pulse - red vignette when HP < 25%.
+   * This creates a pulsing red border effect to warn the player.
    */
   lowHealthVignette(): void {
+    this.lowHealthActive = true;
     this.vignetteColor = 0xff0000;
     this.vignetteRadius = 0.7;
-    // Pulsing handled in update
+    this.vignettePulse = true;
+    this.vignettePulseSpeed = 3;
+  }
+
+  /**
+   * Set low health state - enables/disables pulsing vignette.
+   * @param active Whether low health warning should be active
+   * @param hpPercent Current HP percentage (0-1) for intensity scaling
+   */
+  setLowHealth(active: boolean, hpPercent: number = 0.25): void {
+    this.lowHealthActive = active;
+
+    if (active) {
+      this.vignetteColor = 0xff0000;
+      this.vignetteRadius = 0.6 + (hpPercent * 0.2); // Tighter radius at lower HP
+      this.vignettePulse = true;
+      this.vignettePulseSpeed = 3 + (1 - hpPercent) * 3; // Faster pulse at lower HP
+    } else {
+      this.vignettePulse = false;
+      this.vignetteIntensity = 0;
+    }
   }
 
   /**
@@ -365,6 +520,8 @@ export class ScreenEffects {
    */
   clearVignette(): void {
     this.vignetteIntensity = 0;
+    this.vignettePulse = false;
+    this.lowHealthActive = false;
   }
 
   // ============================================
@@ -412,6 +569,83 @@ export class ScreenEffects {
       intensity: 0.5,
       duration: 150,
     });
+  }
+
+  /**
+   * Big explosion chromatic aberration - brief RGB split on big explosions.
+   */
+  explosionChromaticPulse(): Promise<void> {
+    return this.chromaticAberration({
+      intensity: 1.0,
+      duration: 200,
+      angle: Math.random() * Math.PI * 2,
+    });
+  }
+
+  // ============================================
+  // Kill Streak Effects
+  // ============================================
+
+  /**
+   * Show kill streak effect - screen border glows on kill streaks.
+   */
+  killStreakEffect(config: KillStreakConfig): void {
+    const {
+      streakCount,
+      duration,
+      color = this.getStreakColor(streakCount),
+      pulseSpeed = 2 + Math.min(streakCount / 10, 3),
+    } = config;
+
+    this.killStreakState = {
+      streakCount,
+      duration: duration / 1000,
+      elapsed: 0,
+      color,
+      pulseSpeed,
+      pulsePhase: 0,
+    };
+
+    const effectId = `killstreak_${++this.effectIdCounter}`;
+    this.activeEffects.set(effectId, {
+      type: 'killStreak',
+      startTime: Date.now(),
+      duration,
+      config,
+    });
+  }
+
+  /**
+   * Get streak color based on kill count.
+   */
+  private getStreakColor(streakCount: number): number {
+    if (streakCount >= 50) return 0xff00ff; // Purple - Legendary
+    if (streakCount >= 30) return 0xff0000; // Red - Unstoppable
+    if (streakCount >= 20) return 0xff6600; // Orange - Rampage
+    if (streakCount >= 10) return 0xffff00; // Yellow - Killing Spree
+    if (streakCount >= 5) return 0x00ff00;  // Green - Multi Kill
+    return 0x00ffff; // Cyan - Starting streak
+  }
+
+  /**
+   * Show border glow effect for kill streaks.
+   */
+  showKillStreakBorder(streakCount: number, duration: number = 1000): void {
+    this.killStreakEffect({
+      streakCount,
+      duration,
+      color: this.getStreakColor(streakCount),
+    });
+  }
+
+  /**
+   * Clear kill streak effect.
+   */
+  clearKillStreak(): void {
+    this.killStreakState = null;
+    if (this.killStreakGraphics) {
+      this.killStreakGraphics.clear();
+    }
   }
 
   // ============================================
@@ -495,6 +729,58 @@ export class ScreenEffects {
     });
   }
 
+  /**
+   * Boss kill effect - dramatic slow motion (0.5x speed for 0.5s) on boss kill.
+   */
+  bossKillEffect(): Promise<void> {
+    return new Promise((resolve) => {
+      // Hit stop first for impact
+      this.hitStop({ duration: 100, timeScale: 0 });
+
+      // Then slow motion
+      setTimeout(() => {
+        this.slowMotion({
+          factor: 0.5,
+          duration: 500,
+          easeIn: 50,
+          easeOut: 150,
+        });
+
+        // Screen effects
+        this.flash(0xffffff, 150, 0.8);
+        this.explosionShake(15);
+        this.explosionChromaticPulse();
+
+        // Resolve after slow motion
+        setTimeout(() => resolve(), 700);
+      }, 100);
+    });
+  }
+
+  /**
+   * Critical hit effect - combines hit stop with flash and shake.
+   */
+  criticalHitEffect(): Promise<void> {
+    return new Promise((resolve) => {
+      this.hitStop({ duration: 50, timeScale: 0 }).then(() => {
+        this.flash(0xffff00, 50, 0.3);
+        this.impactShake(4);
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Big explosion effect - chromatic aberration with shake and flash.
+   */
+  bigExplosionEffect(): Promise<void> {
+    return new Promise((resolve) => {
+      this.explosionShake(12);
+      this.flash(0xff6600, 100, 0.4);
+      this.explosionChromaticPulse().then(resolve);
+    });
+  }
+
   // ============================================
   // Update Loop
   // ============================================
@@ -503,10 +789,36 @@ export class ScreenEffects {
    * Update effects each frame.
    */
   update(dt: number): void {
+    this.updateHitStop(dt);
     this.updateShake(dt);
     this.updateTimeScale(dt);
     this.updateVignette(dt);
     this.updateChromaticAberration(dt);
+    this.updateKillStreak(dt);
+  }
+
+  /**
+   * Update hit stop effect.
+   */
+  private updateHitStop(dt: number): void {
+    if (!this.hitStopActive) return;
+
+    this.hitStopTimer += dt;
+
+    if (this.hitStopTimer >= this.hitStopDuration) {
+      // End hit stop
+      this.hitStopActive = false;
+      this._timeScale = this.preHitStopTimeScale;
+
+      // Find and resolve hit stop effect
+      for (const [id, effect] of this.activeEffects) {
+        if (effect.type === 'hitStop' && effect.resolve) {
+          effect.resolve();
+          this.activeEffects.delete(id);
+          break;
+        }
+      }
+    }
   }
 
   /**
@@ -585,10 +897,22 @@ export class ScreenEffects {
   /**
    * Update vignette overlay.
    */
-  private updateVignette(_dt: number): void {
+  private updateVignette(dt: number): void {
     if (!this.vignetteGraphics || !this.scene) return;
 
     this.vignetteGraphics.clear();
+
+    // Handle low health pulsing vignette
+    if (this.lowHealthActive) {
+      this.lowHealthPulsePhase += dt * this.vignettePulseSpeed;
+      // Pulsing intensity between 0.2 and 0.5
+      this.vignetteIntensity = 0.2 + Math.abs(Math.sin(this.lowHealthPulsePhase)) * 0.3;
+    } else if (this.vignettePulse) {
+      // General pulsing vignette
+      this.vignettePulseTime += dt * this.vignettePulseSpeed;
+      const baseIntensity = this.vignetteIntensity;
+      this.vignetteIntensity = baseIntensity * (0.7 + Math.abs(Math.sin(this.vignettePulseTime)) * 0.3);
+    }
 
     if (this.vignetteIntensity <= 0) return;
 
@@ -613,8 +937,14 @@ export class ScreenEffects {
 
   /**
    * Update chromatic aberration.
+   * Simulates RGB split by drawing colored edge overlays.
    */
   private updateChromaticAberration(dt: number): void {
+    if (!this.chromaticGraphicsR || !this.chromaticGraphicsB || !this.scene) return;
+
+    this.chromaticGraphicsR.clear();
+    this.chromaticGraphicsB.clear();
+
     if (!this.chromaticState) return;
 
     this.chromaticState.elapsed += dt;
@@ -624,8 +954,121 @@ export class ScreenEffects {
       return;
     }
 
-    // Note: Full chromatic aberration requires WebGL shaders
-    // This is a placeholder for shader-based implementation
+    // Calculate fade based on progress
+    const progress = this.chromaticState.elapsed / this.chromaticState.duration;
+    const fadeOut = 1 - progress * progress; // Quadratic ease out
+    const intensity = this.chromaticState.intensity * fadeOut;
+
+    if (intensity <= 0.01) return;
+
+    const width = this.scene.scale.width;
+    const height = this.scene.scale.height;
+    const offset = intensity * 8; // Pixel offset for chromatic effect
+
+    // Calculate offset direction based on angle
+    const angle = this.chromaticState.angle;
+    const offsetX = Math.cos(angle) * offset;
+    const offsetY = Math.sin(angle) * offset;
+
+    // Draw red channel offset (left/up)
+    this.chromaticGraphicsR.fillStyle(0xff0000, intensity * 0.15);
+    this.chromaticGraphicsR.fillRect(-offsetX, -offsetY, width, height);
+
+    // Draw blue channel offset (right/down)
+    this.chromaticGraphicsB.fillStyle(0x0000ff, intensity * 0.15);
+    this.chromaticGraphicsB.fillRect(offsetX, offsetY, width, height);
+
+    // Add edge glow effect for more pronounced chromatic look
+    const edgeSize = offset * 2;
+
+    // Red edge on left
+    this.chromaticGraphicsR.fillStyle(0xff0000, intensity * 0.2);
+    this.chromaticGraphicsR.fillRect(0, 0, edgeSize, height);
+
+    // Blue edge on right
+    this.chromaticGraphicsB.fillStyle(0x0000ff, intensity * 0.2);
+    this.chromaticGraphicsB.fillRect(width - edgeSize, 0, edgeSize, height);
+  }
+
+  /**
+   * Update kill streak border glow effect.
+   */
+  private updateKillStreak(dt: number): void {
+    if (!this.killStreakGraphics || !this.scene) return;
+
+    this.killStreakGraphics.clear();
+
+    if (!this.killStreakState) return;
+
+    this.killStreakState.elapsed += dt;
+    this.killStreakState.pulsePhase += dt * this.killStreakState.pulseSpeed;
+
+    // Check if effect has expired
+    if (this.killStreakState.elapsed >= this.killStreakState.duration) {
+      this.killStreakState = null;
+      return;
+    }
+
+    const width = this.scene.scale.width;
+    const height = this.scene.scale.height;
+
+    // Calculate fade based on remaining time
+    const remainingRatio = 1 - (this.killStreakState.elapsed / this.killStreakState.duration);
+    const fadeOut = Math.min(1, remainingRatio * 2); // Fade out in last half
+
+    // Pulsing intensity
+    const pulse = 0.5 + Math.sin(this.killStreakState.pulsePhase) * 0.5;
+    const baseAlpha = 0.3 + (this.killStreakState.streakCount / 100) * 0.3; // Higher streak = more intense
+    const alpha = baseAlpha * pulse * fadeOut;
+
+    const color = this.killStreakState.color;
+    const borderWidth = 8 + Math.min(this.killStreakState.streakCount / 5, 12); // Wider border at higher streaks
+
+    // Draw glowing border on all edges
+    // Top edge
+    this.killStreakGraphics.fillStyle(color, alpha);
+    this.killStreakGraphics.fillRect(0, 0, width, borderWidth);
+
+    // Bottom edge
+    this.killStreakGraphics.fillRect(0, height - borderWidth, width, borderWidth);
+
+    // Left edge
+    this.killStreakGraphics.fillRect(0, borderWidth, borderWidth, height - borderWidth * 2);
+
+    // Right edge
+    this.killStreakGraphics.fillRect(width - borderWidth, borderWidth, borderWidth, height - borderWidth * 2);
+
+    // Add corner glow for higher streaks
+    if (this.killStreakState.streakCount >= 10) {
+      const cornerSize = borderWidth * 2;
+      const cornerAlpha = alpha * 0.5;
+
+      this.killStreakGraphics.fillStyle(color, cornerAlpha);
+      // Top-left corner
+      this.killStreakGraphics.fillRect(0, 0, cornerSize, cornerSize);
+      // Top-right corner
+      this.killStreakGraphics.fillRect(width - cornerSize, 0, cornerSize, cornerSize);
+      // Bottom-left corner
+      this.killStreakGraphics.fillRect(0, height - cornerSize, cornerSize, cornerSize);
+      // Bottom-right corner
+      this.killStreakGraphics.fillRect(width - cornerSize, height - cornerSize, cornerSize, cornerSize);
+    }
+
+    // Add inner glow line for very high streaks
+    if (this.killStreakState.streakCount >= 30) {
+      const innerOffset = borderWidth + 4;
+      const innerWidth = 2;
+
+      this.killStreakGraphics.fillStyle(0xffffff, alpha * 0.5);
+      // Top
+      this.killStreakGraphics.fillRect(innerOffset, innerOffset, width - innerOffset * 2, innerWidth);
+      // Bottom
+      this.killStreakGraphics.fillRect(innerOffset, height - innerOffset - innerWidth, width - innerOffset * 2, innerWidth);
+      // Left
+      this.killStreakGraphics.fillRect(innerOffset, innerOffset + innerWidth, innerWidth, height - innerOffset * 2 - innerWidth * 2);
+      // Right
+      this.killStreakGraphics.fillRect(width - innerOffset - innerWidth, innerOffset + innerWidth, innerWidth, height - innerOffset * 2 - innerWidth * 2);
+    }
   }
 
   // ============================================
@@ -638,9 +1081,13 @@ export class ScreenEffects {
   clearAll(): void {
     this.shakeState = null;
     this.chromaticState = null;
+    this.killStreakState = null;
     this.vignetteIntensity = 0;
+    this.vignettePulse = false;
+    this.lowHealthActive = false;
     this._timeScale = 1;
     this.targetTimeScale = 1;
+    this.hitStopActive = false;
 
     for (const effect of this.activeEffects.values()) {
       if (effect.graphics) {
@@ -655,6 +1102,18 @@ export class ScreenEffects {
     if (this.vignetteGraphics) {
       this.vignetteGraphics.clear();
     }
+    if (this.chromaticGraphicsR) {
+      this.chromaticGraphicsR.clear();
+    }
+    if (this.chromaticGraphicsB) {
+      this.chromaticGraphicsB.clear();
+    }
+    if (this.killStreakGraphics) {
+      this.killStreakGraphics.clear();
+    }
+    if (this.borderGlowGraphics) {
+      this.borderGlowGraphics.clear();
+    }
   }
 
   /**
@@ -667,5 +1126,46 @@ export class ScreenEffects {
       this.vignetteGraphics.destroy();
       this.vignetteGraphics = null;
     }
+    if (this.chromaticGraphicsR) {
+      this.chromaticGraphicsR.destroy();
+      this.chromaticGraphicsR = null;
+    }
+    if (this.chromaticGraphicsB) {
+      this.chromaticGraphicsB.destroy();
+      this.chromaticGraphicsB = null;
+    }
+    if (this.killStreakGraphics) {
+      this.killStreakGraphics.destroy();
+      this.killStreakGraphics = null;
+    }
+    if (this.borderGlowGraphics) {
+      this.borderGlowGraphics.destroy();
+      this.borderGlowGraphics = null;
+    }
+  }
+
+  // ============================================
+  // Getters for external use
+  // ============================================
+
+  /**
+   * Check if hit stop is currently active.
+   */
+  get isHitStopActive(): boolean {
+    return this.hitStopActive;
+  }
+
+  /**
+   * Check if low health vignette is active.
+   */
+  get isLowHealthActive(): boolean {
+    return this.lowHealthActive;
+  }
+
+  /**
+   * Get current kill streak count if active.
+   */
+  get currentKillStreak(): number {
+    return this.killStreakState?.streakCount ?? 0;
   }
 }

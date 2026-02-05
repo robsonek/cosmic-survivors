@@ -12,8 +12,8 @@
 - **Graphics:** WebGPU (fallback WebGL2)
 
 ### Statystyki
-- 137 plików TypeScript
-- ~38,500 linii kodu
+- ~170 plików TypeScript
+- ~55,000 linii kodu
 - 0 błędów kompilacji
 
 ---
@@ -26,18 +26,20 @@
 │   ├── /core/              # Game.ts, GameLoop.ts, EventBus.ts, AssetLoader.ts, InputManager.ts
 │   ├── /ecs/               # World.ts, /components/, /systems/, /queries/
 │   ├── /rendering/         # Renderer.ts, SpriteSystem.ts, Camera.ts, AnimationSystem.ts
-│   ├── /effects/           # ParticleSystem.ts, ScreenEffects.ts, DamageNumberRenderer.ts, TrailRenderer.ts
+│   ├── /effects/           # ParticleSystem.ts, ScreenEffects.ts, GameScreenEffects.ts, TrailEffects.ts
 │   ├── /physics/           # PhysicsSystem.ts, CollisionSystem.ts, MovementSystem.ts
 │   ├── /spatial/           # SpatialHash.ts
 │   ├── /ai/                # AISystem.ts, /behaviors/, /pathfinding/, /spawning/, /definitions/
-│   ├── /weapons/           # WeaponFactory.ts, /definitions/ (5 broni)
+│   ├── /weapons/           # WeaponFactory.ts, /definitions/
 │   ├── /combat/            # DamageSystem.ts, ProjectileSystem.ts, WeaponSystem.ts
-│   ├── /networking/        # NetworkManager.ts, NakamaClient.ts, StateSync.ts, Prediction.ts, Interpolation.ts
-│   ├── /procedural/        # WaveGenerator.ts, LootGenerator.ts, DifficultyScaler.ts, UpgradePool.ts, XPSystem.ts
+│   ├── /systems/           # ComboSystem, KillStreakSystem, PowerUpSystem, TreasureSystem, etc.
+│   ├── /networking/        # NetworkManager.ts, NakamaClient.ts, StateSync.ts, Prediction.ts
+│   ├── /procedural/        # WaveGenerator.ts, LootGenerator.ts, DifficultyScaler.ts
 │   ├── /ui/                # UIManager.ts, /hud/, /screens/, /components/
-│   ├── /audio/             # AudioManager.ts, SFXPlayer.ts, MusicPlayer.ts
-│   ├── /meta/              # ProgressionManager.ts, TalentTree.ts, AchievementSystem.ts, SaveSystem.ts
+│   ├── /audio/             # AudioManager.ts, SFXPlayer.ts, MusicPlayer.ts, SFXTriggers.ts
+│   ├── /meta/              # ProgressionManager.ts, TalentTree.ts, AchievementSystem.ts
 │   ├── /entities/          # PlayerFactory.ts, EnemyFactory.ts
+│   ├── /scenes/            # GameScene.ts (główna scena gry)
 │   └── /shared/            # /interfaces/, /types/, /constants/, /utils/
 ├── /data/                  # JSON: weapons, enemies, waves, talents, achievements
 ├── /assets/                # sprites, particles, audio, fonts, shaders
@@ -231,20 +233,6 @@ GameEvents.GAME_WIN
 | ParticleSystem | effects/ParticleSystem.ts | 90 | Phaser particles |
 | EffectsManager | effects/EffectsManager.ts | - | Koordynator efektów |
 
-**Bronie (5):**
-- MagicWand (Projectile, auto-target)
-- Knife (Projectile, directional, fast)
-- Garlic (Area, passive aura)
-- Whip (Melee, horizontal sweep)
-- FireWand (Projectile, pierce, slow)
-
-**Wrogowie (5):**
-- Bat (Minion, fast swarm)
-- Skeleton (Minion, balanced)
-- Zombie (Minion, slow tanky)
-- Ghost (Elite, pass through walls)
-- Ogre (Elite, very tanky)
-
 ### Faza 3: Progression & UI ✅
 | System | Plik | Opis |
 |--------|------|------|
@@ -273,6 +261,46 @@ GameEvents.GAME_WIN
 | Interpolation | networking/Interpolation.ts | 100ms buffer |
 | MatchHandler | networking/MatchHandler.ts | Lobby, ready, host migration |
 
+### Faza 5: Content & Polish ✅ (NOWA)
+
+#### Systemy Gameplay
+| System | Plik | Opis |
+|--------|------|------|
+| ComboSystem | systems/ComboSystem.ts | Combo 1-10x, milestones 5/10/25/50/100 kills |
+| KillStreakSystem | systems/KillStreakSystem.ts | 5 milestones: XP, +50% DMG, heal, invincibility, AOE |
+| PowerUpSystem | systems/PowerUpSystem.ts | 6 power-upów (10s duration, 5% drop) |
+| TreasureSystem | systems/TreasureSystem.ts | Skrzynie Bronze/Silver/Gold |
+| HazardSystem | systems/HazardSystem.ts | 5 typów zagrożeń (po wave 10) |
+| BossSystem | systems/BossSystem.ts | Wzorce ataków bossów, fazy |
+| EliteSystem | systems/EliteSystem.ts | 5 modyfikatorów elit (5% spawn, 3x XP) |
+| WeaponEvolution | systems/WeaponEvolution.ts | 3 ewolucje broni |
+| DifficultySystem | systems/DifficultySystem.ts | Easy/Normal/Nightmare + endless scaling |
+| DamageNumberSystem | systems/DamageNumberSystem.ts | Latające cyfry, kolory, tekst komiksowy |
+| UpgradeSystem | systems/UpgradeSystem.ts | 8 nowych pasywnych zdolności |
+| WaveManager | systems/WaveManager.ts | Zarządzanie falami wrogów |
+| WeaponManager | systems/WeaponManager.ts | 10 broni, auto-fire, targeting |
+
+#### Efekty Wizualne
+| System | Plik | Opis |
+|--------|------|------|
+| GameScreenEffects | effects/GameScreenEffects.ts | Hit stop, slow motion, chromatic, vignette |
+| TrailEffects | effects/TrailEffects.ts | Afterimages, trails, eksplozje, glow |
+
+#### UI Komponenty
+| System | Plik | Opis |
+|--------|------|------|
+| MiniMap | ui/hud/MiniMap.ts | Radar 150x150px (gracz, wrogowie, bossy, XP) |
+| WaveAnnouncer | ui/WaveAnnouncer.ts | Dramatyczne ogłoszenia fal i milestones |
+| AchievementPopup | ui/AchievementPopup.ts | 10 osiągnięć z animacjami slide-in |
+| StatsScreen | ui/screens/StatsScreen.ts | 4 zakładki: Overview, Combat, Weapons, DPS Graph |
+| StatsTracker | ui/screens/StatsTracker.ts | Śledzenie statystyk, best scores w localStorage |
+| DifficultySelectionScreen | ui/screens/DifficultySelectionScreen.ts | Wybór trudności, high scores |
+
+#### Audio
+| System | Plik | Opis |
+|--------|------|------|
+| SFXTriggers | audio/SFXTriggers.ts | Auto-triggery na eventy, combo, abilities |
+
 ### Faza 6: Meta-Progression ✅
 | System | Plik | Opis |
 |--------|------|------|
@@ -281,6 +309,148 @@ GameEvents.GAME_WIN
 | ProgressionManager | meta/ProgressionManager.ts | Persistent stats |
 | SaveSystem | meta/SaveSystem.ts | LocalStorage + cloud |
 | SettingsManager | meta/SettingsManager.ts | Volume, controls |
+
+---
+
+## Bronie (10)
+
+### Bazowe (5)
+| Broń | Typ | Opis |
+|------|-----|------|
+| Basic Laser | Projectile | Auto-target, szybki fire rate |
+| Spread Shot | Projectile | 5 pocisków w wachlarzu |
+| Homing Missiles | Projectile | Śledzą wrogów |
+| Plasma Cannon | Projectile | Powolny, wysokie DMG |
+| Energy Shield | Area | Pasywna aura obronna |
+
+### Nowe (5)
+| Broń | Typ | Opis |
+|------|-----|------|
+| Lightning Chain | Chain | Przeskakuje między 4 wrogami |
+| Orbital Blades | Orbital | 3 ostrza krążące wokół gracza |
+| Missile Swarm | Projectile | 5 rakiet homing |
+| Freeze Ray | Beam | Promień z 50% slow |
+| Black Hole | Vortex | Przyciąga wrogów (pull force) |
+
+### Ewolucje Broni
+| Bazowa + Pasywna | Ewolucja | Efekt |
+|------------------|----------|-------|
+| Basic Laser + Damage Boost | Death Ray | Przebija wszystkich wrogów |
+| Spread Shot + Multishot | Bullet Storm | 20 pocisków |
+| Homing Missiles + Piercing | Smart Missiles | Idealne śledzenie + eksplozje |
+
+---
+
+## Wrogowie (10)
+
+### Bazowi (5)
+| Wróg | Typ | HP | DMG | Zachowanie |
+|------|-----|-----|-----|------------|
+| Drone | Minion | 30 | 5 | Szybki, prosty ruch |
+| Charger | Minion | 25 | 15 | Szarżuje na gracza |
+| Tank | Minion | 120 | 20 | Powolny, dużo HP |
+| Shooter | Minion | 45 | 12 | Strzela z dystansu |
+| Swarm | Minion | 15 | 3 | Bardzo szybki, słaby |
+
+### Nowi (5)
+| Wróg | Typ | HP | Specjalne |
+|------|-----|-----|-----------|
+| Splitter | Minion | 40 | Dzieli się na 2-3 mini przy śmierci |
+| Teleporter | Minion | 35 | Teleportuje się co 3s |
+| Shielder | Minion | 50 | Tarcza 120° z przodu |
+| Exploder | Minion | 30 | AOE 80 radius przy śmierci |
+| Healer | Support | 40 | Leczy sojuszników 5 HP/s |
+
+### Bossy
+| Boss | HP | Ataki |
+|------|-----|-------|
+| Mothership | 1500 | Bullet Hell, Summon Minions |
+| Destroyer | 3000 | Laser Sweep, Ground Slam, Enrage |
+
+### Elite Modifiers (5% spawn chance, 3x XP)
+- **Vampiric** - Leczy się przy trafieniu
+- **Fast** - +50% prędkość
+- **Giant** - 2x rozmiar, 2x HP
+- **Shielded** - Tarcza regenerująca
+- **Explosive** - Eksploduje przy śmierci
+
+---
+
+## Power-Upy (6)
+
+| Power-Up | Kolor | Efekt | Czas |
+|----------|-------|-------|------|
+| Double Damage | Czerwony | 2x DMG | 10s |
+| Speed Boost | Żółty | +50% speed | 10s |
+| Invincibility | Biały | Nieśmiertelność | 5s |
+| Magnet | Zielony | Przyciąga XP/pickup | 10s |
+| Multi-Shot | Niebieski | +2 pociski | 10s |
+| Rapid Fire | Pomarańczowy | 2x fire rate | 10s |
+
+Drop rate: 5% z wrogów
+
+---
+
+## Pasywne Zdolności (8 nowych)
+
+| Pasywna | Efekt |
+|---------|-------|
+| Thorns | Odbija 20% DMG |
+| Life Steal | 5% DMG = heal |
+| Lucky | +15% crit chance |
+| Berserker | +1% DMG za każdy 1% brakującego HP |
+| Guardian Angel | Raz na grę: przeżyj z 1 HP |
+| Momentum | +1% DMG za każdą sekundę ruchu (max 50%) |
+| Glass Cannon | +100% DMG, -50% HP |
+| Area Master | +30% obszar efektów |
+
+---
+
+## Zagrożenia Środowiskowe (po wave 10)
+
+| Hazard | Efekt |
+|--------|-------|
+| Meteor Shower | Losowe meteory spadają z nieba |
+| Electric Zone | Pulsujące strefy elektryczne |
+| Poison Cloud | Wolno poruszająca się chmura DOT |
+| Ice Patch | Śliska strefa, zmniejsza kontrolę |
+| Lava Crack | Linie lawy, DMG przy kontakcie |
+
+---
+
+## System Trudności
+
+| Poziom | HP Mult | DMG Mult | Speed | XP Mult | Odblokowanie |
+|--------|---------|----------|-------|---------|--------------|
+| Easy | 0.7x | 0.7x | 1.0x | 1.5x | Domyślnie |
+| Normal | 1.0x | 1.0x | 1.0x | 1.0x | Domyślnie |
+| Nightmare | 1.5x | 1.5x | 2.0x | 2.0x | 15 min na Normal |
+
+**Endless Scaling:** Po 20 minutach +5%/min do HP/DMG wrogów
+
+---
+
+## Screen Effects
+
+| Efekt | Trigger | Opis |
+|-------|---------|------|
+| Hit Stop | Critical hit | 50ms pauza |
+| Slow Motion | Boss kill | 0.5x przez 0.5s |
+| Chromatic Aberration | Duża eksplozja | RGB split |
+| Low Health Vignette | HP < 25% | Pulsujący czerwony vignette |
+| Kill Streak Glow | Serie zabójstw | Świecąca ramka |
+
+---
+
+## Kill Streak Milestones
+
+| Streak | Nazwa | Nagroda |
+|--------|-------|---------|
+| 10 | Killing Spree | +50 XP |
+| 25 | Rampage | +50% DMG przez 10s |
+| 50 | Unstoppable | Heal 25% HP |
+| 100 | Godlike | 10s nieśmiertelności |
+| 200 | Legendary | AOE 500 DMG na cały ekran |
 
 ---
 
@@ -374,15 +544,27 @@ eventBus.on<DamageEvent>(GameEvents.DAMAGE, (data) => {
 
 ---
 
-## TODO (Faza 5: Content & Polish)
+## Znane Problemy i Rozwiązania
+
+### Screen Effects przy Game Over
+- Problem: Czerwony vignette pozostawał po śmierci
+- Rozwiązanie: `screenEffects.clearAll()` przed `isPaused = true` w `gameOver()`
+- Plik: `src/scenes/GameScene.ts:2297`
+
+### noUnusedLocals w TypeScript
+- Wyłączone w `tsconfig.json` dla kompatybilności z nowym kodem
+- Zmienne przygotowane na przyszłe użycie mają prefix `_`
+
+---
+
+## TODO (Pozostałe)
 
 - [ ] Dodanie assetów graficznych (sprites, particles)
 - [ ] Dodanie assetów audio (SFX, music)
 - [ ] Balans parametrów (damage, health, speed)
-- [ ] Pozostałe 45 broni + ewolucje
-- [ ] Więcej typów wrogów
-- [ ] Boss encounters
-- [ ] Dodatkowe postacie
+- [ ] Więcej ewolucji broni
+- [ ] Dodatkowe postacie do wyboru
 - [ ] Lokalizacja (i18n)
 - [ ] Tutorial
 - [ ] Testy E2E
+- [ ] Optymalizacja dla mobile

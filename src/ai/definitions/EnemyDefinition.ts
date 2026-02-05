@@ -86,6 +86,43 @@ export interface EnemyFlags {
 
   /** Explosion damage */
   explosionDamage?: number;
+
+  // ========================================================================
+  // NEW ENEMY BEHAVIOR FLAGS
+  // ========================================================================
+
+  /** Can teleport towards target */
+  canTeleport?: boolean;
+
+  /** Teleport cooldown in seconds */
+  teleportCooldown?: number;
+
+  /** Teleport distance (how far towards target) */
+  teleportDistance?: number;
+
+  /** Has front-facing shield that blocks projectiles */
+  hasShield?: boolean;
+
+  /** Shield arc in degrees (front coverage) */
+  shieldArc?: number;
+
+  /** Shield can take this much damage before breaking */
+  shieldHealth?: number;
+
+  /** Shield regenerates after this many seconds */
+  shieldRegenTime?: number;
+
+  /** Can heal nearby allies */
+  canHealAllies?: boolean;
+
+  /** Heal amount per tick */
+  healAmount?: number;
+
+  /** Heal tick rate in seconds */
+  healTickRate?: number;
+
+  /** Heal radius */
+  healRadius?: number;
 }
 
 /**

@@ -10,7 +10,7 @@
 /**
  * Typ zachowania wroga
  */
-export type EnemyBehavior = 'chase' | 'circle' | 'dash' | 'ranged';
+export type EnemyBehavior = 'chase' | 'circle' | 'dash' | 'ranged' | 'teleport' | 'shield' | 'explode' | 'support';
 
 /**
  * Konfiguracja typu wroga
@@ -66,6 +66,7 @@ interface IWaveState {
 
 /**
  * Predefiniowane typy wrogów
+ * BUFF: HP 3x, DMG 2x dla lepszego balansu z systemem progresji czasowej
  */
 export const ENEMY_TYPES: Record<string, IEnemyType> = {
     // Drone - podstawowy wróg, goni gracza
@@ -73,10 +74,10 @@ export const ENEMY_TYPES: Record<string, IEnemyType> = {
         id: 'drone',
         name: 'Drone',
         texture: 'enemy_drone',
-        hp: 20,
-        speed: 80,
-        damage: 5,
-        xpValue: 10,
+        hp: 30,           // 3x (było 10)
+        speed: 90,        // +10 (było 80)
+        damage: 5,        // 2.5x (było 2)
+        xpValue: 20,
         scale: 1.0,
         behavior: 'chase'
     },
@@ -86,10 +87,10 @@ export const ENEMY_TYPES: Record<string, IEnemyType> = {
         id: 'charger',
         name: 'Charger',
         texture: 'enemy_charger',
-        hp: 15,
-        speed: 60,
-        damage: 15,
-        xpValue: 20,
+        hp: 25,           // 3x (było 8)
+        speed: 70,        // +10 (było 60)
+        damage: 15,       // 2x (było 7)
+        xpValue: 40,
         scale: 0.9,
         behavior: 'dash'
     },
@@ -99,10 +100,10 @@ export const ENEMY_TYPES: Record<string, IEnemyType> = {
         id: 'tank',
         name: 'Tank',
         texture: 'enemy_tank',
-        hp: 100,
-        speed: 40,
-        damage: 20,
-        xpValue: 35,
+        hp: 120,          // 3x (było 40)
+        speed: 45,        // +5 (było 40)
+        damage: 20,       // 2x (było 10)
+        xpValue: 70,
         scale: 1.5,
         behavior: 'chase'
     },
@@ -112,10 +113,10 @@ export const ENEMY_TYPES: Record<string, IEnemyType> = {
         id: 'shooter',
         name: 'Shooter',
         texture: 'enemy_shooter',
-        hp: 25,
-        speed: 50,
-        damage: 10,
-        xpValue: 25,
+        hp: 45,           // 3x (było 15)
+        speed: 55,        // +5 (było 50)
+        damage: 12,       // 2.4x (było 5)
+        xpValue: 50,
         scale: 1.0,
         behavior: 'ranged'
     },
@@ -125,17 +126,100 @@ export const ENEMY_TYPES: Record<string, IEnemyType> = {
         id: 'swarm',
         name: 'Swarm',
         texture: 'enemy_swarm',
-        hp: 8,
-        speed: 100,
-        damage: 3,
-        xpValue: 5,
+        hp: 15,           // 3x (było 5)
+        speed: 110,       // +10 (było 100)
+        damage: 3,        // 3x (było 1)
+        xpValue: 10,
         scale: 0.5,
         behavior: 'chase'
+    },
+
+    // ========================================================================
+    // NEW ENEMY TYPES (Wave 5+)
+    // ========================================================================
+
+    // Splitter - when killed, splits into 2-3 smaller versions
+    splitter: {
+        id: 'splitter',
+        name: 'Splitter',
+        texture: 'enemy_splitter',
+        hp: 60,           // Medium HP - needs to survive to split
+        speed: 75,        // Moderate speed
+        damage: 8,        // Moderate damage
+        xpValue: 45,      // Good XP reward for the complexity
+        scale: 1.3,       // Larger to show it can split
+        behavior: 'chase'
+    },
+
+    // Splitter Mini - smaller version spawned when Splitter dies
+    splitter_mini: {
+        id: 'splitter_mini',
+        name: 'Splitter Mini',
+        texture: 'enemy_splitter_mini',
+        hp: 20,           // Low HP
+        speed: 95,        // Faster than parent
+        damage: 4,        // Lower damage
+        xpValue: 15,      // Small XP reward
+        scale: 0.7,       // Smaller version
+        behavior: 'chase'
+    },
+
+    // Teleporter - blinks/teleports towards player every 3 seconds
+    teleporter: {
+        id: 'teleporter',
+        name: 'Teleporter',
+        texture: 'enemy_teleporter',
+        hp: 35,           // Low HP - glass cannon
+        speed: 60,        // Slow base speed (relies on teleport)
+        damage: 18,       // High damage - reward for reaching player
+        xpValue: 55,      // Good XP for difficulty
+        scale: 1.0,
+        behavior: 'teleport'
+    },
+
+    // Shielder - has a front-facing shield that blocks projectiles
+    shielder: {
+        id: 'shielder',
+        name: 'Shielder',
+        texture: 'enemy_shielder',
+        hp: 80,           // Tanky - shield + HP
+        speed: 50,        // Slow - shield makes them defensive
+        damage: 12,       // Moderate damage
+        xpValue: 60,      // High XP for difficulty
+        scale: 1.2,
+        behavior: 'shield'
+    },
+
+    // Exploder - runs at player and explodes on death dealing AOE damage
+    exploder: {
+        id: 'exploder',
+        name: 'Exploder',
+        texture: 'enemy_exploder',
+        hp: 25,           // Low HP - designed to die near player
+        speed: 130,       // Very fast - rushes player
+        damage: 10,       // Contact damage (explosion is separate)
+        xpValue: 35,      // Medium XP
+        scale: 0.9,
+        behavior: 'explode'
+    },
+
+    // Healer - heals nearby enemies, priority target
+    healer: {
+        id: 'healer',
+        name: 'Healer',
+        texture: 'enemy_healer',
+        hp: 50,           // Medium HP - needs protection
+        speed: 65,        // Slow - stays behind frontline
+        damage: 5,        // Low damage - support role
+        xpValue: 80,      // High XP - priority target
+        scale: 1.1,
+        behavior: 'support'
     }
 };
 
 /**
  * Predefiniowane typy bossów
+ * BUFF: HP 2.5x, DMG 2x dla lepszego balansu z systemem progresji czasowej
  */
 export const BOSS_TYPES: Record<string, IEnemyType> = {
     // Mothership - duży boss, spawnuje drony
@@ -143,10 +227,10 @@ export const BOSS_TYPES: Record<string, IEnemyType> = {
         id: 'mothership',
         name: 'Mothership',
         texture: 'boss_mothership',
-        hp: 1000,
+        hp: 1500,         // 2.5x (było 600)
         speed: 30,
-        damage: 25,
-        xpValue: 500,
+        damage: 25,       // 2x (było 12)
+        xpValue: 1000,
         scale: 3.0,
         behavior: 'circle'
     },
@@ -156,10 +240,10 @@ export const BOSS_TYPES: Record<string, IEnemyType> = {
         id: 'destroyer',
         name: 'Destroyer',
         texture: 'boss_destroyer',
-        hp: 2000,
+        hp: 3000,         // 2.5x (było 1200)
         speed: 20,
-        damage: 50,
-        xpValue: 1000,
+        damage: 50,       // 2x (było 25)
+        xpValue: 2000,
         scale: 4.0,
         behavior: 'chase'
     }
@@ -177,9 +261,9 @@ export class WaveManager {
     private state: IWaveState;
 
     // Konfiguracja
-    private readonly baseDuration: number = 30;  // bazowy czas fali w sekundach
-    private readonly bossWaveInterval: number = 5;  // boss co 5 fal
-    private readonly difficultyScaling: number = 0.15;  // 15% wzrost na falę
+    private readonly baseDuration: number = 40;  // bazowy czas fali w sekundach (zwiększony dla łatwiejszej rozgrywki)
+    private readonly bossWaveInterval: number = 7;  // boss co 7 fal (rzadziej)
+    private readonly difficultyScaling: number = 0.12;  // 12% wzrost na falę (zwiększone dla balansu z progresją czasową)
 
     // Callbacks
     private onWaveStart?: (wave: IWaveConfig) => void;
@@ -368,94 +452,152 @@ export class WaveManager {
     private generateEnemySpawns(waveNumber: number, difficultyMultiplier: number): IEnemySpawnConfig[] {
         const spawns: IEnemySpawnConfig[] = [];
 
-        // Fala 1-2: tylko drony
+        // Fala 1-2: tylko drony (spawn rate zmniejszony o 30%)
         if (waveNumber <= 2) {
             spawns.push({
                 type: 'drone',
-                spawnRate: 0.5 * difficultyMultiplier,
+                spawnRate: 0.35 * difficultyMultiplier,
                 maxCount: Math.floor(10 * difficultyMultiplier)
             });
         }
-        // Fala 3-4: drony + swarm
+        // Fala 3-4: drony + swarm (spawn rate zmniejszony o 30%)
         else if (waveNumber <= 4) {
             spawns.push({
                 type: 'drone',
-                spawnRate: 0.6 * difficultyMultiplier,
+                spawnRate: 0.42 * difficultyMultiplier,
                 maxCount: Math.floor(12 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'swarm',
-                spawnRate: 1.0 * difficultyMultiplier,
+                spawnRate: 0.7 * difficultyMultiplier,
                 maxCount: Math.floor(20 * difficultyMultiplier)
             });
         }
-        // Fala 5-7: dodaj chargery
+        // Fala 5-7: dodaj chargery + nowe typy wrogów (spawn rate zmniejszony o 30%)
         else if (waveNumber <= 7) {
             spawns.push({
                 type: 'drone',
-                spawnRate: 0.7 * difficultyMultiplier,
+                spawnRate: 0.49 * difficultyMultiplier,
                 maxCount: Math.floor(15 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'swarm',
-                spawnRate: 1.2 * difficultyMultiplier,
+                spawnRate: 0.84 * difficultyMultiplier,
                 maxCount: Math.floor(25 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'charger',
-                spawnRate: 0.3 * difficultyMultiplier,
+                spawnRate: 0.21 * difficultyMultiplier,
                 maxCount: Math.floor(5 * difficultyMultiplier)
             });
+            // New enemy types starting wave 5
+            spawns.push({
+                type: 'splitter',
+                spawnRate: 0.08 * difficultyMultiplier,
+                maxCount: Math.floor(3 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'exploder',
+                spawnRate: 0.12 * difficultyMultiplier,
+                maxCount: Math.floor(4 * difficultyMultiplier)
+            });
         }
-        // Fala 8-10: dodaj shootery
+        // Fala 8-10: dodaj shootery + więcej nowych typów (spawn rate zmniejszony o 30%)
         else if (waveNumber <= 10) {
             spawns.push({
                 type: 'drone',
-                spawnRate: 0.8 * difficultyMultiplier,
+                spawnRate: 0.56 * difficultyMultiplier,
                 maxCount: Math.floor(18 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'swarm',
-                spawnRate: 1.5 * difficultyMultiplier,
+                spawnRate: 1.05 * difficultyMultiplier,
                 maxCount: Math.floor(30 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'charger',
-                spawnRate: 0.4 * difficultyMultiplier,
+                spawnRate: 0.28 * difficultyMultiplier,
                 maxCount: Math.floor(8 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'shooter',
-                spawnRate: 0.25 * difficultyMultiplier,
+                spawnRate: 0.175 * difficultyMultiplier,
                 maxCount: Math.floor(5 * difficultyMultiplier)
             });
+            // More new enemy types
+            spawns.push({
+                type: 'splitter',
+                spawnRate: 0.1 * difficultyMultiplier,
+                maxCount: Math.floor(4 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'exploder',
+                spawnRate: 0.15 * difficultyMultiplier,
+                maxCount: Math.floor(5 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'teleporter',
+                spawnRate: 0.06 * difficultyMultiplier,
+                maxCount: Math.floor(2 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'healer',
+                spawnRate: 0.04 * difficultyMultiplier,
+                maxCount: Math.floor(2 * difficultyMultiplier)
+            });
         }
-        // Fala 11+: wszystkie typy wrogów
+        // Fala 11+: wszystkie typy wrogów (spawn rate zmniejszony o 30%)
         else {
             spawns.push({
                 type: 'drone',
-                spawnRate: 1.0 * difficultyMultiplier,
+                spawnRate: 0.7 * difficultyMultiplier,
                 maxCount: Math.floor(20 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'swarm',
-                spawnRate: 2.0 * difficultyMultiplier,
+                spawnRate: 1.4 * difficultyMultiplier,
                 maxCount: Math.floor(40 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'charger',
-                spawnRate: 0.5 * difficultyMultiplier,
+                spawnRate: 0.35 * difficultyMultiplier,
                 maxCount: Math.floor(10 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'shooter',
-                spawnRate: 0.35 * difficultyMultiplier,
+                spawnRate: 0.245 * difficultyMultiplier,
                 maxCount: Math.floor(8 * difficultyMultiplier)
             });
             spawns.push({
                 type: 'tank',
-                spawnRate: 0.15 * difficultyMultiplier,
+                spawnRate: 0.105 * difficultyMultiplier,
                 maxCount: Math.floor(3 * difficultyMultiplier)
+            });
+            // All new enemy types at full strength
+            spawns.push({
+                type: 'splitter',
+                spawnRate: 0.14 * difficultyMultiplier,
+                maxCount: Math.floor(5 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'exploder',
+                spawnRate: 0.2 * difficultyMultiplier,
+                maxCount: Math.floor(6 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'teleporter',
+                spawnRate: 0.08 * difficultyMultiplier,
+                maxCount: Math.floor(3 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'shielder',
+                spawnRate: 0.06 * difficultyMultiplier,
+                maxCount: Math.floor(2 * difficultyMultiplier)
+            });
+            spawns.push({
+                type: 'healer',
+                spawnRate: 0.05 * difficultyMultiplier,
+                maxCount: Math.floor(2 * difficultyMultiplier)
             });
         }
 

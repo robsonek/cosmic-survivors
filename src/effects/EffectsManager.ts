@@ -21,6 +21,15 @@ import { ParticleSystem } from './ParticleSystem';
 import { EffectType, ParticlePresets } from './ParticlePresets';
 import { ScreenEffects } from './ScreenEffects';
 import { TrailRenderer } from './TrailRenderer';
+import { TrailEffects } from './TrailEffects';
+import type {
+  PlayerTrailConfig,
+  ProjectileTrailConfig,
+  DeathExplosionConfig,
+  XPAbsorptionConfig,
+  WeaponGlowConfig,
+  CriticalHitConfig,
+} from './TrailEffects';
 import { DamageNumberRenderer } from './DamageNumberRenderer';
 
 /**
@@ -51,6 +60,8 @@ export interface EffectsConfig {
   screenEffects?: boolean;
   /** Enable trails */
   trails?: boolean;
+  /** Enable advanced trail effects */
+  trailEffects?: boolean;
   /** Enable damage numbers */
   damageNumbers?: boolean;
   /** Auto-subscribe to game events */
@@ -70,6 +81,7 @@ export class EffectsManager {
   private particleSystem: ParticleSystem;
   private screenEffects: ScreenEffects;
   private trailRenderer: TrailRenderer;
+  private trailEffects: TrailEffects;
   private damageNumberRenderer: DamageNumberRenderer;
 
   /** Configuration */
@@ -92,6 +104,7 @@ export class EffectsManager {
       particles: true,
       screenEffects: true,
       trails: true,
+      trailEffects: true,
       damageNumbers: true,
       autoSubscribe: true,
       particleQuality: 1,
@@ -104,6 +117,7 @@ export class EffectsManager {
     this.particleSystem = new ParticleSystem(renderer);
     this.screenEffects = new ScreenEffects(renderer, camera);
     this.trailRenderer = new TrailRenderer(renderer);
+    this.trailEffects = new TrailEffects(renderer, this.trailRenderer);
     this.damageNumberRenderer = new DamageNumberRenderer(renderer);
   }
 
@@ -448,6 +462,129 @@ export class EffectsManager {
   }
 
   // ============================================
+  // Advanced Trail Effects
+  // ============================================
+
+  /**
+   * Start player afterimage trail effect.
+   */
+  startPlayerTrail(
+    entity: number,
+    textureKey: string,
+    config?: Partial<PlayerTrailConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.startPlayerTrail(entity, textureKey, config);
+  }
+
+  /**
+   * Stop player afterimage trail effect.
+   */
+  stopPlayerTrail(): void {
+    this.trailEffects.stopPlayerTrail();
+  }
+
+  /**
+   * Spawn dash trail with afterimages.
+   */
+  spawnDashTrail(
+    entity: number,
+    textureKey: string,
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number,
+    config?: Partial<PlayerTrailConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.spawnDashTrail(entity, textureKey, startX, startY, endX, endY, config);
+  }
+
+  /**
+   * Create projectile trail with optional particle emission.
+   */
+  createProjectileTrailAdvanced(
+    entity: number,
+    config?: Partial<ProjectileTrailConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.createProjectileTrail(entity, config);
+  }
+
+  /**
+   * Remove projectile trail.
+   */
+  removeProjectileTrail(entity: number): void {
+    this.trailEffects.removeProjectileTrail(entity);
+  }
+
+  /**
+   * Spawn enemy death explosion with particles.
+   */
+  spawnDeathExplosion(
+    x: number,
+    y: number,
+    config?: Partial<DeathExplosionConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.spawnDeathExplosion(x, y, config);
+  }
+
+  /**
+   * Start XP absorption sparkle trail.
+   */
+  startXPAbsorption(
+    orbEntity: number,
+    targetEntity: number,
+    config?: Partial<XPAbsorptionConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.startXPAbsorption(orbEntity, targetEntity, config);
+  }
+
+  /**
+   * Stop XP absorption effect.
+   */
+  stopXPAbsorption(orbEntity: number): void {
+    this.trailEffects.stopXPAbsorption(orbEntity);
+  }
+
+  /**
+   * Play XP collection burst effect.
+   */
+  playXPCollectBurst(x: number, y: number, value: number): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.playXPCollectBurst(x, y, value);
+  }
+
+  /**
+   * Add pulsing glow effect to weapon/entity.
+   */
+  addWeaponGlow(entity: number, config?: Partial<WeaponGlowConfig>): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.addWeaponGlow(entity, config);
+  }
+
+  /**
+   * Remove weapon glow from entity.
+   */
+  removeWeaponGlow(entity: number): void {
+    this.trailEffects.removeWeaponGlow(entity);
+  }
+
+  /**
+   * Play critical hit star burst effect.
+   */
+  playCriticalHitBurst(
+    x: number,
+    y: number,
+    config?: Partial<CriticalHitConfig>
+  ): void {
+    if (!this.config.trailEffects || this.paused) return;
+    this.trailEffects.playCriticalHitBurst(x, y, config);
+  }
+
+  // ============================================
   // Damage Numbers
   // ============================================
 
@@ -500,6 +637,7 @@ export class EffectsManager {
     this.particleSystem.update(world, scaledDt);
     this.screenEffects.update(scaledDt);
     this.trailRenderer.update(scaledDt);
+    this.trailEffects.update(scaledDt);
     this.damageNumberRenderer.update(scaledDt);
   }
 
@@ -514,6 +652,7 @@ export class EffectsManager {
     this.paused = true;
     this.particleSystem.pauseAll();
     this.trailRenderer.pauseAll();
+    this.trailEffects.pause();
   }
 
   /**
@@ -523,6 +662,7 @@ export class EffectsManager {
     this.paused = false;
     this.particleSystem.resumeAll();
     this.trailRenderer.resumeAll();
+    this.trailEffects.resume();
   }
 
   /**
@@ -536,7 +676,7 @@ export class EffectsManager {
    * Enable/disable effect categories.
    */
   setEnabled(
-    category: 'particles' | 'screenEffects' | 'trails' | 'damageNumbers' | 'autoSubscribe',
+    category: 'particles' | 'screenEffects' | 'trails' | 'trailEffects' | 'damageNumbers' | 'autoSubscribe',
     enabled: boolean
   ): void {
     this.config[category] = enabled;
@@ -568,6 +708,13 @@ export class EffectsManager {
   }
 
   /**
+   * Get trail effects.
+   */
+  getTrailEffects(): TrailEffects {
+    return this.trailEffects;
+  }
+
+  /**
    * Get damage number renderer.
    */
   getDamageNumberRenderer(): DamageNumberRenderer {
@@ -585,6 +732,7 @@ export class EffectsManager {
     this.particleSystem.destroyAll();
     this.screenEffects.clearAll();
     this.trailRenderer.clearAll();
+    this.trailEffects.clearAll();
     this.damageNumberRenderer.clearAll();
   }
 
@@ -602,6 +750,7 @@ export class EffectsManager {
     this.particleSystem.destroy();
     this.screenEffects.destroy();
     this.trailRenderer.destroy();
+    this.trailEffects.destroy();
     this.damageNumberRenderer.destroy();
 
     this.eventBus = null;

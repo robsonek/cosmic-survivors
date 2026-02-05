@@ -22,6 +22,7 @@ import { PauseScreen, type PauseStats } from './screens/PauseScreen';
 import { GameOverScreen, type GameOverStats } from './screens/GameOverScreen';
 import { UIFactory } from './UIFactory';
 import { Tooltip } from './components/Tooltip';
+import { AchievementPopup } from './AchievementPopup';
 import { GAME_WIDTH, GAME_HEIGHT } from '@shared/constants/game';
 
 export interface UIManagerConfig {
@@ -64,6 +65,7 @@ export class UIManager implements IUIManager {
   private gameOverScreen: GameOverScreen;
   private tooltip: Tooltip;
   private factory: UIFactory;
+  private achievementPopup: AchievementPopup;
 
   // Damage numbers
   private damageNumbers: DamageNumber[] = [];
@@ -139,6 +141,13 @@ export class UIManager implements IUIManager {
 
     // Create tooltip
     this.tooltip = new Tooltip(this.scene);
+
+    // Create achievement popup
+    this.achievementPopup = new AchievementPopup({
+      scene: this.scene,
+      eventBus: this.eventBus,
+      screenWidth: this.screenWidth,
+    });
 
     // Setup event listeners
     this.setupEventListeners();
@@ -664,6 +673,9 @@ export class UIManager implements IUIManager {
 
     // Update notifications
     this.updateNotifications();
+
+    // Update achievement popup
+    this.achievementPopup.update(dt);
   }
 
   private updateDamageNumbers(): void {
@@ -720,6 +732,9 @@ export class UIManager implements IUIManager {
 
     // Reposition notification container
     this.notificationContainer.setPosition(width - 20, 20);
+
+    // Resize achievement popup
+    this.achievementPopup.resize(width, height);
   }
 
   destroy(): void {
@@ -728,6 +743,7 @@ export class UIManager implements IUIManager {
     this.pauseScreen.destroy();
     this.gameOverScreen.destroy();
     this.tooltip.destroy();
+    this.achievementPopup.destroy();
 
     // Clean up damage numbers
     this.damageNumberPool.forEach(text => text.destroy());
@@ -764,6 +780,10 @@ export class UIManager implements IUIManager {
 
   getTooltip(): Tooltip {
     return this.tooltip;
+  }
+
+  getAchievementPopup(): AchievementPopup {
+    return this.achievementPopup;
   }
 
   /**

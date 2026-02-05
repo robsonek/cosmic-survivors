@@ -8,12 +8,14 @@ import type { IUIComponent } from '@shared/interfaces/IUI';
 import { UIColors, UIFonts, UIDepth, UISizes } from '../UIConstants';
 import { Button } from '../components/Button';
 import { Panel } from '../components/Panel';
+import { StatsScreen, type GameStats } from './StatsScreen';
 
 export interface GameOverScreenConfig {
   screenWidth: number;
   screenHeight: number;
   onRestart?: () => void;
   onMainMenu?: () => void;
+  onViewStats?: () => GameStats | null;
 }
 
 export interface GameOverStats {
@@ -37,6 +39,8 @@ export class GameOverScreen implements IUIComponent {
   private config: GameOverScreenConfig;
   private _visible: boolean = false;
   private _interactive: boolean = true;
+  private statsScreen: StatsScreen | null = null;
+  private lastGameStats: GameStats | null = null;
 
   constructor(scene: Phaser.Scene, config: GameOverScreenConfig) {
     this.id = `gameoverscreen_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -93,14 +97,31 @@ export class GameOverScreen implements IUIComponent {
   }
 
   private createButtons(): void {
-    const buttonWidth = 220;
+    const buttonWidth = 180;
     const buttonHeight = UISizes.BUTTON_HEIGHT;
     const buttonY = this.config.screenHeight / 2 + 170;
     const centerX = this.config.screenWidth / 2;
+    const buttonSpacing = 15;
+
+    // View Stats button
+    const statsBtn = new Button(this.scene, {
+      x: centerX - buttonWidth - buttonSpacing,
+      y: buttonY,
+      width: buttonWidth,
+      height: buttonHeight,
+      text: 'View Stats',
+      backgroundColor: UIColors.PRIMARY,
+      hoverColor: UIColors.PRIMARY_LIGHT,
+      onClick: () => {
+        this.showStatsScreen();
+      },
+    });
+    this.buttons.push(statsBtn);
+    this.container.add(statsBtn.getContainer());
 
     // Restart button
     const restartBtn = new Button(this.scene, {
-      x: centerX - buttonWidth / 2 - 15,
+      x: centerX,
       y: buttonY,
       width: buttonWidth,
       height: buttonHeight,
@@ -116,7 +137,7 @@ export class GameOverScreen implements IUIComponent {
 
     // Main Menu button
     const menuBtn = new Button(this.scene, {
-      x: centerX + buttonWidth / 2 + 15,
+      x: centerX + buttonWidth + buttonSpacing,
       y: buttonY,
       width: buttonWidth,
       height: buttonHeight,
@@ -127,6 +148,34 @@ export class GameOverScreen implements IUIComponent {
     });
     this.buttons.push(menuBtn);
     this.container.add(menuBtn.getContainer());
+  }
+
+  /**
+   * Show the stats screen overlay.
+   */
+  private showStatsScreen(): void {
+    if (!this.statsScreen) {
+      this.statsScreen = new StatsScreen(this.scene, {
+        screenWidth: this.config.screenWidth,
+        screenHeight: this.config.screenHeight,
+        onClose: () => {
+          // Stats screen will hide itself
+        },
+      });
+    }
+
+    // Get game stats from callback or stored stats
+    const gameStats = this.config.onViewStats?.() ?? this.lastGameStats;
+    if (gameStats) {
+      this.statsScreen.showWithStats(gameStats);
+    }
+  }
+
+  /**
+   * Set game stats to be shown in stats screen.
+   */
+  setGameStats(stats: GameStats): void {
+    this.lastGameStats = stats;
   }
 
   get visible(): boolean {
@@ -318,6 +367,7 @@ export class GameOverScreen implements IUIComponent {
   destroy(): void {
     this.buttons.forEach(btn => btn.destroy());
     this.panel.destroy();
+    this.statsScreen?.destroy();
     this.container.destroy();
   }
 

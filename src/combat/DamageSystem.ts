@@ -28,6 +28,8 @@ import {
   CRITICAL_HIT_MULTIPLIER,
   MAX_CRITICAL_CHANCE,
 } from '../shared/constants/game';
+import type { EliteSystem } from '../systems/EliteSystem';
+import { Elite } from '../systems/EliteSystem';
 
 /**
  * Result of a damage calculation.
@@ -63,8 +65,18 @@ export class DamageSystem implements ISystem {
   // Query for entities with Health
   private healthQuery!: ReturnType<typeof defineQuery>;
 
+  // Elite system reference for XP multipliers
+  private eliteSystem: EliteSystem | null = null;
+
   constructor(eventBus: IEventBus) {
     this.eventBus = eventBus;
+  }
+
+  /**
+   * Set the elite system reference for XP calculations.
+   */
+  setEliteSystem(eliteSystem: EliteSystem): void {
+    this.eliteSystem = eliteSystem;
   }
 
   init(world: IWorld): void {
@@ -356,14 +368,23 @@ export class DamageSystem implements ISystem {
       addComponent(rawWorld as Parameters<typeof addComponent>[0], Tags.Dead, entity);
     }
 
-    // Calculate XP value
+    // Calculate base XP value
     let xpValue = 1;
     if (hasComponent(rawWorld as Parameters<typeof hasComponent>[0], Tags.Enemy, entity)) {
-      // Could read from Enemy component if available
-      xpValue = 1;
+      // Check if entity has Elite component with stored base XP value
+      if (hasComponent(rawWorld as Parameters<typeof hasComponent>[0], Elite, entity)) {
+        xpValue = Elite.baseXpValue[entity];
+      } else {
+        xpValue = 1;
+      }
     }
     if (hasComponent(rawWorld as Parameters<typeof hasComponent>[0], Tags.Boss, entity)) {
       xpValue = 100;
+    }
+
+    // Apply elite XP multiplier (3x base + modifier bonuses)
+    if (this.eliteSystem && this.eliteSystem.isElite(entity)) {
+      xpValue = Math.floor(xpValue * this.eliteSystem.getXpMultiplier(entity));
     }
 
     // Emit entity killed event

@@ -8,6 +8,7 @@ import type { IUIComponent } from '@shared/interfaces/IUI';
 import { UIColors, UIFonts, UIDepth, UISizes } from '../UIConstants';
 import { Button } from '../components/Button';
 import { Panel } from '../components/Panel';
+import { StatsScreen, type GameStats } from './StatsScreen';
 
 export interface PauseScreenConfig {
   screenWidth: number;
@@ -15,6 +16,7 @@ export interface PauseScreenConfig {
   onResume?: () => void;
   onSettings?: () => void;
   onQuit?: () => void;
+  onViewStats?: () => GameStats | null;
 }
 
 export interface PauseStats {
@@ -37,6 +39,7 @@ export class PauseScreen implements IUIComponent {
   private _visible: boolean = false;
   private _interactive: boolean = true;
   private keyboardHandler?: (event: KeyboardEvent) => void;
+  private statsScreen: StatsScreen | null = null;
 
   constructor(scene: Phaser.Scene, config: PauseScreenConfig) {
     this.id = `pausescreen_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -98,8 +101,9 @@ export class PauseScreen implements IUIComponent {
   private createButtons(): void {
     const buttonWidth = 250;
     const buttonHeight = UISizes.BUTTON_HEIGHT;
-    const buttonY = this.config.screenHeight / 2 + 50;
+    const buttonY = this.config.screenHeight / 2 + 30;
     const centerX = this.config.screenWidth / 2;
+    const buttonSpacing = 55;
 
     // Resume button
     const resumeBtn = new Button(this.scene, {
@@ -118,10 +122,26 @@ export class PauseScreen implements IUIComponent {
     this.buttons.push(resumeBtn);
     this.container.add(resumeBtn.getContainer());
 
+    // View Stats button
+    const statsBtn = new Button(this.scene, {
+      x: centerX,
+      y: buttonY + buttonSpacing,
+      width: buttonWidth,
+      height: buttonHeight,
+      text: 'View Stats',
+      backgroundColor: UIColors.PRIMARY,
+      hoverColor: UIColors.PRIMARY_LIGHT,
+      onClick: () => {
+        this.showStatsScreen();
+      },
+    });
+    this.buttons.push(statsBtn);
+    this.container.add(statsBtn.getContainer());
+
     // Settings button
     const settingsBtn = new Button(this.scene, {
       x: centerX,
-      y: buttonY + 60,
+      y: buttonY + buttonSpacing * 2,
       width: buttonWidth,
       height: buttonHeight,
       text: 'Settings',
@@ -135,7 +155,7 @@ export class PauseScreen implements IUIComponent {
     // Quit button
     const quitBtn = new Button(this.scene, {
       x: centerX,
-      y: buttonY + 120,
+      y: buttonY + buttonSpacing * 3,
       width: buttonWidth,
       height: buttonHeight,
       text: 'Quit to Menu',
@@ -147,6 +167,27 @@ export class PauseScreen implements IUIComponent {
     });
     this.buttons.push(quitBtn);
     this.container.add(quitBtn.getContainer());
+  }
+
+  /**
+   * Show the stats screen overlay.
+   */
+  private showStatsScreen(): void {
+    if (!this.statsScreen) {
+      this.statsScreen = new StatsScreen(this.scene, {
+        screenWidth: this.config.screenWidth,
+        screenHeight: this.config.screenHeight,
+        onClose: () => {
+          // Stats screen will hide itself
+        },
+      });
+    }
+
+    // Get current game stats from callback
+    const gameStats = this.config.onViewStats?.();
+    if (gameStats) {
+      this.statsScreen.showWithStats(gameStats);
+    }
   }
 
   private setupKeyboardControls(): void {
@@ -294,6 +335,7 @@ export class PauseScreen implements IUIComponent {
     }
     this.buttons.forEach(btn => btn.destroy());
     this.panel.destroy();
+    this.statsScreen?.destroy();
     this.container.destroy();
   }
 

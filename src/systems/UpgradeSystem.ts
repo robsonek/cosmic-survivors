@@ -28,6 +28,18 @@ export interface IPlayerStats {
     shieldCooldown: number;
     shieldActive: boolean;
     lastShieldTime: number;
+    // New passive stats
+    thornsPercent: number;           // % of damage reflected to attackers
+    lifeStealPercent: number;        // % of damage dealt healed
+    luckyXpChance: number;           // % chance for double XP
+    berserkerDamageBonus: number;    // Damage multiplier based on missing HP
+    guardianAngelCharges: number;    // Number of revives available
+    guardianAngelUsed: boolean;      // Whether revive has been used this run
+    momentumSpeedBonus: number;      // Speed bonus per kill (accumulated)
+    momentumKillCount: number;       // Kills for momentum tracking
+    momentumDecayRate: number;       // How fast momentum decays
+    glassCannonActive: boolean;      // Whether Glass Cannon is active
+    areaMultiplier: number;          // AOE size multiplier
 }
 
 /**
@@ -40,6 +52,7 @@ export interface IWeaponStats {
     piercing: boolean;
     critChance: number;
     critMultiplier: number;
+    areaSize: number;       // Base AOE size for area weapons
 }
 
 /**
@@ -104,14 +117,14 @@ export enum UpgradeRarity {
 }
 
 /**
- * Rarity weights for random selection
+ * Rarity weights for random selection (increased chances for rare upgrades)
  */
 const RARITY_WEIGHTS: Record<UpgradeRarity, number> = {
-    [UpgradeRarity.COMMON]: 50,
+    [UpgradeRarity.COMMON]: 40,
     [UpgradeRarity.UNCOMMON]: 30,
-    [UpgradeRarity.RARE]: 15,
-    [UpgradeRarity.EPIC]: 4,
-    [UpgradeRarity.LEGENDARY]: 1
+    [UpgradeRarity.RARE]: 20,
+    [UpgradeRarity.EPIC]: 8,
+    [UpgradeRarity.LEGENDARY]: 2
 };
 
 /**
@@ -152,10 +165,10 @@ export class UpgradeSystem {
     private _currentXp: number = 0;
     private _totalXp: number = 0;
 
-    // XP scaling configuration
-    private readonly baseXpRequired: number = 100;
-    private readonly xpScalingFactor: number = 1.15;
-    private readonly xpFlatIncrease: number = 25;
+    // XP scaling configuration (reduced by 40% for faster progression)
+    private readonly baseXpRequired: number = 60;
+    private readonly xpScalingFactor: number = 1.12;
+    private readonly xpFlatIncrease: number = 15;
 
     // Upgrades
     private upgrades: Map<string, IUpgrade> = new Map();
@@ -203,28 +216,29 @@ export class UpgradeSystem {
             {
                 id: 'hp_boost',
                 name: 'Vital Force',
-                description: 'Increases maximum HP by 20%',
+                description: 'Increases maximum HP by 30',
                 icon: '❤️',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.DEFENSE,
                 rarity: UpgradeRarity.COMMON,
                 effect: (ctx, level) => {
-                    const multiplier = 1 + (0.20 * level);
-                    ctx.playerStats.maxHp = Math.floor(100 * multiplier);
+                    // +30 HP per level (was +20)
+                    ctx.playerStats.maxHp = 100 + (30 * level);
                 }
             },
             {
                 id: 'hp_regen',
                 name: 'Regeneration',
-                description: 'Regenerate 1 HP per second',
+                description: 'Regenerate 2 HP per second',
                 icon: '💚',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.DEFENSE,
                 rarity: UpgradeRarity.UNCOMMON,
                 effect: (ctx, level) => {
-                    ctx.playerStats.hpRegenPerSecond = level;
+                    // 2 HP/s per level (was 1 HP/s)
+                    ctx.playerStats.hpRegenPerSecond = level * 2;
                 }
             },
             {
@@ -252,28 +266,30 @@ export class UpgradeSystem {
             {
                 id: 'damage_boost',
                 name: 'Power Strike',
-                description: 'Increases damage by 25%',
+                description: 'Increases damage by 40%',
                 icon: '⚔️',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.OFFENSE,
                 rarity: UpgradeRarity.COMMON,
                 effect: (ctx, level) => {
-                    const multiplier = 1 + (0.25 * level);
+                    // +40% damage per level (was +25%)
+                    const multiplier = 1 + (0.40 * level);
                     ctx.weaponStats.damage = Math.floor(10 * multiplier);
                 }
             },
             {
                 id: 'fire_rate',
                 name: 'Rapid Fire',
-                description: 'Reduces fire cooldown by 10%',
+                description: 'Reduces fire cooldown by 15%',
                 icon: '🔥',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.OFFENSE,
                 rarity: UpgradeRarity.COMMON,
                 effect: (ctx, level) => {
-                    const multiplier = Math.pow(0.90, level);
+                    // -15% cooldown per level (was -10%)
+                    const multiplier = Math.pow(0.85, level);
                     ctx.weaponStats.fireRate = 1000 * multiplier; // Base 1000ms
                 }
             },
@@ -322,29 +338,29 @@ export class UpgradeSystem {
             {
                 id: 'move_speed',
                 name: 'Swift Feet',
-                description: 'Increases movement speed by 15%',
+                description: 'Increases movement speed by 50',
                 icon: '👟',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.UTILITY,
                 rarity: UpgradeRarity.COMMON,
                 effect: (ctx, level) => {
-                    const multiplier = 1 + (0.15 * level);
-                    ctx.playerStats.moveSpeed = 200 * multiplier; // Base 200
+                    // +50 speed per level (was +35 equivalent)
+                    ctx.playerStats.moveSpeed = 200 + (50 * level); // Base 200
                 }
             },
             {
                 id: 'xp_magnet',
                 name: 'XP Magnet',
-                description: 'Increases XP pickup range by 30%',
+                description: 'Increases XP pickup range by 60',
                 icon: '🧲',
                 maxLevel: 5,
                 currentLevel: 0,
                 category: UpgradeCategory.UTILITY,
                 rarity: UpgradeRarity.COMMON,
                 effect: (ctx, level) => {
-                    const multiplier = 1 + (0.30 * level);
-                    ctx.playerStats.xpMagnetRange = 50 * multiplier; // Base 50
+                    // +60 radius per level (was +40 equivalent)
+                    ctx.playerStats.xpMagnetRange = 50 + (60 * level); // Base 50
                 }
             },
 
@@ -403,6 +419,167 @@ export class UpgradeSystem {
                 effect: (ctx, level) => {
                     // Applied when collecting XP orbs
                     // Multiplier: 1 + (0.15 * level)
+                }
+            },
+
+            // ========================================
+            // NEW PASSIVE UPGRADES (8 total)
+            // ========================================
+
+            // 1. THORNS - Reflect damage to attackers
+            {
+                id: 'thorns',
+                name: 'Thorns',
+                description: 'Reflect 20% damage to attackers',
+                icon: '🌵',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.DEFENSE,
+                rarity: UpgradeRarity.UNCOMMON,
+                effect: (ctx, level) => {
+                    // Level 1: 20%, Level 2: 40%, Level 3: 60%, Level 4: 80%, Level 5: 100%
+                    ctx.playerStats.thornsPercent = 0.20 * level;
+                }
+            },
+
+            // 2. LIFE STEAL - Heal from damage dealt
+            {
+                id: 'life_steal',
+                name: 'Life Steal',
+                description: 'Heal 5% of damage dealt',
+                icon: '🩸',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.DEFENSE,
+                rarity: UpgradeRarity.RARE,
+                effect: (ctx, level) => {
+                    // Level 1: 5%, Level 2: 10%, Level 3: 15%, Level 4: 20%, Level 5: 25%
+                    ctx.playerStats.lifeStealPercent = 0.05 * level;
+                }
+            },
+
+            // 3. LUCKY - Chance for double XP
+            {
+                id: 'lucky',
+                name: 'Lucky',
+                description: '10% chance for double XP',
+                icon: '🍀',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.UTILITY,
+                rarity: UpgradeRarity.UNCOMMON,
+                effect: (ctx, level) => {
+                    // Level 1: 10%, Level 2: 20%, Level 3: 30%, Level 4: 40%, Level 5: 50%
+                    ctx.playerStats.luckyXpChance = 0.10 * level;
+                }
+            },
+
+            // 4. BERSERKER - Damage increases as HP decreases
+            {
+                id: 'berserker',
+                name: 'Berserker',
+                description: 'Damage increases as HP decreases',
+                icon: '🔥',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.OFFENSE,
+                rarity: UpgradeRarity.RARE,
+                effect: (ctx, level) => {
+                    // Bonus damage = (1 - HP%) * level * 20%
+                    // At 50% HP with level 5: 50% extra damage
+                    // At 10% HP with level 5: 90% extra damage
+                    const missingHpPercent = 1 - (ctx.playerStats.currentHp / ctx.playerStats.maxHp);
+                    ctx.playerStats.berserkerDamageBonus = missingHpPercent * level * 0.20;
+                }
+            },
+
+            // 5. GUARDIAN ANGEL - Revive once with 25% HP
+            {
+                id: 'guardian_angel',
+                name: 'Guardian Angel',
+                description: 'Revive once with 25% HP',
+                icon: '👼',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.DEFENSE,
+                rarity: UpgradeRarity.EPIC,
+                effect: (ctx, level) => {
+                    // Level 1: 25% HP, Level 2: 35% HP, Level 3: 45% HP, Level 4: 55% HP, Level 5: 65% HP
+                    // Each level also adds invulnerability time after revive
+                    if (!ctx.playerStats.guardianAngelUsed) {
+                        ctx.playerStats.guardianAngelCharges = 1;
+                    }
+                    // Store revive HP percent: 25% + 10% per additional level
+                    // This is applied in the actual revive logic, tracked here for reference
+                }
+            },
+
+            // 6. MOMENTUM - Speed increases with kills
+            {
+                id: 'momentum',
+                name: 'Momentum',
+                description: 'Speed increases with kills',
+                icon: '💨',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.UTILITY,
+                rarity: UpgradeRarity.UNCOMMON,
+                effect: (ctx, level) => {
+                    // Each kill adds +2% speed per level (up to 50% max bonus)
+                    // Speed bonus decays over time
+                    // Level affects: bonus per kill and max cap
+                    // Level 1: +2% per kill, 10% max
+                    // Level 2: +4% per kill, 20% max
+                    // Level 3: +6% per kill, 30% max
+                    // Level 4: +8% per kill, 40% max
+                    // Level 5: +10% per kill, 50% max
+                    const maxBonus = 0.10 * level;
+                    const currentBonus = Math.min(ctx.playerStats.momentumSpeedBonus, maxBonus);
+                    ctx.playerStats.moveSpeed *= (1 + currentBonus);
+                    ctx.playerStats.momentumDecayRate = 0.02; // 2% decay per second
+                }
+            },
+
+            // 7. GLASS CANNON - More damage, less HP
+            {
+                id: 'glass_cannon',
+                name: 'Glass Cannon',
+                description: '+50% damage, -25% HP',
+                icon: '💎',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.SPECIAL,
+                rarity: UpgradeRarity.EPIC,
+                effect: (ctx, level) => {
+                    // Level 1: +50% damage, -25% HP
+                    // Level 2: +75% damage, -22% HP (less penalty)
+                    // Level 3: +100% damage, -19% HP
+                    // Level 4: +125% damage, -16% HP
+                    // Level 5: +150% damage, -13% HP
+                    const damageBonus = 0.50 + (0.25 * (level - 1));
+                    const hpPenalty = 0.25 - (0.03 * (level - 1));
+
+                    ctx.weaponStats.damage *= (1 + damageBonus);
+                    ctx.playerStats.maxHp *= (1 - hpPenalty);
+                    ctx.playerStats.glassCannonActive = true;
+                }
+            },
+
+            // 8. AREA MASTER - Increased AOE size
+            {
+                id: 'area_master',
+                name: 'Area Master',
+                description: '+30% AOE size',
+                icon: '🔮',
+                maxLevel: 5,
+                currentLevel: 0,
+                category: UpgradeCategory.OFFENSE,
+                rarity: UpgradeRarity.UNCOMMON,
+                effect: (ctx, level) => {
+                    // Level 1: +30%, Level 2: +60%, Level 3: +90%, Level 4: +120%, Level 5: +150%
+                    const areaBonus = 0.30 * level;
+                    ctx.playerStats.areaMultiplier = 1 + areaBonus;
+                    ctx.weaponStats.areaSize *= ctx.playerStats.areaMultiplier;
                 }
             }
         ];
@@ -501,7 +678,8 @@ export class UpgradeSystem {
      * Emit level up event to all listeners
      */
     private emitLevelUp(): void {
-        const availableUpgrades = this.getRandomUpgrades(3);
+        // 4 upgrades to choose from (was 3)
+        const availableUpgrades = this.getRandomUpgrades(4);
         const event: ILevelUpEvent = {
             newLevel: this._level,
             previousLevel: this._level - 1,
@@ -715,6 +893,9 @@ export class UpgradeSystem {
         for (const upgrade of this.upgrades.values()) {
             upgrade.currentLevel = 0;
         }
+
+        // Reset Guardian Angel used state
+        this.guardianAngelUsed = false;
     }
 
     /**
@@ -809,7 +990,8 @@ export class UpgradeSystem {
         let damage = baseDamage;
 
         if (damageUpgrade && damageUpgrade.currentLevel > 0) {
-            damage *= 1 + (0.25 * damageUpgrade.currentLevel);
+            // +40% damage per level (was +25%)
+            damage *= 1 + (0.40 * damageUpgrade.currentLevel);
         }
 
         if (this.rollCritical()) {
@@ -817,6 +999,229 @@ export class UpgradeSystem {
         }
 
         return Math.floor(damage);
+    }
+
+    // ========================================================================
+    // New Passive Upgrade Helper Methods
+    // ========================================================================
+
+    /**
+     * Get thorns damage to reflect back to attacker
+     * @param damageTaken The damage taken by the player
+     * @returns The damage to reflect back to the attacker
+     */
+    public getThornsReflectDamage(damageTaken: number): number {
+        const thornsUpgrade = this.getUpgrade('thorns');
+        if (!thornsUpgrade || thornsUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 20% per level
+        const reflectPercent = 0.20 * thornsUpgrade.currentLevel;
+        return Math.floor(damageTaken * reflectPercent);
+    }
+
+    /**
+     * Get life steal healing amount from damage dealt
+     * @param damageDealt The damage dealt by the player
+     * @returns The amount to heal
+     */
+    public getLifeStealHealing(damageDealt: number): number {
+        const lifeStealUpgrade = this.getUpgrade('life_steal');
+        if (!lifeStealUpgrade || lifeStealUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 5% per level
+        const healPercent = 0.05 * lifeStealUpgrade.currentLevel;
+        return Math.floor(damageDealt * healPercent);
+    }
+
+    /**
+     * Check if lucky double XP triggers
+     * @returns true if XP should be doubled
+     */
+    public rollLuckyDoubleXp(): boolean {
+        const luckyUpgrade = this.getUpgrade('lucky');
+        if (!luckyUpgrade || luckyUpgrade.currentLevel === 0) {
+            return false;
+        }
+        // 10% per level
+        const chance = 0.10 * luckyUpgrade.currentLevel;
+        return Math.random() < chance;
+    }
+
+    /**
+     * Get berserker damage multiplier based on missing HP
+     * @param currentHp Current HP
+     * @param maxHp Maximum HP
+     * @returns Damage multiplier (1.0 = no bonus)
+     */
+    public getBerserkerMultiplier(currentHp: number, maxHp: number): number {
+        const berserkerUpgrade = this.getUpgrade('berserker');
+        if (!berserkerUpgrade || berserkerUpgrade.currentLevel === 0) {
+            return 1.0;
+        }
+        const missingHpPercent = 1 - (currentHp / maxHp);
+        // 20% bonus damage per level per 100% missing HP
+        const damageBonus = missingHpPercent * berserkerUpgrade.currentLevel * 0.20;
+        return 1 + damageBonus;
+    }
+
+    /**
+     * Check if Guardian Angel can revive
+     * @returns true if revive is available
+     */
+    public canGuardianAngelRevive(): boolean {
+        const guardianUpgrade = this.getUpgrade('guardian_angel');
+        if (!guardianUpgrade || guardianUpgrade.currentLevel === 0) {
+            return false;
+        }
+        // Check if already used (stored in upgrade state tracking)
+        return !this.guardianAngelUsed;
+    }
+
+    /**
+     * Get Guardian Angel revive HP percent
+     * @returns The percentage of max HP to revive with (0-1)
+     */
+    public getGuardianAngelRevivePercent(): number {
+        const guardianUpgrade = this.getUpgrade('guardian_angel');
+        if (!guardianUpgrade || guardianUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 25% + 10% per additional level
+        return 0.25 + (0.10 * (guardianUpgrade.currentLevel - 1));
+    }
+
+    /**
+     * Get Guardian Angel invulnerability duration after revive
+     * @returns Duration in seconds
+     */
+    public getGuardianAngelInvulnerabilityDuration(): number {
+        const guardianUpgrade = this.getUpgrade('guardian_angel');
+        if (!guardianUpgrade || guardianUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 1 second base + 0.5s per level
+        return 1.0 + (0.5 * guardianUpgrade.currentLevel);
+    }
+
+    /**
+     * Use Guardian Angel revive
+     */
+    public useGuardianAngel(): void {
+        this.guardianAngelUsed = true;
+    }
+
+    /** Track if Guardian Angel has been used */
+    private guardianAngelUsed = false;
+
+    /**
+     * Get momentum speed bonus per kill
+     * @returns Speed bonus multiplier per kill
+     */
+    public getMomentumBonusPerKill(): number {
+        const momentumUpgrade = this.getUpgrade('momentum');
+        if (!momentumUpgrade || momentumUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 2% per level per kill
+        return 0.02 * momentumUpgrade.currentLevel;
+    }
+
+    /**
+     * Get maximum momentum speed bonus
+     * @returns Maximum speed bonus (0-1)
+     */
+    public getMomentumMaxBonus(): number {
+        const momentumUpgrade = this.getUpgrade('momentum');
+        if (!momentumUpgrade || momentumUpgrade.currentLevel === 0) {
+            return 0;
+        }
+        // 10% max per level
+        return 0.10 * momentumUpgrade.currentLevel;
+    }
+
+    /**
+     * Get Glass Cannon damage multiplier
+     * @returns Damage multiplier from Glass Cannon
+     */
+    public getGlassCannonDamageMultiplier(): number {
+        const glassCannonUpgrade = this.getUpgrade('glass_cannon');
+        if (!glassCannonUpgrade || glassCannonUpgrade.currentLevel === 0) {
+            return 1.0;
+        }
+        // 50% + 25% per additional level
+        const bonus = 0.50 + (0.25 * (glassCannonUpgrade.currentLevel - 1));
+        return 1 + bonus;
+    }
+
+    /**
+     * Get Glass Cannon HP penalty multiplier
+     * @returns HP multiplier (less than 1.0)
+     */
+    public getGlassCannonHpMultiplier(): number {
+        const glassCannonUpgrade = this.getUpgrade('glass_cannon');
+        if (!glassCannonUpgrade || glassCannonUpgrade.currentLevel === 0) {
+            return 1.0;
+        }
+        // 25% penalty reduced by 3% per additional level
+        const penalty = 0.25 - (0.03 * (glassCannonUpgrade.currentLevel - 1));
+        return 1 - penalty;
+    }
+
+    /**
+     * Get Area Master AOE multiplier
+     * @returns AOE size multiplier
+     */
+    public getAreaMasterMultiplier(): number {
+        const areaMasterUpgrade = this.getUpgrade('area_master');
+        if (!areaMasterUpgrade || areaMasterUpgrade.currentLevel === 0) {
+            return 1.0;
+        }
+        // 30% per level
+        return 1 + (0.30 * areaMasterUpgrade.currentLevel);
+    }
+
+    /**
+     * Get upgrade description with current level stats
+     * @param upgradeId The upgrade ID
+     * @returns Description with level-specific values
+     */
+    public getUpgradeDescriptionWithLevel(upgradeId: string): string {
+        const upgrade = this.getUpgrade(upgradeId);
+        if (!upgrade) return '';
+
+        const level = upgrade.currentLevel;
+        const nextLevel = level + 1;
+
+        switch (upgradeId) {
+            case 'thorns':
+                return `Reflect ${nextLevel * 20}% damage to attackers`;
+            case 'life_steal':
+                return `Heal ${nextLevel * 5}% of damage dealt`;
+            case 'lucky':
+                return `${nextLevel * 10}% chance for double XP`;
+            case 'berserker':
+                return `Up to +${nextLevel * 20}% damage at low HP`;
+            case 'guardian_angel': {
+                const reviveHp = 25 + (nextLevel - 1) * 10;
+                return `Revive with ${reviveHp}% HP`;
+            }
+            case 'momentum': {
+                const perKill = nextLevel * 2;
+                const maxBonus = nextLevel * 10;
+                return `+${perKill}% speed per kill (max ${maxBonus}%)`;
+            }
+            case 'glass_cannon': {
+                const dmgBonus = 50 + (nextLevel - 1) * 25;
+                const hpPenalty = 25 - (nextLevel - 1) * 3;
+                return `+${dmgBonus}% damage, -${hpPenalty}% HP`;
+            }
+            case 'area_master':
+                return `+${nextLevel * 30}% AOE size`;
+            default:
+                return upgrade.description;
+        }
     }
 }
 

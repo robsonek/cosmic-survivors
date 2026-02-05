@@ -14,6 +14,7 @@ import { Position, Tags } from '../../shared/types/components';
 import { defineQuery } from 'bitecs';
 import { MAX_ENEMIES, ENEMY_SPAWN_MARGIN, GAME_WIDTH, GAME_HEIGHT } from '../../shared/constants/game';
 import { randomRange, randomElement, TWO_PI } from '../../shared/utils/math';
+import type { EliteSystem } from '../../systems/EliteSystem';
 
 /**
  * Spawn point calculated by position strategy.
@@ -47,12 +48,22 @@ export class SpawnManager implements ISpawner {
   private arenaMaxX = GAME_WIDTH * 2;
   private arenaMaxY = GAME_HEIGHT * 2;
 
+  // Elite system reference for converting enemies to elites
+  private eliteSystem: EliteSystem | null = null;
+
   constructor(world: IWorld) {
     this.world = world;
     this.factory = new EnemyFactory(world);
 
     // Define player query
     this.playerQuery = defineQuery([Position, Tags.Player]);
+  }
+
+  /**
+   * Set the elite system reference for elite enemy spawning.
+   */
+  setEliteSystem(eliteSystem: EliteSystem): void {
+    this.eliteSystem = eliteSystem;
   }
 
   /**
@@ -112,6 +123,17 @@ export class SpawnManager implements ISpawner {
       const entity = this.factory.createEnemy(definition, pos.x, pos.y);
       this.enemyEntities.add(entity);
       spawned.push(entity);
+
+      // Try to make elite (5% chance for regular enemies)
+      if (this.eliteSystem) {
+        this.eliteSystem.tryMakeElite(
+          entity,
+          false, // Don't force elite
+          false, // Not a boss
+          definition.xpValue,
+          definition.damage
+        );
+      }
     }
 
     return spawned;
@@ -127,9 +149,22 @@ export class SpawnManager implements ISpawner {
       return -1;
     }
 
+    const definition = EnemyRegistry.get(enemyId);
     const entity = this.factory.createEnemyById(enemyId, x, y);
     if (entity !== null) {
       this.enemyEntities.add(entity);
+
+      // Try to make elite (5% chance for regular enemies)
+      if (this.eliteSystem && definition) {
+        this.eliteSystem.tryMakeElite(
+          entity,
+          false, // Don't force elite
+          false, // Not a boss
+          definition.xpValue,
+          definition.damage
+        );
+      }
+
       return entity;
     }
 
@@ -150,6 +185,17 @@ export class SpawnManager implements ISpawner {
     const position = this.getEdgeSpawnPosition();
     const entity = this.factory.createEnemy(definition, position.x, position.y);
     this.enemyEntities.add(entity);
+
+    // Bosses always become elite with stacked modifiers
+    if (this.eliteSystem) {
+      this.eliteSystem.tryMakeElite(
+        entity,
+        true,  // Force elite
+        true,  // Is a boss (stack modifiers)
+        definition.xpValue,
+        definition.damage
+      );
+    }
 
     return entity;
   }

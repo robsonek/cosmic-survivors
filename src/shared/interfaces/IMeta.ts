@@ -190,10 +190,12 @@ export enum AchievementCondition {
   MaxLevel = 'maxLevel',
   FullEvolutions = 'fullEvolutions',
   BossKilled = 'bossKilled',
+  BossNoHit = 'bossNoHit',
   MultiplayerWin = 'multiplayerWin',
   TotalPlayTime = 'totalPlayTime',
   WeaponMastery = 'weaponMastery',
   CollectXP = 'collectXP',
+  ComboCount = 'comboCount',
 }
 
 export interface IAchievementRewards {

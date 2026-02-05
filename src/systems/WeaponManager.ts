@@ -81,6 +81,12 @@ export enum WeaponBehaviorType {
 
   /** Area - continuous damage in close range */
   Area = 'area',
+
+  /** Beam - continuous ray that damages enemies in a line */
+  Beam = 'beam',
+
+  /** Vortex - pulls enemies toward a point and damages them */
+  Vortex = 'vortex',
 }
 
 /**
@@ -103,6 +109,16 @@ export interface IWeaponInstance {
 
   /** For area weapons - active targets being damaged */
   areaTargets?: Set<number>;
+
+  /** For beam weapons - current beam target position */
+  beamTargetX?: number;
+  beamTargetY?: number;
+
+  /** For vortex weapons - active vortex positions */
+  vortexPositions?: Array<{ x: number; y: number; lifetime: number }>;
+
+  /** Cooldown tracking for enemies hit by continuous weapons */
+  enemyHitCooldowns?: Map<number, number>;
 }
 
 /**
@@ -157,6 +173,7 @@ interface IUpgradeScaling {
 
 /**
  * Upgrade scaling per level (level 1 = base stats).
+ * Damage and fire rate bonuses increased by 25% for faster, more satisfying upgrades.
  */
 const UPGRADE_SCALING: Record<number, IUpgradeScaling> = {
   1: {
@@ -168,32 +185,32 @@ const UPGRADE_SCALING: Record<number, IUpgradeScaling> = {
     pierceBonus: 0,
   },
   2: {
-    damageMultiplier: 1.25,
-    fireRateMultiplier: 1.1,
+    damageMultiplier: 1.5625, // +25% bonus (was 1.25, now 1.25 * 1.25)
+    fireRateMultiplier: 1.375, // +25% bonus (was 1.1, now 1.1 * 1.25)
     projectileCountBonus: 0,
     projectileSpeedMultiplier: 1.05,
     spreadReduction: 0,
     pierceBonus: 0,
   },
   3: {
-    damageMultiplier: 1.5,
-    fireRateMultiplier: 1.2,
+    damageMultiplier: 1.875, // +25% bonus (was 1.5, now 1.5 * 1.25)
+    fireRateMultiplier: 1.5, // +25% bonus (was 1.2, now 1.2 * 1.25)
     projectileCountBonus: 1,
     projectileSpeedMultiplier: 1.1,
     spreadReduction: 5,
     pierceBonus: 1,
   },
   4: {
-    damageMultiplier: 2.0,
-    fireRateMultiplier: 1.35,
+    damageMultiplier: 2.5, // +25% bonus (was 2.0, now 2.0 * 1.25)
+    fireRateMultiplier: 1.6875, // +25% bonus (was 1.35, now 1.35 * 1.25)
     projectileCountBonus: 1,
     projectileSpeedMultiplier: 1.2,
     spreadReduction: 10,
     pierceBonus: 1,
   },
   5: {
-    damageMultiplier: 2.75,
-    fireRateMultiplier: 1.5,
+    damageMultiplier: 3.4375, // +25% bonus (was 2.75, now 2.75 * 1.25)
+    fireRateMultiplier: 1.875, // +25% bonus (was 1.5, now 1.5 * 1.25)
     projectileCountBonus: 2,
     projectileSpeedMultiplier: 1.3,
     spreadReduction: 15,
@@ -207,14 +224,15 @@ const UPGRADE_SCALING: Record<number, IUpgradeScaling> = {
 
 /**
  * Basic Laser - targets closest enemy, fast fire rate.
+ * Bazowe wartości obniżone dla balansu z systemem progresji czasowej.
  */
 export const BasicLaserDefinition: IWeaponDefinition = {
   id: 'basic_laser',
   name: 'Basic Laser',
   description: 'A reliable energy beam that targets the closest enemy. Fast and accurate.',
-  damage: 8,
-  fireRate: 3.0, // 3 shots per second
-  projectileSpeed: 600,
+  damage: 10,           // Obniżone (było 12) - progresja czasowa doda brakującą moc
+  fireRate: 3.5,        // Obniżone (było 3.9) - progresja czasowa doda brakującą moc
+  projectileSpeed: 900,
   projectileCount: 1,
   spread: 0,
   piercing: false,
@@ -224,17 +242,18 @@ export const BasicLaserDefinition: IWeaponDefinition = {
 };
 
 /**
- * Spread Shot - fires 3 projectiles in a fan pattern.
+ * Spread Shot - fires 5 projectiles in a fan pattern.
+ * Bazowe wartości obniżone dla balansu z systemem progresji czasowej.
  */
 export const SpreadShotDefinition: IWeaponDefinition = {
   id: 'spread_shot',
   name: 'Spread Shot',
   description: 'Fires a burst of energy pellets in a wide arc. Great for crowd control.',
-  damage: 5,
-  fireRate: 1.5,
-  projectileSpeed: 450,
-  projectileCount: 3,
-  spread: 30, // 30 degrees total spread
+  damage: 6,            // Obniżone (było 7) - progresja czasowa doda brakującą moc
+  fireRate: 1.3,        // Obniżone (było 1.5) - progresja czasowa doda brakującą moc
+  projectileSpeed: 540,
+  projectileCount: 5,
+  spread: 45,
   piercing: false,
   homing: false,
   projectileTexture: 'projectile_spread',
@@ -248,9 +267,9 @@ export const HomingMissilesDefinition: IWeaponDefinition = {
   id: 'homing_missiles',
   name: 'Homing Missiles',
   description: 'Smart missiles that seek out enemies. Slower but never miss.',
-  damage: 15,
-  fireRate: 0.8,
-  projectileSpeed: 250,
+  damage: 21, // +40% (was 15)
+  fireRate: 0.96, // +20% (was 0.8)
+  projectileSpeed: 300, // +20% global (was 250)
   projectileCount: 1,
   spread: 0,
   piercing: false,
@@ -272,7 +291,7 @@ export const OrbitalShieldDefinition: IWeaponDefinition = {
   description: 'Energy orbs that circle around you, damaging enemies on contact.',
   damage: 12,
   fireRate: 0.5, // Spawns new orbs slowly
-  projectileSpeed: 180, // Orbital rotation speed (degrees/second)
+  projectileSpeed: 216, // +20% global - Orbital rotation speed (was 180 degrees/second)
   projectileCount: 3,
   spread: 120, // Orbs are evenly distributed (360/3 = 120)
   piercing: true,
@@ -282,7 +301,7 @@ export const OrbitalShieldDefinition: IWeaponDefinition = {
   behaviorConfig: {
     orbitRadius: 80,
     maxOrbitals: 8,
-    orbitSpeed: 180, // degrees per second
+    orbitSpeed: 216, // +20% degrees per second (was 180)
     hitCooldown: 0.5, // seconds between hitting same enemy
   },
 };
@@ -296,7 +315,7 @@ export const LightningDefinition: IWeaponDefinition = {
   description: 'Electric bolt that instantly strikes and chains to nearby enemies.',
   damage: 20,
   fireRate: 0.6,
-  projectileSpeed: 0, // Instant
+  projectileSpeed: 0, // Instant (no change needed - instant hit)
   projectileCount: 1,
   spread: 0,
   piercing: true,
@@ -305,7 +324,7 @@ export const LightningDefinition: IWeaponDefinition = {
   behaviorType: WeaponBehaviorType.Chain,
   behaviorConfig: {
     chainCount: 3, // Jumps to 3 additional enemies
-    chainRange: 150, // Max distance for chain jump
+    chainRange: 180, // +20% Max distance for chain jump (was 150)
     chainDamageDecay: 0.7, // Each chain does 70% of previous damage
   },
 };
@@ -319,7 +338,7 @@ export const FlamethrowerDefinition: IWeaponDefinition = {
   description: 'Engulfs nearby enemies in flames. Short range but devastating.',
   damage: 4, // Damage per tick
   fireRate: 10, // Ticks per second (continuous)
-  projectileSpeed: 0,
+  projectileSpeed: 0, // Area weapon - no projectile speed needed
   projectileCount: 1,
   spread: 45, // Cone angle
   piercing: true,
@@ -327,11 +346,151 @@ export const FlamethrowerDefinition: IWeaponDefinition = {
   projectileTexture: 'effect_flame',
   behaviorType: WeaponBehaviorType.Area,
   behaviorConfig: {
-    range: 120,
+    range: 144, // +20% range (was 120)
     coneAngle: 45, // degrees
     tickRate: 10, // damage ticks per second
     burnDuration: 2.0, // seconds of burn after leaving area
     burnDamage: 2, // damage per second while burning
+  },
+};
+
+// ============================================
+// NEW WEAPONS - Lightning Chain, Orbital Blades,
+// Missile Swarm, Freeze Ray, Black Hole
+// ============================================
+
+/**
+ * Lightning Chain - Electric attack that chains to multiple enemies.
+ * Enhanced version of basic lightning with more chains and longer range.
+ */
+export const LightningChainDefinition: IWeaponDefinition = {
+  id: 'lightning_chain',
+  name: 'Lightning Chain',
+  description: 'Unleashes a powerful bolt that arcs between enemies, striking up to 4 targets.',
+  damage: 25,
+  fireRate: 0.8,
+  projectileSpeed: 0, // Instant hit
+  projectileCount: 1,
+  spread: 0,
+  piercing: true,
+  homing: false,
+  projectileTexture: 'effect_lightning_chain',
+  behaviorType: WeaponBehaviorType.Chain,
+  behaviorConfig: {
+    chainCount: 4, // Chains to 4 additional enemies (5 total hits)
+    chainRange: 200, // Range for chain jumps
+    chainDamageDecay: 0.8, // Each chain does 80% of previous damage
+    chainDelay: 0.05, // Visual delay between chains (seconds)
+    stunDuration: 0.3, // Brief stun on hit
+  },
+};
+
+/**
+ * Orbital Blades - Spinning blades that orbit around the player.
+ * High damage melee option that requires enemies to get close.
+ */
+export const OrbitalBladesDefinition: IWeaponDefinition = {
+  id: 'orbital_blades',
+  name: 'Orbital Blades',
+  description: 'Three deadly blades orbit around you, slicing through any enemy that gets too close.',
+  damage: 18,
+  fireRate: 0.3, // Low fire rate since orbitals persist
+  projectileSpeed: 300, // Rotation speed (degrees/second)
+  projectileCount: 3,
+  spread: 120, // 360/3 = 120 degrees apart
+  piercing: true,
+  homing: false,
+  projectileTexture: 'projectile_blade',
+  behaviorType: WeaponBehaviorType.Orbital,
+  behaviorConfig: {
+    orbitRadius: 70, // Distance from player
+    maxOrbitals: 6, // Maximum blades at max level
+    orbitSpeed: 300, // Fast rotation (degrees/second)
+    hitCooldown: 0.25, // Quick re-hit time for aggressive damage
+    bladeLength: 30, // Visual length of blade
+  },
+};
+
+/**
+ * Missile Swarm - Fires multiple homing missiles that spread out.
+ * Excellent for clearing scattered groups of enemies.
+ */
+export const MissileSwarmDefinition: IWeaponDefinition = {
+  id: 'missile_swarm',
+  name: 'Missile Swarm',
+  description: 'Launches 5 smart missiles that spread out and hunt down different targets.',
+  damage: 15,
+  fireRate: 0.5, // Fires every 2 seconds
+  projectileSpeed: 280,
+  projectileCount: 5,
+  spread: 60, // Initial spread angle
+  piercing: false,
+  homing: true,
+  projectileTexture: 'projectile_missile_swarm',
+  behaviorType: WeaponBehaviorType.Homing,
+  behaviorConfig: {
+    turnSpeed: 4.0, // Slightly slower turn than single missiles
+    maxLifetime: 6.0, // Longer lifetime to find targets
+    explosionRadius: 40, // Small AoE on impact
+    explosionDamage: 0.5, // 50% of direct damage as splash
+    targetSpread: true, // Each missile targets a different enemy
+  },
+};
+
+/**
+ * Freeze Ray - Continuous beam that slows and damages enemies.
+ * Great for controlling fast enemies and bosses.
+ */
+export const FreezeRayDefinition: IWeaponDefinition = {
+  id: 'freeze_ray',
+  name: 'Freeze Ray',
+  description: 'Projects a freezing beam that slows enemies by 50% while dealing continuous damage.',
+  damage: 8, // Damage per tick
+  fireRate: 15, // 15 ticks per second (continuous)
+  projectileSpeed: 0, // Instant beam
+  projectileCount: 1,
+  spread: 0,
+  piercing: true, // Beam hits all enemies in line
+  homing: false,
+  projectileTexture: 'effect_freeze_beam',
+  behaviorType: WeaponBehaviorType.Beam,
+  behaviorConfig: {
+    beamRange: 350, // Max beam length
+    beamWidth: 25, // Width of the beam
+    slowAmount: 0.5, // 50% slow
+    slowDuration: 1.5, // Slow persists for 1.5s after leaving beam
+    freezeThreshold: 3.0, // Enemies in beam for 3s become frozen solid
+    freezeDuration: 2.0, // Frozen duration
+    tickRate: 15, // Damage ticks per second
+  },
+};
+
+/**
+ * Black Hole - Creates a vortex that pulls enemies in and damages them.
+ * Powerful crowd control with high damage potential.
+ */
+export const BlackHoleDefinition: IWeaponDefinition = {
+  id: 'black_hole',
+  name: 'Black Hole',
+  description: 'Summons a gravitational vortex that pulls enemies in and crushes them with cosmic force.',
+  damage: 12, // Damage per tick while in vortex
+  fireRate: 0.15, // One vortex every ~7 seconds
+  projectileSpeed: 0,
+  projectileCount: 1,
+  spread: 0,
+  piercing: true,
+  homing: false,
+  projectileTexture: 'effect_black_hole',
+  behaviorType: WeaponBehaviorType.Vortex,
+  behaviorConfig: {
+    vortexRadius: 120, // Pull radius
+    pullStrength: 200, // Pull force (pixels/second)
+    damageRadius: 60, // Damage zone radius (center of vortex)
+    vortexDuration: 4.0, // How long the vortex lasts
+    tickRate: 10, // Damage ticks per second
+    implosionDamage: 50, // Burst damage when vortex expires
+    implosionRadius: 100, // Implosion damage radius
+    maxVortices: 2, // Maximum simultaneous vortices at max level
   },
 };
 
@@ -345,6 +504,12 @@ export const WEAPON_DEFINITIONS: Record<string, IWeaponDefinition> = {
   [OrbitalShieldDefinition.id]: OrbitalShieldDefinition,
   [LightningDefinition.id]: LightningDefinition,
   [FlamethrowerDefinition.id]: FlamethrowerDefinition,
+  // New weapons
+  [LightningChainDefinition.id]: LightningChainDefinition,
+  [OrbitalBladesDefinition.id]: OrbitalBladesDefinition,
+  [MissileSwarmDefinition.id]: MissileSwarmDefinition,
+  [FreezeRayDefinition.id]: FreezeRayDefinition,
+  [BlackHoleDefinition.id]: BlackHoleDefinition,
 };
 
 // ============================================
@@ -718,6 +883,11 @@ export class WeaponManager {
       computedSpread: Math.max(0, definition.spread - scaling.spreadReduction),
       orbitalAngle: 0,
       areaTargets: new Set(),
+      // Initialize new weapon behavior properties
+      beamTargetX: 0,
+      beamTargetY: 0,
+      vortexPositions: [],
+      enemyHitCooldowns: new Map(),
     };
   }
 
@@ -757,6 +927,14 @@ export class WeaponManager {
 
       case WeaponBehaviorType.Area:
         this.fireAreaWeapon(instance, playerX, playerY, enemies);
+        break;
+
+      case WeaponBehaviorType.Beam:
+        this.fireBeamWeapon(instance, playerX, playerY, enemies);
+        break;
+
+      case WeaponBehaviorType.Vortex:
+        this.fireVortexWeapon(instance, playerX, playerY, enemies);
         break;
     }
   }
@@ -1027,6 +1205,362 @@ export class WeaponManager {
       range,
       coneAngle: coneAngle * (180 / Math.PI),
     });
+  }
+
+  /**
+   * Fire beam/freeze ray weapon.
+   * Continuous beam that damages and slows enemies in a line.
+   */
+  private fireBeamWeapon(
+    instance: IWeaponInstance,
+    playerX: number,
+    playerY: number,
+    enemies: IEnemy[]
+  ): void {
+    const config = instance.definition.behaviorConfig ?? {};
+    const beamRange = (config.beamRange as number) ?? 350;
+    const beamWidth = (config.beamWidth as number) ?? 25;
+    const slowAmount = (config.slowAmount as number) ?? 0.5;
+    const slowDuration = (config.slowDuration as number) ?? 1.5;
+
+    // Find target to aim beam at (closest enemy)
+    const target = this.findClosestEnemy(playerX, playerY, enemies);
+
+    // Calculate beam direction
+    let beamAngle: number;
+    if (target) {
+      beamAngle = Math.atan2(target.y - playerY, target.x - playerX);
+      instance.beamTargetX = target.x;
+      instance.beamTargetY = target.y;
+    } else {
+      // Default to right if no target
+      beamAngle = 0;
+      instance.beamTargetX = playerX + beamRange;
+      instance.beamTargetY = playerY;
+    }
+
+    // Initialize enemy hit cooldowns if needed
+    if (!instance.enemyHitCooldowns) {
+      instance.enemyHitCooldowns = new Map();
+    }
+
+    // Update cooldowns
+    const tickRate = (config.tickRate as number) ?? 15;
+    const tickInterval = 1 / tickRate;
+
+    // Find all enemies in the beam path
+    for (const enemy of enemies) {
+      if (!enemy.active || enemy.health <= 0) continue;
+
+      // Check if enemy is hit by beam
+      const isInBeam = this.isPointInBeam(
+        enemy.x,
+        enemy.y,
+        playerX,
+        playerY,
+        beamAngle,
+        beamRange,
+        beamWidth
+      );
+
+      if (isInBeam) {
+        // Check cooldown
+        const lastHitTime = instance.enemyHitCooldowns.get(enemy.id) ?? 0;
+        const currentTime = Date.now() / 1000;
+
+        if (currentTime - lastHitTime >= tickInterval) {
+          // Deal damage
+          this.dealDamage(enemy.id, instance.computedDamage, instance.definition.id, {
+            x: enemy.x,
+            y: enemy.y,
+          });
+
+          // Apply slow effect
+          this.triggerEffect('freeze_slow', enemy.x, enemy.y, {
+            slowAmount,
+            slowDuration,
+            enemyId: enemy.id,
+          });
+
+          // Update cooldown
+          instance.enemyHitCooldowns.set(enemy.id, currentTime);
+        }
+      }
+    }
+
+    // Trigger beam visual effect
+    this.triggerEffect('freeze_beam', playerX, playerY, {
+      angle: beamAngle,
+      range: beamRange,
+      width: beamWidth,
+      targetX: instance.beamTargetX,
+      targetY: instance.beamTargetY,
+    });
+  }
+
+  /**
+   * Check if a point is within a beam path.
+   */
+  private isPointInBeam(
+    px: number,
+    py: number,
+    beamStartX: number,
+    beamStartY: number,
+    beamAngle: number,
+    beamLength: number,
+    beamWidth: number
+  ): boolean {
+    // Calculate beam end point
+    const beamEndX = beamStartX + Math.cos(beamAngle) * beamLength;
+    const beamEndY = beamStartY + Math.sin(beamAngle) * beamLength;
+
+    // Vector from start to end
+    const dx = beamEndX - beamStartX;
+    const dy = beamEndY - beamStartY;
+    const lengthSq = dx * dx + dy * dy;
+
+    if (lengthSq === 0) return false;
+
+    // Project point onto beam line
+    const t = Math.max(0, Math.min(1, ((px - beamStartX) * dx + (py - beamStartY) * dy) / lengthSq));
+
+    // Closest point on beam
+    const closestX = beamStartX + t * dx;
+    const closestY = beamStartY + t * dy;
+
+    // Distance from point to closest point on beam
+    const distSq = (px - closestX) * (px - closestX) + (py - closestY) * (py - closestY);
+
+    return distSq <= (beamWidth / 2) * (beamWidth / 2);
+  }
+
+  /**
+   * Fire vortex/black hole weapon.
+   * Creates a gravitational vortex that pulls and damages enemies.
+   */
+  private fireVortexWeapon(
+    instance: IWeaponInstance,
+    playerX: number,
+    playerY: number,
+    enemies: IEnemy[]
+  ): void {
+    const config = instance.definition.behaviorConfig ?? {};
+    const vortexRadius = (config.vortexRadius as number) ?? 120;
+    const pullStrength = (config.pullStrength as number) ?? 200;
+    const damageRadius = (config.damageRadius as number) ?? 60;
+    const vortexDuration = (config.vortexDuration as number) ?? 4.0;
+    const tickRate = (config.tickRate as number) ?? 10;
+    const implosionDamage = (config.implosionDamage as number) ?? 50;
+    const implosionRadius = (config.implosionRadius as number) ?? 100;
+    const maxVortices = ((config.maxVortices as number) ?? 1) + Math.floor(instance.level / 3);
+
+    // Initialize vortex positions array
+    if (!instance.vortexPositions) {
+      instance.vortexPositions = [];
+    }
+
+    // Clean up expired vortices
+    instance.vortexPositions = instance.vortexPositions.filter(v => v.lifetime > 0);
+
+    // Check if we can spawn a new vortex
+    if (instance.vortexPositions.length >= maxVortices) {
+      // Update existing vortices
+      this.updateVortices(instance, enemies, damageRadius, pullStrength, tickRate, implosionDamage, implosionRadius);
+      return;
+    }
+
+    // Find spawn position - target area with most enemies
+    const spawnPos = this.findBestVortexPosition(playerX, playerY, enemies, vortexRadius * 2);
+
+    // Create new vortex
+    instance.vortexPositions.push({
+      x: spawnPos.x,
+      y: spawnPos.y,
+      lifetime: vortexDuration,
+    });
+
+    // Trigger spawn effect
+    this.triggerEffect('black_hole_spawn', spawnPos.x, spawnPos.y, {
+      radius: vortexRadius,
+      duration: vortexDuration,
+    });
+
+    // Update all vortices
+    this.updateVortices(instance, enemies, damageRadius, pullStrength, tickRate, implosionDamage, implosionRadius);
+  }
+
+  /**
+   * Update active vortices - pull enemies and deal damage.
+   */
+  private updateVortices(
+    instance: IWeaponInstance,
+    enemies: IEnemy[],
+    damageRadius: number,
+    pullStrength: number,
+    tickRate: number,
+    implosionDamage: number,
+    implosionRadius: number
+  ): void {
+    if (!instance.vortexPositions) return;
+
+    const config = instance.definition.behaviorConfig ?? {};
+    const vortexRadius = (config.vortexRadius as number) ?? 120;
+
+    // Initialize enemy hit cooldowns if needed
+    if (!instance.enemyHitCooldowns) {
+      instance.enemyHitCooldowns = new Map();
+    }
+
+    const tickInterval = 1 / tickRate;
+    const currentTime = Date.now() / 1000;
+
+    for (let i = instance.vortexPositions.length - 1; i >= 0; i--) {
+      const vortex = instance.vortexPositions[i];
+
+      // Decrease lifetime (called every tick)
+      vortex.lifetime -= 1 / 60; // Approximate dt
+
+      // Process each enemy
+      for (const enemy of enemies) {
+        if (!enemy.active || enemy.health <= 0) continue;
+
+        const dx = vortex.x - enemy.x;
+        const dy = vortex.y - enemy.y;
+        const dist = Math.hypot(dx, dy);
+
+        // Check if enemy is within pull radius
+        if (dist <= vortexRadius && dist > 0) {
+          // Calculate pull force (stronger near center)
+          const pullFactor = 1 - (dist / vortexRadius);
+          const normalizedDx = dx / dist;
+          const normalizedDy = dy / dist;
+
+          // Trigger pull effect (game will handle actual movement)
+          this.triggerEffect('vortex_pull', enemy.x, enemy.y, {
+            pullX: normalizedDx * pullStrength * pullFactor,
+            pullY: normalizedDy * pullStrength * pullFactor,
+            enemyId: enemy.id,
+          });
+        }
+
+        // Check if enemy is in damage zone
+        if (dist <= damageRadius) {
+          const lastHitTime = instance.enemyHitCooldowns.get(enemy.id) ?? 0;
+
+          if (currentTime - lastHitTime >= tickInterval) {
+            // Deal damage (more damage near center)
+            const damageMultiplier = 1 + (1 - dist / damageRadius) * 0.5;
+            const damage = Math.floor(instance.computedDamage * damageMultiplier);
+
+            this.dealDamage(enemy.id, damage, instance.definition.id, {
+              x: enemy.x,
+              y: enemy.y,
+            });
+
+            this.triggerEffect('vortex_damage', enemy.x, enemy.y, {
+              damage,
+            });
+
+            instance.enemyHitCooldowns.set(enemy.id, currentTime);
+          }
+        }
+      }
+
+      // Check for implosion (vortex expiring)
+      if (vortex.lifetime <= 0) {
+        // Deal implosion damage to nearby enemies
+        const scaledImplosionDamage = Math.floor(implosionDamage * (1 + (instance.level - 1) * 0.2));
+
+        for (const enemy of enemies) {
+          if (!enemy.active || enemy.health <= 0) continue;
+
+          const dist = Math.hypot(vortex.x - enemy.x, vortex.y - enemy.y);
+          if (dist <= implosionRadius) {
+            // Damage falloff from center
+            const damageFalloff = 1 - (dist / implosionRadius) * 0.5;
+            const finalDamage = Math.floor(scaledImplosionDamage * damageFalloff);
+
+            this.dealDamage(enemy.id, finalDamage, instance.definition.id, {
+              x: enemy.x,
+              y: enemy.y,
+            });
+          }
+        }
+
+        // Trigger implosion effect
+        this.triggerEffect('black_hole_implode', vortex.x, vortex.y, {
+          radius: implosionRadius,
+          damage: scaledImplosionDamage,
+        });
+
+        // Remove the vortex
+        instance.vortexPositions.splice(i, 1);
+      } else {
+        // Trigger visual update for active vortex
+        this.triggerEffect('black_hole_active', vortex.x, vortex.y, {
+          radius: vortexRadius,
+          intensity: vortex.lifetime / ((config.vortexDuration as number) ?? 4.0),
+        });
+      }
+    }
+  }
+
+  /**
+   * Find the best position to spawn a vortex (area with most enemies).
+   */
+  private findBestVortexPosition(
+    playerX: number,
+    playerY: number,
+    enemies: IEnemy[],
+    maxRange: number
+  ): { x: number; y: number } {
+    if (enemies.length === 0) {
+      // No enemies, spawn at random position near player
+      const angle = Math.random() * Math.PI * 2;
+      const dist = maxRange * 0.5;
+      return {
+        x: playerX + Math.cos(angle) * dist,
+        y: playerY + Math.sin(angle) * dist,
+      };
+    }
+
+    // Find enemy cluster center within range
+    let bestX = 0;
+    let bestY = 0;
+    let bestScore = -1;
+
+    // Sample positions around enemies
+    for (const enemy of enemies) {
+      const dist = Math.hypot(enemy.x - playerX, enemy.y - playerY);
+      if (dist > maxRange) continue;
+
+      // Count nearby enemies
+      let score = 0;
+      for (const other of enemies) {
+        const otherDist = Math.hypot(other.x - enemy.x, other.y - enemy.y);
+        if (otherDist <= 120) { // Vortex pull radius
+          score += 1 - (otherDist / 120) * 0.5;
+        }
+      }
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestX = enemy.x;
+        bestY = enemy.y;
+      }
+    }
+
+    if (bestScore > 0) {
+      return { x: bestX, y: bestY };
+    }
+
+    // Fallback to closest enemy
+    const closest = this.findClosestEnemy(playerX, playerY, enemies);
+    if (closest) {
+      return { x: closest.x, y: closest.y };
+    }
+
+    return { x: playerX + 100, y: playerY };
   }
 
   /**

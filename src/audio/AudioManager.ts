@@ -65,9 +65,7 @@ export class AudioManager implements IAudioManager {
   private channels: Map<AudioChannel, ChannelState> = new Map();
 
   /** Listener position (stored for getStats/debugging) */
-  // @ts-expect-error - stored for potential future use
   private _listenerX = 0;
-  // @ts-expect-error - stored for potential future use
   private _listenerY = 0;
 
   /** Initialized state */
