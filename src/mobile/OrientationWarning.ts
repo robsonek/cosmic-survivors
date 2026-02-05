@@ -18,8 +18,8 @@ export class OrientationWarning {
     this.overlay.id = 'orientation-warning';
     this.overlay.innerHTML = `
       <div style="font-size:48px;margin-bottom:16px;">&#x1F504;</div>
-      <div style="font-size:20px;font-weight:bold;">Obróć urządzenie</div>
-      <div style="font-size:14px;margin-top:8px;opacity:0.7;">Gra wymaga trybu poziomego</div>
+      <div style="font-size:20px;font-weight:bold;">Rotate Your Device</div>
+      <div style="font-size:14px;margin-top:8px;opacity:0.7;">This game requires landscape mode</div>
     `;
 
     Object.assign(this.overlay.style, {

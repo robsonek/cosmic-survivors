@@ -224,6 +224,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Detect mobile early so all UI can adapt
+    this.isMobileDevice = isMobile();
+
     // Get game mode from URL parameters
     this.gameMode = getGameMode();
     console.log(`Game mode: ${this.gameMode}`);
@@ -338,9 +341,9 @@ export class GameScene extends Phaser.Scene {
     this.crosshair.setDepth(200);
     this.drawCrosshair();
 
-    // Create MiniMap (bottom-left corner)
-    const minimapPadding = 20;
-    const minimapSize = 150;
+    // Create MiniMap (bottom-left corner) — smaller on mobile
+    const minimapPadding = this.isMobileDevice ? 10 : 20;
+    const minimapSize = this.isMobileDevice ? 100 : 150;
     this.miniMap = new MiniMap(this, {
       x: minimapPadding,
       y: this.cameras.main.height - minimapSize - minimapPadding,
@@ -416,8 +419,7 @@ export class GameScene extends Phaser.Scene {
     // Hide default cursor
     this.input.setDefaultCursor('none');
 
-    // Mobile detection and setup
-    this.isMobileDevice = isMobile();
+    // Mobile input setup
     if (this.isMobileDevice) {
       this.mobileInput = new MobileInputAdapter(this, {
         onDash: () => this.useDash(),
@@ -663,38 +665,51 @@ export class GameScene extends Phaser.Scene {
   }
 
   private createUI(): void {
-    this.scoreText = this.add.text(20, 20, 'SCORE: 0 | KILLS: 0', {
+    const w = this.cameras.main.width;
+    const h = this.cameras.main.height;
+    const mob = this.isMobileDevice;
+
+    // On mobile, use smaller fonts and adjust positions for pause button
+    const scoreSize = mob ? '13px' : '18px';
+    const waveSize = mob ? '12px' : '16px';
+    const timeSize = mob ? '16px' : '20px';
+    const diffSize = mob ? '12px' : '16px';
+    const streakSize = mob ? '13px' : '16px';
+    const modeSize = mob ? '14px' : '18px';
+
+    this.scoreText = this.add.text(10, 10, 'SCORE: 0 | KILLS: 0', {
       fontFamily: 'monospace',
-      fontSize: '18px',
+      fontSize: scoreSize,
       color: '#00ffff',
       stroke: '#003333',
       strokeThickness: 2,
     }).setScrollFactor(0).setDepth(100);
 
-    this.waveText = this.add.text(20, 45, 'WAVE 1', {
+    this.waveText = this.add.text(10, mob ? 30 : 45, 'WAVE 1', {
       fontFamily: 'monospace',
-      fontSize: '16px',
+      fontSize: waveSize,
       color: '#ff00ff',
       stroke: '#330033',
       strokeThickness: 2,
     }).setScrollFactor(0).setDepth(100);
 
-    this.levelText = this.add.text(20, this.cameras.main.height - 35, 'LV 1', {
+    this.levelText = this.add.text(10, h - 35, 'LV 1', {
       fontFamily: 'monospace',
-      fontSize: '14px',
+      fontSize: mob ? '12px' : '14px',
       color: '#ffff00',
     }).setScrollFactor(0).setDepth(100);
 
-    this.timeText = this.add.text(this.cameras.main.width - 100, 20, '00:00', {
+    // On mobile, move timer left to make room for pause button
+    this.timeText = this.add.text(mob ? w - 130 : w - 100, mob ? 10 : 20, '00:00', {
       fontFamily: 'monospace',
-      fontSize: '20px',
+      fontSize: timeSize,
       color: '#ffffff',
     }).setScrollFactor(0).setDepth(100);
 
     // Progression threshold text (shows current power level)
-    this.progressionText = this.add.text(this.cameras.main.width - 20, 50, '', {
+    this.progressionText = this.add.text(mob ? w - 80 : w - 20, mob ? 30 : 50, '', {
       fontFamily: 'monospace',
-      fontSize: '14px',
+      fontSize: mob ? '11px' : '14px',
       color: '#88ff88',
       align: 'right',
     }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
@@ -702,35 +717,36 @@ export class GameScene extends Phaser.Scene {
     this.hpBar = this.add.graphics().setScrollFactor(0).setDepth(100);
     this.xpBar = this.add.graphics().setScrollFactor(0).setDepth(100);
 
-    // Kill Streak UI (right side, below time)
-    this.killStreakText = this.add.text(this.cameras.main.width - 20, 80, '', {
+    // Kill Streak UI (right side, below time) — on mobile, shift left for pause button
+    const streakX = mob ? w - 80 : w - 20;
+    this.killStreakText = this.add.text(streakX, mob ? 50 : 80, '', {
       fontFamily: 'monospace',
-      fontSize: '16px',
+      fontSize: streakSize,
       color: '#ffaa00',
       align: 'right',
     }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
 
-    this.killStreakEffectText = this.add.text(this.cameras.main.width - 20, 100, '', {
+    this.killStreakEffectText = this.add.text(streakX, mob ? 67 : 100, '', {
       fontFamily: 'monospace',
-      fontSize: '12px',
+      fontSize: mob ? '10px' : '12px',
       color: '#ffffff',
       align: 'right',
     }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
 
     // Difficulty indicator (top center)
     const diffIndicator = difficultySystem.getDifficultyIndicator();
-    this.difficultyText = this.add.text(this.cameras.main.width / 2, 20, diffIndicator.text, {
+    this.difficultyText = this.add.text(w / 2, mob ? 10 : 20, diffIndicator.text, {
       fontFamily: 'monospace',
-      fontSize: '16px',
+      fontSize: diffSize,
       color: `#${diffIndicator.color.toString(16).padStart(6, '0')}`,
       stroke: '#000000',
       strokeThickness: 2,
     }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(100);
 
     // Game mode indicator (top center, below difficulty)
-    this.gameModeText = this.add.text(this.cameras.main.width / 2, 45, '', {
+    this.gameModeText = this.add.text(w / 2, mob ? 26 : 45, '', {
       fontFamily: 'monospace',
-      fontSize: '18px',
+      fontSize: modeSize,
       color: '#00ffff',
       stroke: '#000000',
       strokeThickness: 3,
@@ -1990,14 +2006,17 @@ export class GameScene extends Phaser.Scene {
 
     // HP Bar
     this.hpBar.clear();
+    const hpBarY = this.isMobileDevice ? 48 : 70;
+    const hpBarW = this.isMobileDevice ? 160 : 200;
+    const hpBarH = this.isMobileDevice ? 10 : 12;
     this.hpBar.fillStyle(0x333333, 0.8);
-    this.hpBar.fillRect(20, 70, 200, 12);
+    this.hpBar.fillRect(10, hpBarY, hpBarW, hpBarH);
     const hpRatio = this.stats.hp / this.stats.maxHp;
     const hpColor = hpRatio > 0.5 ? 0x00ff88 : (hpRatio > 0.25 ? 0xffff00 : 0xff4444);
     this.hpBar.fillStyle(hpColor, 1);
-    this.hpBar.fillRect(22, 72, 196 * hpRatio, 8);
+    this.hpBar.fillRect(12, hpBarY + 2, (hpBarW - 4) * hpRatio, hpBarH - 4);
     this.hpBar.lineStyle(2, 0x00ffff, 0.8);
-    this.hpBar.strokeRect(20, 70, 200, 12);
+    this.hpBar.strokeRect(10, hpBarY, hpBarW, hpBarH);
 
     // XP Bar
     this.xpBar.clear();

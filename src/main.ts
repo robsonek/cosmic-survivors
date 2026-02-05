@@ -114,10 +114,13 @@ async function main(): Promise<void> {
     }
 
     // Phaser game configuration
+    const gameWidth = mobile ? window.innerWidth : 1280;
+    const gameHeight = mobile ? window.innerHeight : 720;
+
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: mobile ? window.innerWidth : 1280,
-      height: mobile ? window.innerHeight : 720,
+      width: gameWidth,
+      height: gameHeight,
       parent: 'game-container',
       backgroundColor: '#0a0a1a',
       physics: {
@@ -130,8 +133,8 @@ async function main(): Promise<void> {
       scale: {
         mode: mobile ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: mobile ? '100%' : 1280,
-        height: mobile ? '100%' : 720,
+        width: gameWidth,
+        height: gameHeight,
       },
       input: {
         touch: {
