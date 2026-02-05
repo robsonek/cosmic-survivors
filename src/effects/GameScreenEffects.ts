@@ -489,6 +489,11 @@ export class GameScreenEffects {
 
   /**
    * Update vignette overlay.
+   *
+   * Draws the vignette as edge-only gradient strips along all four sides
+   * of the screen. The strips fade from full intensity at the screen edge
+   * to fully transparent toward the center, leaving the gameplay area
+   * completely clear.
    */
   private updateVignette(dt: number): void {
     this.vignetteGraphics.clear();
@@ -496,27 +501,67 @@ export class GameScreenEffects {
     // Handle low health pulsing vignette
     if (this.lowHealthActive) {
       this.lowHealthPulsePhase += dt * this.lowHealthPulseSpeed;
-      this.vignetteIntensity = 0.2 + Math.abs(Math.sin(this.lowHealthPulsePhase)) * 0.3;
+      this.vignetteIntensity = 0.15 + Math.abs(Math.sin(this.lowHealthPulsePhase)) * 0.25;
     }
 
     if (this.vignetteIntensity <= 0) return;
 
     const width = this.scene.scale.width;
     const height = this.scene.scale.height;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY);
-    const innerRadius = maxRadius * this.vignetteRadius;
 
-    // Create radial gradient with multiple rings
-    const steps = 15;
-    for (let i = steps; i >= 0; i--) {
-      const t = i / steps;
-      const radius = innerRadius + (maxRadius - innerRadius) * t;
-      const alpha = this.vignetteIntensity * (1 - t);
+    // The vignette border thickness scales with vignetteRadius:
+    // Lower radius = thicker border (more danger feeling).
+    // Range roughly 80px (radius=1) to 200px (radius=0.5).
+    const borderThickness = Math.round((1 - this.vignetteRadius) * 300 + 80);
+
+    // Number of gradient strips per edge
+    const strips = 20;
+    const stripSize = borderThickness / strips;
+
+    for (let i = 0; i < strips; i++) {
+      // t goes from 1 (at screen edge) to 0 (toward center)
+      const t = 1 - i / strips;
+      // Quadratic falloff for a smooth gradient that fades quickly toward center
+      const alpha = this.vignetteIntensity * t * t;
+
+      if (alpha < 0.002) continue;
 
       this.vignetteGraphics.fillStyle(this.vignetteColor, alpha);
-      this.vignetteGraphics.fillCircle(centerX, centerY, radius);
+
+      const offset = i * stripSize;
+
+      // Top strip
+      this.vignetteGraphics.fillRect(0, offset, width, stripSize);
+      // Bottom strip
+      this.vignetteGraphics.fillRect(0, height - offset - stripSize, width, stripSize);
+      // Left strip
+      this.vignetteGraphics.fillRect(offset, offset + stripSize, stripSize, height - (offset + stripSize) * 2);
+      // Right strip
+      this.vignetteGraphics.fillRect(width - offset - stripSize, offset + stripSize, stripSize, height - (offset + stripSize) * 2);
+    }
+
+    // Draw corner accents for a more natural vignette shape.
+    // Corners get extra intensity since they are farthest from center.
+    const cornerSize = borderThickness * 0.7;
+    const cornerStrips = 10;
+    const cornerStripSize = cornerSize / cornerStrips;
+
+    for (let i = 0; i < cornerStrips; i++) {
+      const t = 1 - i / cornerStrips;
+      const alpha = this.vignetteIntensity * 0.5 * t * t;
+      if (alpha < 0.002) continue;
+
+      this.vignetteGraphics.fillStyle(this.vignetteColor, alpha);
+      const size = cornerStripSize * (cornerStrips - i);
+
+      // Top-left corner
+      this.vignetteGraphics.fillRect(0, 0, size, size);
+      // Top-right corner
+      this.vignetteGraphics.fillRect(width - size, 0, size, size);
+      // Bottom-left corner
+      this.vignetteGraphics.fillRect(0, height - size, size, size);
+      // Bottom-right corner
+      this.vignetteGraphics.fillRect(width - size, height - size, size, size);
     }
   }
 

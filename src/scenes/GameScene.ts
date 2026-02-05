@@ -38,6 +38,7 @@ import {
 } from '../systems/HazardSystem';
 import { difficultySystem, DifficultyMode } from '../systems/DifficultySystem';
 import { getGameMode } from '../shared/utils/urlParams';
+import { isMobile, MobileInputAdapter } from '../mobile';
 
 interface Enemy extends Phaser.GameObjects.Sprite {
   enemyId: string;
@@ -98,6 +99,7 @@ export class GameScene extends Phaser.Scene {
   private isGameOver = false;
   private weaponCooldowns: Map<string, number> = new Map();
   private practiceModeTimer = 0;
+  private contactDamageCooldown = 0; // iframes after contact damage
 
   // Abilities system
   private abilities = {
@@ -188,6 +190,10 @@ export class GameScene extends Phaser.Scene {
   // Input
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private wasd!: { W: Phaser.Input.Keyboard.Key; A: Phaser.Input.Keyboard.Key; S: Phaser.Input.Keyboard.Key; D: Phaser.Input.Keyboard.Key };
+
+  // Mobile support
+  private isMobileDevice = false;
+  private mobileInput: MobileInputAdapter | null = null;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -282,6 +288,7 @@ export class GameScene extends Phaser.Scene {
     this.practiceModeTimer = 0;
     this.resetStats();
     this.resetAbilities();
+    this.contactDamageCooldown = 0;
 
     // Apply practice mode modifications
     if (this.gameMode === 'practice') {
@@ -408,6 +415,34 @@ export class GameScene extends Phaser.Scene {
 
     // Hide default cursor
     this.input.setDefaultCursor('none');
+
+    // Mobile detection and setup
+    this.isMobileDevice = isMobile();
+    if (this.isMobileDevice) {
+      this.mobileInput = new MobileInputAdapter(this, {
+        onDash: () => this.useDash(),
+        onUltimate: () => this.useUltimate(),
+        onBomb: () => this.useBomb(),
+        onShield: () => this.useShield(),
+        onPause: () => {
+          this.isPaused = !this.isPaused;
+        },
+      });
+
+      // Hide crosshair on mobile
+      this.crosshair.setVisible(false);
+
+      // Hide keyboard ability labels on mobile (they show SPACE, Q, E, R)
+      for (const text of this.abilityTexts) {
+        text.setVisible(false);
+      }
+      for (const icon of this.abilityIcons) {
+        icon.setVisible(false);
+      }
+
+      // Show system cursor on mobile (no crosshair replacement needed)
+      this.input.setDefaultCursor('default');
+    }
   }
 
   private resetAbilities(): void {
@@ -459,15 +494,17 @@ export class GameScene extends Phaser.Scene {
       this.abilityTexts.push(keyText);
 
       // Name label below
-      this.add.text(x, y + 35, data.name, {
+      const nameLabel = this.add.text(x, y + 35, data.name, {
         fontFamily: 'monospace',
         fontSize: '8px',
         color: '#888888',
       }).setOrigin(0.5).setScrollFactor(0).setDepth(101);
+      this.abilityTexts.push(nameLabel);
     }
   }
 
   private updateAbilityUI(): void {
+    if (this.isMobileDevice) return;
     const screenWidth = this.cameras.main.width;
     const screenHeight = this.cameras.main.height;
     const iconSize = 50;
@@ -542,6 +579,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateCrosshair(): void {
+    if (this.isMobileDevice) return;
     const pointer = this.input.activePointer;
     this.crosshair.setPosition(pointer.x, pointer.y);
 
@@ -570,12 +608,19 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updatePlayerRotation(): void {
-    // Rotate player ship towards mouse cursor
-    const pointer = this.input.activePointer;
-    const targetAngle = Phaser.Math.Angle.Between(
-      this.player.x, this.player.y,
-      pointer.worldX, pointer.worldY
-    );
+    let targetAngle: number;
+
+    if (this.isMobileDevice && this.mobileInput) {
+      // Mobile: rotate towards auto-aim target
+      targetAngle = this.mobileInput.aimAngle;
+    } else {
+      // Desktop: rotate towards mouse cursor
+      const pointer = this.input.activePointer;
+      targetAngle = Phaser.Math.Angle.Between(
+        this.player.x, this.player.y,
+        pointer.worldX, pointer.worldY
+      );
+    }
 
     // Add PI/2 offset because sprite faces "up" by default
     const targetRotation = targetAngle + Math.PI / 2;
@@ -782,6 +827,22 @@ export class GameScene extends Phaser.Scene {
     // Update ice slow effect
     this.updateIceSlowEffect(dt);
 
+    // Update contact damage cooldown (iframes)
+    if (this.contactDamageCooldown > 0) {
+      this.contactDamageCooldown -= dt;
+    }
+
+    // Update mobile input (auto-aim, cooldown displays)
+    if (this.isMobileDevice && this.mobileInput) {
+      this.mobileInput.update(dt, this.player.x, this.player.y, this.enemies);
+      this.mobileInput.updateCooldowns({
+        dash: this.abilities.dash.cooldown / this.abilities.dash.maxCooldown,
+        ultimate: this.abilities.ultimate.cooldown / this.abilities.ultimate.maxCooldown,
+        bomb: this.abilities.bomb.cooldown / this.abilities.bomb.maxCooldown,
+        shield: this.abilities.shield.cooldown / this.abilities.shield.maxCooldown,
+      });
+    }
+
     this.background.tilePositionY -= 30 * dt;
     this.handleInput(dt);
     this.handleAbilityInput();
@@ -838,6 +899,9 @@ export class GameScene extends Phaser.Scene {
   private handleAbilityInput(): void {
     if (this.isGameOver) return;
 
+    // On mobile, abilities are triggered via touch button callbacks
+    if (this.isMobileDevice) return;
+
     // DASH - SPACE
     if (Phaser.Input.Keyboard.JustDown(this.abilityKeys.dash)) {
       this.useDash();
@@ -862,12 +926,21 @@ export class GameScene extends Phaser.Scene {
   private useDash(): void {
     if (this.abilities.dash.cooldown > 0 || this.abilities.dash.active) return;
 
-    // Calculate dash target towards mouse cursor
-    const pointer = this.input.activePointer;
-    const angle = Phaser.Math.Angle.Between(
-      this.player.x, this.player.y,
-      pointer.worldX, pointer.worldY
-    );
+    // Calculate dash target: joystick direction on mobile, mouse cursor on desktop
+    let angle: number;
+    if (this.isMobileDevice && this.mobileInput) {
+      if (this.mobileInput.joystickActive) {
+        angle = this.mobileInput.joystickDirection;
+      } else {
+        angle = this.mobileInput.aimAngle;
+      }
+    } else {
+      const pointer = this.input.activePointer;
+      angle = Phaser.Math.Angle.Between(
+        this.player.x, this.player.y,
+        pointer.worldX, pointer.worldY
+      );
+    }
 
     const dashDistance = 175; // 150-200 pixels
     this.dashStartPos = { x: this.player.x, y: this.player.y };
@@ -1229,15 +1302,22 @@ export class GameScene extends Phaser.Scene {
 
     let vx = 0, vy = 0;
 
-    if (this.wasd.A.isDown || this.cursors.left.isDown) vx -= 1;
-    if (this.wasd.D.isDown || this.cursors.right.isDown) vx += 1;
-    if (this.wasd.W.isDown || this.cursors.up.isDown) vy -= 1;
-    if (this.wasd.S.isDown || this.cursors.down.isDown) vy += 1;
+    if (this.isMobileDevice && this.mobileInput) {
+      // Mobile: read from virtual joystick
+      vx = this.mobileInput.moveX;
+      vy = this.mobileInput.moveY;
+    } else {
+      // Desktop: keyboard input
+      if (this.wasd.A.isDown || this.cursors.left.isDown) vx -= 1;
+      if (this.wasd.D.isDown || this.cursors.right.isDown) vx += 1;
+      if (this.wasd.W.isDown || this.cursors.up.isDown) vy -= 1;
+      if (this.wasd.S.isDown || this.cursors.down.isDown) vy += 1;
 
-    if (vx !== 0 && vy !== 0) {
-      const len = Math.sqrt(vx * vx + vy * vy);
-      vx /= len;
-      vy /= len;
+      if (vx !== 0 && vy !== 0) {
+        const len = Math.sqrt(vx * vx + vy * vy);
+        vx /= len;
+        vy /= len;
+      }
     }
 
     // Apply power-up speed boost multiplier
@@ -1262,8 +1342,25 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateWeapons(dt: number): void {
-    // Only fire when left mouse button is held down
-    if (!this.input.activePointer.isDown) {
+    // Determine if we should fire and the aim angle
+    let shouldFire: boolean;
+    let angle: number;
+
+    if (this.isMobileDevice && this.mobileInput) {
+      // Mobile: auto-fire when target exists or player is moving
+      shouldFire = this.mobileInput.shouldFire;
+      angle = this.mobileInput.aimAngle;
+    } else {
+      // Desktop: fire when left mouse button is held down
+      shouldFire = this.input.activePointer.isDown;
+      const pointer = this.input.activePointer;
+      angle = Phaser.Math.Angle.Between(
+        this.player.x, this.player.y,
+        pointer.worldX, pointer.worldY
+      );
+    }
+
+    if (!shouldFire) {
       // Still update cooldowns when not firing
       const weapons = weaponManager.getActiveWeapons();
       for (const weapon of weapons) {
@@ -1275,13 +1372,6 @@ export class GameScene extends Phaser.Scene {
       }
       return;
     }
-
-    // Calculate angle from player to mouse cursor
-    const pointer = this.input.activePointer;
-    const angle = Phaser.Math.Angle.Between(
-      this.player.x, this.player.y,
-      pointer.worldX, pointer.worldY
-    );
 
     const weapons = weaponManager.getActiveWeapons();
 
@@ -1612,14 +1702,29 @@ export class GameScene extends Phaser.Scene {
         }
       }
 
-      // Contact damage
-      for (const enemy of this.enemies) {
-        const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y);
-        if (dist < 35) {
-          this.damagePlayer(enemy.damage * 0.5);
-          const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, enemy.x, enemy.y);
-          enemy.x += Math.cos(angle) * 50;
-          enemy.y += Math.sin(angle) * 50;
+      // Contact damage (with iframes to prevent instant death from bosses)
+      if (this.contactDamageCooldown <= 0) {
+        for (const enemy of this.enemies) {
+          const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y);
+          if (dist < 35) {
+            this.damagePlayer(enemy.damage * 0.5);
+            this.contactDamageCooldown = 0.5; // 0.5s iframes after contact
+
+            // Push enemy away
+            const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, enemy.x, enemy.y);
+            enemy.x += Math.cos(angle) * 80;
+            enemy.y += Math.sin(angle) * 80;
+
+            // Knockback player away from enemy
+            const knockbackDist = enemy.isBoss ? 120 : 60;
+            const margin = 40;
+            this.player.x -= Math.cos(angle) * knockbackDist;
+            this.player.y -= Math.sin(angle) * knockbackDist;
+            this.player.x = Phaser.Math.Clamp(this.player.x, margin, this.cameras.main.width - margin);
+            this.player.y = Phaser.Math.Clamp(this.player.y, margin, this.cameras.main.height - margin);
+
+            break; // Only one contact hit per iframe window
+          }
         }
       }
     }

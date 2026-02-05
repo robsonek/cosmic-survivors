@@ -24,6 +24,7 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 3000,
     open: true,
+    allowedHosts: true, // needed for mobile testing via network/docker
   },
   base: command === 'build' ? '/game/' : '/',
   build: {
