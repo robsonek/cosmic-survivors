@@ -1,0 +1,17 @@
+{
+  "name": "Cosmic Survivors",
+  "short_name": "CosmicSurv",
+  "description": "Bullet Heaven / Roguelite space game",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a1a",
+  "icons": [
+    {
+      "src": "/assets/sprites/player.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

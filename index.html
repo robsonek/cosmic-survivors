@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.json">
   <title>Cosmic Survivors</title>
   <style>
     * {
@@ -55,13 +57,59 @@
       font-family: 'Courier New', monospace;
       font-size: 24px;
       text-align: center;
+      z-index: 50;
     }
     #loading.hidden {
       display: none;
     }
+    /* Mobile fullscreen splash - blocks interaction until tapped */
+    #mobile-splash {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 100000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier New', monospace;
+      color: #ffffff;
+      text-align: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #mobile-splash .title {
+      font-size: 28px;
+      color: #00ff88;
+      margin-bottom: 8px;
+      letter-spacing: 4px;
+    }
+    #mobile-splash .tap-text {
+      font-size: 18px;
+      color: #00ffff;
+      animation: pulse 1.5s ease-in-out infinite;
+      margin-top: 30px;
+    }
+    #mobile-splash .hint {
+      font-size: 11px;
+      color: #666;
+      margin-top: 20px;
+      max-width: 280px;
+      line-height: 1.4;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
+  <div id="mobile-splash">
+    <div class="title">COSMIC SURVIVORS</div>
+    <div class="tap-text">DOTKNIJ ABY GRAC</div>
+    <div class="hint">Aby calkowicie ukryc pasek przegladarki, dodaj gre do ekranu glownego (Udostepnij → Dodaj do ekranu glownego)</div>
+  </div>
   <div id="game-container">
     <div id="loading">
       <div>COSMIC SURVIVORS</div>
