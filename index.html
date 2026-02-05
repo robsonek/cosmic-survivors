@@ -17,6 +17,9 @@
       height: 100%;
       overflow: hidden;
       background-color: #0a0a0f;
+      position: fixed;
+      top: 0;
+      left: 0;
     }
     #game-container {
       width: 100%;
@@ -24,9 +27,24 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      /* Safe area for notched phones */
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     canvas {
       display: block;
+      touch-action: none;
+    }
+    /* Mobile: fill entire viewport */
+    @media (hover: none) and (pointer: coarse) {
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+    /* Fullscreen: fill entire screen, no safe area padding */
+    :fullscreen #game-container,
+    :-webkit-full-screen #game-container {
+      padding: 0;
     }
     #loading {
       position: fixed;

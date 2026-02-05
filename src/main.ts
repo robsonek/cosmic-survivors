@@ -6,6 +6,7 @@
 
 import * as Phaser from 'phaser';
 import { GameScene } from './scenes/GameScene';
+import { isMobile } from './mobile/MobileDetector';
 
 // Hide loading screen when game starts
 function hideLoading(): void {
@@ -31,11 +32,13 @@ function main(): void {
   console.log('🚀 Cosmic Survivors starting...');
 
   try {
+    const mobile = isMobile();
+
     // Phaser game configuration
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: 1280,
-      height: 720,
+      width: mobile ? window.innerWidth : 1280,
+      height: mobile ? window.innerHeight : 720,
       parent: 'game-container',
       backgroundColor: '#0a0a1a',
       physics: {
@@ -46,8 +49,15 @@ function main(): void {
       },
       scene: [GameScene],
       scale: {
-        mode: Phaser.Scale.FIT,
+        mode: mobile ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: mobile ? '100%' : 1280,
+        height: mobile ? '100%' : 720,
+      },
+      input: {
+        touch: {
+          capture: true,
+        },
       },
     };
 
@@ -59,6 +69,31 @@ function main(): void {
       hideLoading();
       console.log('✅ Cosmic Survivors initialized!');
     });
+
+    // On mobile, request fullscreen on first touch to hide browser chrome
+    if (mobile) {
+      const requestFullscreen = () => {
+        const doc = document.documentElement;
+        const requestFS = doc.requestFullscreen
+          || (doc as HTMLElement & { webkitRequestFullscreen?: () => Promise<void> }).webkitRequestFullscreen;
+        if (requestFS) {
+          requestFS.call(doc).catch(() => {
+            // Fullscreen denied - scroll to hide address bar as fallback
+            window.scrollTo(0, 1);
+          });
+        }
+        document.removeEventListener('touchstart', requestFullscreen);
+      };
+      document.addEventListener('touchstart', requestFullscreen, { once: true });
+
+      // Also try to lock orientation to landscape
+      const orientation = screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> };
+      if (orientation?.lock) {
+        orientation.lock('landscape').catch(() => {
+          // Orientation lock not supported - OrientationWarning handles this
+        });
+      }
+    }
 
     // Expose game to window for debugging
     if (import.meta.env.DEV) {
