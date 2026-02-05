@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cosmic Survivors - A Bullet Heaven roguelite game. Survive endless waves, evolve weapons, and dominate the cosmos in this action-packed multiplayer experience.">
+  <meta name="keywords" content="bullet heaven, roguelite, phaser 4, multiplayer, cosmic survivors, browser game">
+  <title>Cosmic Survivors - Survive. Evolve. Dominate.</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="stars-bg"></div>
+    <div class="hero-content">
+      <h1 class="text-gradient animate-fade-in">COSMIC SURVIVORS</h1>
+      <p class="subtitle animate-fade-in">Survive. Evolve. Dominate.</p>
+      <p class="subtitle animate-fade-in">Battle endless waves of cosmic enemies in this action-packed Bullet Heaven roguelite. Build devastating weapon combinations and become the ultimate survivor.</p>
+      <div class="btn-group animate-fade-in">
+        <a href="play.html" class="btn btn-primary">Play Now</a>
+        <a href="about.html" class="btn btn-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-gradient">Why Play Cosmic Survivors?</h2>
+        <div class="section-divider"></div>
+        <p class="section-desc">Experience the ultimate bullet heaven experience with revolutionary gameplay mechanics</p>
+      </div>
+
+      <div class="card-grid reveal">
+        <!-- Feature 1 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(0,255,255,0.2), rgba(0,255,255,0.05));">
+            ⚔️
+          </div>
+          <h3>Bullet Heaven Combat</h3>
+          <p>Auto-shooting weapons that fill the screen with projectiles. Choose from 10 unique weapons, each with distinct attack patterns and playstyles.</p>
+          <span class="tag tag-cyan">Core Feature</span>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(255,0,255,0.2), rgba(255,0,255,0.05));">
+            ⚡
+          </div>
+          <h3>Weapon Evolution</h3>
+          <p>Combine weapons to create powerful evolutions with game-changing abilities. Discover synergies and create your perfect build.</p>
+          <span class="tag tag-magenta">Synergy System</span>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(255,51,85,0.2), rgba(255,51,85,0.05));">
+            👾
+          </div>
+          <h3>Endless Waves</h3>
+          <p>Face escalating enemy waves with increasing difficulty. Every 5th wave spawns a challenging boss with unique mechanics.</p>
+          <span class="tag tag-red">Infinite Scaling</span>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(255,215,0,0.05));">
+            💎
+          </div>
+          <h3>Power-Up System</h3>
+          <p>Choose from 6 passive power-ups at each level. Stack upgrades, trigger combo multipliers, and watch your power grow exponentially.</p>
+          <span class="tag tag-gold">Progression</span>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(51,255,136,0.2), rgba(51,255,136,0.05));">
+            🌟
+          </div>
+          <h3>Deep Progression</h3>
+          <p>Unlock permanent upgrades through the talent tree. Complete achievements, earn rewards, and grow stronger with every run.</p>
+          <span class="tag tag-green">Meta Progression</span>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card">
+          <div class="card-icon" style="background: linear-gradient(135deg, rgba(51,136,255,0.2), rgba(51,136,255,0.05));">
+            🎮
+          </div>
+          <h3>Multiplayer Co-op</h3>
+          <p>Team up with up to 4 players online. Share XP, coordinate builds, and dominate together in this cooperative bullet hell experience.</p>
+          <span class="tag tag-blue">4 Players</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weapons Showcase -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-gradient">Featured Weapons</h2>
+        <div class="section-divider"></div>
+        <p class="section-desc">Master unique weapons with distinct attack patterns and upgrade paths</p>
+      </div>
+
+      <div class="card-grid card-grid-2 reveal">
+        <!-- Weapon 1 -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+            <h3>Magic Wand</h3>
+            <span class="tag tag-cyan">Projectile</span>
+          </div>
+          <p style="margin-bottom: 0.5rem;">The classic starter weapon. Fires homing projectiles at nearby enemies with moderate damage and fire rate.</p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <span class="tag tag-purple">Auto-Target</span>
+            <span class="tag tag-blue">Beginner-Friendly</span>
+          </div>
+        </div>
+
+        <!-- Weapon 2 -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+            <h3>Fire Wand</h3>
+            <span class="tag tag-red">Projectile</span>
+          </div>
+          <p style="margin-bottom: 0.5rem;">Shoots piercing fireballs that pass through enemies. Slow but devastating, perfect for clearing dense crowds.</p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <span class="tag tag-orange">Pierce</span>
+            <span class="tag tag-red">High Damage</span>
+          </div>
+        </div>
+
+        <!-- Weapon 3 -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+            <h3>Garlic</h3>
+            <span class="tag tag-green">Area</span>
+          </div>
+          <p style="margin-bottom: 0.5rem;">Creates a protective aura that damages enemies on contact. Passive defense that grows stronger with upgrades.</p>
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <span class="tag tag-green">Passive</span>
+            <span class="tag tag-cyan">Defense</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <a href="weapons.html" class="btn btn-secondary">View All 10 Weapons</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Game Stats -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-gradient">By The Numbers</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+        <div class="reveal">
+          <div style="font-size: 3.5rem; font-family: var(--font-heading); font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;">10</div>
+          <div style="font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem;">Unique Weapons</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Each with evolutions</div>
+        </div>
+
+        <div class="reveal">
+          <div style="font-size: 3.5rem; font-family: var(--font-heading); font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;">10</div>
+          <div style="font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem;">Enemy Types</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Including epic bosses</div>
+        </div>
+
+        <div class="reveal">
+          <div style="font-size: 3.5rem; font-family: var(--font-heading); font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;">55K+</div>
+          <div style="font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem;">Lines of Code</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Built with Phaser 4</div>
+        </div>
+
+        <div class="reveal">
+          <div style="font-size: 3.5rem; font-family: var(--font-heading); font-weight: 700; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1;">∞</div>
+          <div style="font-size: 1.1rem; color: var(--text-secondary); margin-top: 0.5rem;">Replayability</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Endless progression</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section section-alt">
+    <div class="container" style="text-align: center;">
+      <div class="reveal">
+        <h2 class="text-gradient" style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 1.5rem;">Ready to Survive?</h2>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+          Jump into the action now. No downloads, no registration required. Just pure bullet heaven mayhem.
+        </p>
+        <div class="btn-group">
+          <a href="play.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 3rem;">
+            Play Now - It's Free
+          </a>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+          Runs in any modern browser with WebGPU support
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   resolve: {
     alias: {
       '@core': resolve(__dirname, 'src/core'),
@@ -25,9 +25,10 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  base: command === 'build' ? '/game/' : '/',
   build: {
     target: 'esnext',
-    outDir: 'dist',
+    outDir: 'dist/game',
     sourcemap: true,
     minify: 'esbuild',
     rollupOptions: {
@@ -43,4 +44,4 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
   },
-});
+}));

@@ -138,8 +138,7 @@ export const DIFFICULTY_CONFIGS: Record<DifficultyMode, DifficultyConfig> = {
       xpMultiplier: 2.0,
       spawnRateMultiplier: 1.3,
     },
-    locked: true,
-    unlockRequirement: 'Survive 15 minutes on Normal difficulty',
+    locked: false,
   },
 };
 

@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:website": "cd website && python3 -m http.server 8080",
     "build": "tsc && vite build",
+    "build:deploy": "rm -rf dist && tsc && vite build && cp -r website/* dist/",
     "preview": "vite preview",
     "test": "vitest",
     "test:unit": "vitest run --dir tests/unit",

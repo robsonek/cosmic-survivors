@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Mechanics - Cosmic Survivors</title>
+  <meta name="description" content="Deep systems that create emergent gameplay - combo chains, kill streaks, power-ups, environmental hazards, and progression mechanics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="text-gradient">Game Mechanics</h1>
+      <div class="section-divider"></div>
+      <p class="page-desc">Deep systems that create emergent gameplay</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Tabs Navigation -->
+    <section class="section">
+      <div class="container">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="combo">Combo System</button>
+          <button class="tab-btn" data-tab="streaks">Kill Streaks</button>
+          <button class="tab-btn" data-tab="powerups">Power-Ups</button>
+          <button class="tab-btn" data-tab="hazards">Hazards</button>
+          <button class="tab-btn" data-tab="difficulty">Difficulty</button>
+          <button class="tab-btn" data-tab="progression">Progression</button>
+        </div>
+
+        <!-- Tab: Combo System -->
+        <div class="tab-content active" data-tab-content="combo">
+          <div class="card">
+            <h3>Combo Chain System</h3>
+            <p>Chain kills within 2 seconds to build devastating multipliers and unlock milestone bonuses.</p>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">How It Works</h4>
+              <ul style="color: var(--text-secondary); line-height: 1.8;">
+                <li>Kill an enemy to start a combo chain</li>
+                <li>Each subsequent kill within <span class="text-cyan">2 seconds</span> extends the combo</li>
+                <li>Multiplier increases from <span class="text-gold">1x</span> to <span class="text-gold">10x</span></li>
+                <li>Missing the window resets your combo to zero</li>
+                <li>Higher multipliers apply to XP gain from each kill</li>
+              </ul>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Combo Milestones</h4>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Milestone</th>
+                    <th>Kills Required</th>
+                    <th>Bonus XP</th>
+                    <th>Visual Effect</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="tag tag-cyan">Small Chain</span></td>
+                    <td class="highlight">5 kills</td>
+                    <td>+50 XP</td>
+                    <td>Blue glow</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-blue">Medium Chain</span></td>
+                    <td class="highlight">10 kills</td>
+                    <td>+100 XP</td>
+                    <td>Purple glow</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-magenta">Large Chain</span></td>
+                    <td class="highlight">25 kills</td>
+                    <td>+250 XP</td>
+                    <td>Magenta pulse</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-orange">Mega Chain</span></td>
+                    <td class="highlight">50 kills</td>
+                    <td>+500 XP</td>
+                    <td>Orange explosion</td>
+                  </tr>
+                  <tr>
+                    <td><span class="tag tag-gold">God Chain</span></td>
+                    <td class="highlight">100 kills</td>
+                    <td>+1000 XP</td>
+                    <td>Golden screen flash</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Visual Feedback</h4>
+              <p style="color: var(--text-secondary);">The combo counter appears at the top center of the screen with dynamic colors based on tier:</p>
+              <div class="card-grid" style="margin-top: 1rem;">
+                <div class="card" style="background: rgba(0, 255, 255, 0.1); border-color: var(--accent-cyan);">
+                  <div class="tag tag-cyan">1x - 2x</div>
+                  <p style="margin-top: 0.5rem;">Cyan - Starting</p>
+                </div>
+                <div class="card" style="background: rgba(51, 136, 255, 0.1); border-color: var(--accent-blue);">
+                  <div class="tag tag-blue">3x - 4x</div>
+                  <p style="margin-top: 0.5rem;">Blue - Building</p>
+                </div>
+                <div class="card" style="background: rgba(255, 0, 255, 0.1); border-color: var(--accent-magenta);">
+                  <div class="tag tag-magenta">5x - 7x</div>
+                  <p style="margin-top: 0.5rem;">Magenta - Strong</p>
+                </div>
+                <div class="card" style="background: rgba(255, 136, 51, 0.1); border-color: var(--accent-orange);">
+                  <div class="tag tag-orange">8x - 9x</div>
+                  <p style="margin-top: 0.5rem;">Orange - Extreme</p>
+                </div>
+                <div class="card" style="background: rgba(255, 215, 0, 0.1); border-color: var(--accent-gold);">
+                  <div class="tag tag-gold">10x</div>
+                  <p style="margin-top: 0.5rem;">Gold - Maximum</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Kill Streaks -->
+        <div class="tab-content" data-tab-content="streaks">
+          <div class="card">
+            <h3>Kill Streak Rewards</h3>
+            <p>Accumulate total kills in a single run to unlock powerful temporary bonuses and game-changing abilities.</p>
+
+            <table class="data-table" style="margin-top: 2rem;">
+              <thead>
+                <tr>
+                  <th>Kills</th>
+                  <th>Streak Name</th>
+                  <th>Reward</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="highlight">10</td>
+                  <td><span class="tag tag-cyan">Killing Spree</span></td>
+                  <td>+50 XP</td>
+                  <td>Bonus experience points awarded</td>
+                </tr>
+                <tr>
+                  <td class="highlight">25</td>
+                  <td><span class="tag tag-blue">Rampage</span></td>
+                  <td>+50% Damage (10s)</td>
+                  <td>All your weapons deal increased damage</td>
+                </tr>
+                <tr>
+                  <td class="highlight">50</td>
+                  <td><span class="tag tag-magenta">Unstoppable</span></td>
+                  <td>Heal 25% HP</td>
+                  <td>Instant health regeneration</td>
+                </tr>
+                <tr>
+                  <td class="highlight">100</td>
+                  <td><span class="tag tag-orange">Godlike</span></td>
+                  <td>10s Invincibility</td>
+                  <td>Immune to all damage, golden aura</td>
+                </tr>
+                <tr>
+                  <td class="highlight">200</td>
+                  <td><span class="tag tag-gold">Legendary</span></td>
+                  <td>Screen-wide Explosion</td>
+                  <td>Deals 500 damage to all enemies on screen</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-gold); margin-bottom: 0.5rem;">Pro Tip</h4>
+              <p style="color: var(--text-secondary); margin: 0;">Kill streaks are cumulative and persist throughout the entire run. Plan your upgrades around key streak thresholds for maximum survival potential.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Power-Ups -->
+        <div class="tab-content" data-tab-content="powerups">
+          <div class="card">
+            <h3>Temporary Power-Ups</h3>
+            <p>Enemies have a <span class="text-gold">5% chance</span> to drop power-ups on death. Stack multiple power-ups for devastating combos!</p>
+
+            <div class="card-grid" style="margin-top: 2rem;">
+              <!-- Double Damage -->
+              <div class="card" style="background: rgba(255, 51, 85, 0.1); border-color: var(--accent-red);">
+                <div class="card-icon" style="background: rgba(255, 51, 85, 0.2);">⚔️</div>
+                <h4 style="color: var(--accent-red);">Double Damage</h4>
+                <div class="tag tag-red" style="margin: 0.5rem 0;">10 seconds</div>
+                <p>All weapons deal 2x damage. Stacks multiplicatively with other damage bonuses.</p>
+              </div>
+
+              <!-- Speed Boost -->
+              <div class="card" style="background: rgba(255, 215, 0, 0.1); border-color: var(--accent-gold);">
+                <div class="card-icon" style="background: rgba(255, 215, 0, 0.2);">⚡</div>
+                <h4 style="color: var(--accent-gold);">Speed Boost</h4>
+                <div class="tag tag-gold" style="margin: 0.5rem 0;">10 seconds</div>
+                <p>Movement speed increased by 50%. Great for dodging or repositioning.</p>
+              </div>
+
+              <!-- Invincibility -->
+              <div class="card" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.2);">
+                <div class="card-icon" style="background: rgba(255, 255, 255, 0.1);">🛡️</div>
+                <h4 style="color: var(--text-primary);">Invincibility</h4>
+                <div class="tag" style="background: rgba(255, 255, 255, 0.2); color: white; margin: 0.5rem 0;">5 seconds</div>
+                <p>Complete immunity to all damage. Golden shield effect visible.</p>
+              </div>
+
+              <!-- Magnet -->
+              <div class="card" style="background: rgba(51, 255, 136, 0.1); border-color: var(--accent-green);">
+                <div class="card-icon" style="background: rgba(51, 255, 136, 0.2);">🧲</div>
+                <h4 style="color: var(--accent-green);">Magnet</h4>
+                <div class="tag tag-green" style="margin: 0.5rem 0;">10 seconds</div>
+                <p>XP orbs and pickups are pulled toward you from 3x normal range.</p>
+              </div>
+
+              <!-- Multi-Shot -->
+              <div class="card" style="background: rgba(51, 136, 255, 0.1); border-color: var(--accent-blue);">
+                <div class="card-icon" style="background: rgba(51, 136, 255, 0.2);">🎯</div>
+                <h4 style="color: var(--accent-blue);">Multi-Shot</h4>
+                <div class="tag tag-blue" style="margin: 0.5rem 0;">10 seconds</div>
+                <p>All projectile weapons fire 2 additional projectiles at angles.</p>
+              </div>
+
+              <!-- Rapid Fire -->
+              <div class="card" style="background: rgba(255, 136, 51, 0.1); border-color: var(--accent-orange);">
+                <div class="card-icon" style="background: rgba(255, 136, 51, 0.2);">🔥</div>
+                <h4 style="color: var(--accent-orange);">Rapid Fire</h4>
+                <div class="tag tag-orange" style="margin: 0.5rem 0;">10 seconds</div>
+                <p>Weapon cooldowns reduced by 50%. Attack twice as fast.</p>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 255, 255, 0.05); border-left: 3px solid var(--accent-cyan); border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">Power-Up Stacking</h4>
+              <p style="color: var(--text-secondary); margin: 0;">Multiple power-ups of the same type refresh the duration. Different power-ups stack together - combine Double Damage + Rapid Fire for massive DPS!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Environmental Hazards -->
+        <div class="tab-content" data-tab-content="hazards">
+          <div class="card">
+            <h3>Environmental Hazards</h3>
+            <p>Random hazards spawn after <span class="text-red">Wave 10</span>, adding chaos and strategic depth to each run.</p>
+
+            <div class="card-grid" style="margin-top: 2rem;">
+              <!-- Meteor Shower -->
+              <div class="card" style="background: rgba(255, 136, 51, 0.1); border-color: var(--accent-orange);">
+                <div class="card-icon" style="background: rgba(255, 136, 51, 0.2);">☄️</div>
+                <h4 style="color: var(--accent-orange);">Meteor Shower</h4>
+                <table style="width: 100%; margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <tr>
+                    <td><strong>Damage:</strong></td>
+                    <td class="text-orange">50 per hit</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>8 seconds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Visual:</strong></td>
+                    <td>Orange trails from top of screen</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 1rem;">Meteors fall randomly across the arena. Watch for warning indicators and dodge!</p>
+              </div>
+
+              <!-- Electric Zone -->
+              <div class="card" style="background: rgba(0, 255, 255, 0.1); border-color: var(--accent-cyan);">
+                <div class="card-icon" style="background: rgba(0, 255, 255, 0.2);">⚡</div>
+                <h4 style="color: var(--accent-cyan);">Electric Zone</h4>
+                <table style="width: 100%; margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <tr>
+                    <td><strong>Damage:</strong></td>
+                    <td class="text-cyan">30 per second</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>10 seconds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Visual:</strong></td>
+                    <td>Cyan crackling area</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 1rem;">Electrified zones damage both players and enemies. Use strategically to funnel foes.</p>
+              </div>
+
+              <!-- Poison Cloud -->
+              <div class="card" style="background: rgba(51, 255, 136, 0.1); border-color: var(--accent-green);">
+                <div class="card-icon" style="background: rgba(51, 255, 136, 0.2);">☠️</div>
+                <h4 style="color: var(--accent-green);">Poison Cloud</h4>
+                <table style="width: 100%; margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <tr>
+                    <td><strong>Damage:</strong></td>
+                    <td class="text-green">20 per second</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>15 seconds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Visual:</strong></td>
+                    <td>Green toxic fog</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 1rem;">Lingering poison clouds reduce visibility and apply damage over time. Avoid prolonged exposure.</p>
+              </div>
+
+              <!-- Ice Patch -->
+              <div class="card" style="background: rgba(51, 136, 255, 0.1); border-color: var(--accent-blue);">
+                <div class="card-icon" style="background: rgba(51, 136, 255, 0.2);">❄️</div>
+                <h4 style="color: var(--accent-blue);">Ice Patch</h4>
+                <table style="width: 100%; margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <tr>
+                    <td><strong>Damage:</strong></td>
+                    <td class="text-blue">10 per second</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>12 seconds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Visual:</strong></td>
+                    <td>Blue icy ground</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 1rem;">Slows movement by 40% and applies minor cold damage. Affects all units.</p>
+              </div>
+
+              <!-- Lava Crack -->
+              <div class="card" style="background: rgba(255, 51, 85, 0.1); border-color: var(--accent-red);">
+                <div class="card-icon" style="background: rgba(255, 51, 85, 0.2);">🌋</div>
+                <h4 style="color: var(--accent-red);">Lava Crack</h4>
+                <table style="width: 100%; margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                  <tr>
+                    <td><strong>Damage:</strong></td>
+                    <td class="text-red">40 per second</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Duration:</strong></td>
+                    <td>20 seconds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Visual:</strong></td>
+                    <td>Red glowing fissure</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 1rem;">Cracks in the ground spew lava. High damage but clearly visible - easy to avoid.</p>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 51, 85, 0.05); border-left: 3px solid var(--accent-red); border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-red); margin-bottom: 0.5rem;">Warning</h4>
+              <p style="color: var(--text-secondary); margin: 0;">Hazards spawn more frequently at higher waves and can overlap. Stay mobile and keep an escape route open at all times!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Difficulty System -->
+        <div class="tab-content" data-tab-content="difficulty">
+          <div class="card">
+            <h3>Difficulty Scaling</h3>
+            <p>Choose your challenge level and face increasingly difficult waves as time progresses.</p>
+
+            <table class="data-table" style="margin-top: 2rem;">
+              <thead>
+                <tr>
+                  <th>Difficulty</th>
+                  <th>Enemy HP</th>
+                  <th>Enemy Damage</th>
+                  <th>Enemy Speed</th>
+                  <th>XP Multiplier</th>
+                  <th>Unlock Requirement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag tag-green">Easy</span></td>
+                  <td class="highlight">0.7x</td>
+                  <td class="highlight">0.7x</td>
+                  <td>1.0x</td>
+                  <td class="text-gold">1.5x</td>
+                  <td>Default</td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-cyan">Normal</span></td>
+                  <td class="highlight">1.0x</td>
+                  <td class="highlight">1.0x</td>
+                  <td>1.0x</td>
+                  <td class="text-gold">1.0x</td>
+                  <td>Default</td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-red">Nightmare</span></td>
+                  <td class="highlight">1.5x</td>
+                  <td class="highlight">1.5x</td>
+                  <td class="text-red">2.0x</td>
+                  <td class="text-gold">2.0x</td>
+                  <td>Survive 15 min on Normal</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Endless Scaling</h4>
+              <p style="color: var(--text-secondary);">After 20 minutes in any difficulty, the game enters "Endless Mode":</p>
+              <ul style="color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                <li>Enemy HP and damage increase by <span class="text-red">+5% per minute</span></li>
+                <li>Enemy spawn rate increases by <span class="text-red">+3% per minute</span></li>
+                <li>Boss health scales by <span class="text-red">+10% per minute</span></li>
+                <li>Maximum enemy count increases by <span class="text-cyan">+10 per minute</span></li>
+                <li>No upper limit - survive as long as you can!</li>
+              </ul>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Adaptive Difficulty (Multiplayer)</h4>
+              <p style="color: var(--text-secondary);">In co-op games, difficulty automatically adjusts based on player count:</p>
+              <table class="data-table" style="margin-top: 1rem;">
+                <thead>
+                  <tr>
+                    <th>Players</th>
+                    <th>Enemy HP Modifier</th>
+                    <th>Enemy Count Modifier</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="highlight">2 Players</td>
+                    <td>+40%</td>
+                    <td>+30%</td>
+                  </tr>
+                  <tr>
+                    <td class="highlight">3 Players</td>
+                    <td>+80%</td>
+                    <td>+60%</td>
+                  </tr>
+                  <tr>
+                    <td class="highlight">4 Players</td>
+                    <td>+120%</td>
+                    <td>+100%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 0, 255, 0.05); border-left: 3px solid var(--accent-magenta); border-radius: var(--radius-md);">
+              <h4 style="color: var(--accent-magenta); margin-bottom: 0.5rem;">Challenge Mode</h4>
+              <p style="color: var(--text-secondary); margin: 0;">Unlock challenge modifiers after your first 30-minute survival: Random weapon starts, double boss waves, no passive abilities, and more!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Progression -->
+        <div class="tab-content" data-tab-content="progression">
+          <div class="card">
+            <h3>Progression Systems</h3>
+            <p>Multiple layers of growth ensure every run makes you stronger, both within the session and across your entire account.</p>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">XP & Leveling</h4>
+              <p style="color: var(--text-secondary);">Gain experience from killing enemies and reach new levels to unlock upgrade choices.</p>
+              <ul style="color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                <li>XP required per level scales at <span class="text-gold">level^1.15</span></li>
+                <li>Each level grants choice of <span class="text-cyan">3 random upgrades</span></li>
+                <li>Higher combo multipliers increase XP gain up to 10x</li>
+                <li>XP orbs are automatically collected after 1 second near player</li>
+                <li>Magnet power-up or passive increases collection radius by 3x</li>
+              </ul>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Passive Abilities</h4>
+              <p style="color: var(--text-secondary);">Permanent stat bonuses that can be leveled up during a run (max 5 stacks each).</p>
+
+              <div class="card-grid" style="margin-top: 1rem;">
+                <div class="card" style="background: rgba(255, 51, 85, 0.05);">
+                  <h4 style="color: var(--accent-red); font-size: 1rem;">🔪 Thorns</h4>
+                  <p style="font-size: 0.85rem;">Reflect 10% damage back to attackers</p>
+                </div>
+                <div class="card" style="background: rgba(255, 0, 255, 0.05);">
+                  <h4 style="color: var(--accent-magenta); font-size: 1rem;">❤️ Life Steal</h4>
+                  <p style="font-size: 0.85rem;">Heal for 5% of damage dealt</p>
+                </div>
+                <div class="card" style="background: rgba(255, 215, 0, 0.05);">
+                  <h4 style="color: var(--accent-gold); font-size: 1rem;">🍀 Lucky</h4>
+                  <p style="font-size: 0.85rem;">+10% critical hit chance</p>
+                </div>
+                <div class="card" style="background: rgba(255, 51, 85, 0.05);">
+                  <h4 style="color: var(--accent-red); font-size: 1rem;">💢 Berserker</h4>
+                  <p style="font-size: 0.85rem;">+15% damage when below 30% HP</p>
+                </div>
+                <div class="card" style="background: rgba(51, 255, 136, 0.05);">
+                  <h4 style="color: var(--accent-green); font-size: 1rem;">🛡️ Guardian Angel</h4>
+                  <p style="font-size: 0.85rem;">Revive once per run with 50% HP</p>
+                </div>
+                <div class="card" style="background: rgba(0, 255, 255, 0.05);">
+                  <h4 style="color: var(--accent-cyan); font-size: 1rem;">⚡ Momentum</h4>
+                  <p style="font-size: 0.85rem;">+5% speed for each kill (max 50%)</p>
+                </div>
+                <div class="card" style="background: rgba(255, 136, 51, 0.05);">
+                  <h4 style="color: var(--accent-orange); font-size: 1rem;">💥 Glass Cannon</h4>
+                  <p style="font-size: 0.85rem;">+25% damage, -20% max HP</p>
+                </div>
+                <div class="card" style="background: rgba(170, 85, 255, 0.05);">
+                  <h4 style="color: var(--accent-purple); font-size: 1rem;">🌐 Area Master</h4>
+                  <p style="font-size: 0.85rem;">+20% area of effect size</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Weapon Evolution</h4>
+              <p style="color: var(--text-secondary);">Fully upgraded weapons can evolve into legendary forms with unique abilities.</p>
+              <table class="data-table" style="margin-top: 1rem;">
+                <thead>
+                  <tr>
+                    <th>Requirement</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="highlight">Weapon Level</td>
+                    <td>Max level (8)</td>
+                  </tr>
+                  <tr>
+                    <td class="highlight">Character Level</td>
+                    <td>Level 20+</td>
+                  </tr>
+                  <tr>
+                    <td class="highlight">Required Passive</td>
+                    <td>Specific passive at level 3+</td>
+                  </tr>
+                  <tr>
+                    <td class="highlight">Evolution Trigger</td>
+                    <td>Find evolution chest or reach wave 15</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div style="margin-top: 2rem;">
+              <h4 style="color: var(--accent-cyan); margin-bottom: 1rem;">Meta-Progression: Talent Tree</h4>
+              <p style="color: var(--text-secondary);">Spend crystals earned from runs to unlock permanent account-wide bonuses across 4 branches:</p>
+              <div class="card-grid card-grid-2" style="margin-top: 1rem;">
+                <div class="card">
+                  <h4 style="color: var(--accent-red);">⚔️ Offense (8 talents)</h4>
+                  <p style="font-size: 0.9rem;">Increased damage, crit chance, projectile count, cooldown reduction</p>
+                </div>
+                <div class="card">
+                  <h4 style="color: var(--accent-green);">🛡️ Defense (7 talents)</h4>
+                  <p style="font-size: 0.9rem;">More HP, armor, regeneration, damage reduction, revives</p>
+                </div>
+                <div class="card">
+                  <h4 style="color: var(--accent-cyan);">🌟 Utility (6 talents)</h4>
+                  <p style="font-size: 0.9rem;">Magnet range, XP gain, movement speed, pickup value</p>
+                </div>
+                <div class="card">
+                  <h4 style="color: var(--accent-magenta);">🎲 Luck (5 talents)</h4>
+                  <p style="font-size: 0.9rem;">Power-up drop rate, better upgrade choices, rare item chance</p>
+                </div>
+              </div>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem; text-align: center;">Total: 26 talents with multiple ranks each</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Screen Effects Section -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Screen Effects & Feedback</h2>
+          <div class="section-divider"></div>
+          <p class="section-desc">Visual polish that makes every action feel impactful</p>
+        </div>
+
+        <div class="card-grid card-grid-2">
+          <div class="card">
+            <div class="card-icon" style="background: rgba(255, 0, 255, 0.2); color: var(--accent-magenta);">⏸️</div>
+            <h3>Hit Stop</h3>
+            <p>Time briefly freezes on critical hits and kills, emphasizing the impact of your attacks. Duration scales with damage dealt.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon" style="background: rgba(0, 255, 255, 0.2); color: var(--accent-cyan);">🐌</div>
+            <h3>Slow Motion</h3>
+            <p>Triggered during kill streak milestones and boss phase transitions. Gives you a moment to appreciate the chaos and plan your next move.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon" style="background: rgba(255, 51, 85, 0.2); color: var(--accent-red);">🌈</div>
+            <h3>Chromatic Aberration</h3>
+            <p>RGB color separation effect when taking heavy damage or during intense moments. Adds visual intensity without obscuring gameplay.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon" style="background: rgba(255, 215, 0, 0.2); color: var(--accent-gold);">🎯</div>
+            <h3>Vignette Effect</h3>
+            <p>Screen edges darken at low health or during boss encounters. Subtle visual cue that focuses attention on the center action.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-card); border: var(--border-subtle); border-radius: var(--radius-lg);">
+          <h4 style="color: var(--accent-cyan); margin-bottom: 1rem; text-align: center;">Accessibility Options</h4>
+          <p style="color: var(--text-secondary); text-align: center; margin: 0;">All screen effects can be adjusted or disabled in settings. We want the game to be enjoyable for everyone, regardless of motion sensitivity.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

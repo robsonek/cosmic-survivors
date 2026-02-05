@@ -36,7 +36,8 @@ import {
   getHazardSystem,
   resetHazardSystem,
 } from '../systems/HazardSystem';
-import { difficultySystem } from '../systems/DifficultySystem';
+import { difficultySystem, DifficultyMode } from '../systems/DifficultySystem';
+import { getGameMode } from '../shared/utils/urlParams';
 
 interface Enemy extends Phaser.GameObjects.Sprite {
   enemyId: string;
@@ -71,6 +72,9 @@ export class GameScene extends Phaser.Scene {
   private projectiles: Projectile[] = [];
   private xpOrbs: XPOrb[] = [];
 
+  // Game mode from URL parameters
+  private gameMode: string = 'standard';
+
   // Player stats - base stats, progression system adds power over time
   private stats = {
     maxHp: 150,
@@ -93,6 +97,7 @@ export class GameScene extends Phaser.Scene {
   private isPaused = false;
   private isGameOver = false;
   private weaponCooldowns: Map<string, number> = new Map();
+  private practiceModeTimer = 0;
 
   // Abilities system
   private abilities = {
@@ -162,6 +167,7 @@ export class GameScene extends Phaser.Scene {
   private xpBar!: Phaser.GameObjects.Graphics;
   private background!: Phaser.GameObjects.TileSprite;
   private difficultyText!: Phaser.GameObjects.Text;
+  private gameModeText!: Phaser.GameObjects.Text;
 
   // Crosshair
   private crosshair!: Phaser.GameObjects.Graphics;
@@ -212,6 +218,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Get game mode from URL parameters
+    this.gameMode = getGameMode();
+    console.log(`Game mode: ${this.gameMode}`);
+
     // Reset systems
     this.upgradeSystem.reset();
     waveManager.reset();
@@ -223,6 +233,21 @@ export class GameScene extends Phaser.Scene {
     powerUpSystem.reset();
     difficultySystem.reset();
     this.comboSystem.fullReset();
+
+    // Check for difficulty URL parameter and set after reset
+    const urlParams = new URLSearchParams(window.location.search);
+    const difficultyParam = urlParams.get('difficulty');
+    if (difficultyParam) {
+      const difficultyMap: Record<string, DifficultyMode> = {
+        'easy': DifficultyMode.Easy,
+        'normal': DifficultyMode.Normal,
+        'nightmare': DifficultyMode.Nightmare
+      };
+      const mode = difficultyMap[difficultyParam.toLowerCase()];
+      if (mode && difficultySystem.setMode(mode)) {
+        console.log(`Difficulty set to: ${mode}`);
+      }
+    }
 
     // Set up combo system event handler
     this.comboSystem.addEventListener((event: IComboEvent) => {
@@ -254,8 +279,15 @@ export class GameScene extends Phaser.Scene {
     this.gameTime = 0;
     this.isPaused = false;
     this.isGameOver = false;
+    this.practiceModeTimer = 0;
     this.resetStats();
     this.resetAbilities();
+
+    // Apply practice mode modifications
+    if (this.gameMode === 'practice') {
+      this.stats.maxHp = 99999;
+      this.stats.hp = 99999;
+    }
 
     // Background
     this.background = this.add.tileSprite(
@@ -649,6 +681,22 @@ export class GameScene extends Phaser.Scene {
       stroke: '#000000',
       strokeThickness: 2,
     }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(100);
+
+    // Game mode indicator (top center, below difficulty)
+    this.gameModeText = this.add.text(this.cameras.main.width / 2, 45, '', {
+      fontFamily: 'monospace',
+      fontSize: '18px',
+      color: '#00ffff',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(100);
+
+    // Set game mode text based on mode
+    if (this.gameMode === 'practice') {
+      this.gameModeText.setText('PRACTICE MODE');
+    } else if (this.gameMode === 'multiplayer') {
+      this.gameModeText.setText('MULTIPLAYER - Coming Soon');
+    }
   }
 
   private showUpgradeSelection(): void {
@@ -738,7 +786,19 @@ export class GameScene extends Phaser.Scene {
     this.handleInput(dt);
     this.handleAbilityInput();
     this.updateAbilities(dt);
-    this.updateWaves(dt);
+
+    // Skip wave spawning in practice mode
+    if (this.gameMode !== 'practice') {
+      this.updateWaves(dt);
+    } else {
+      // In practice mode, auto-level every 5 seconds
+      this.practiceModeTimer += dt;
+      if (this.practiceModeTimer >= 5) {
+        this.practiceModeTimer = 0;
+        this.upgradeSystem.addXp(this.upgradeSystem.xpToNextLevel - this.upgradeSystem.currentXp);
+      }
+    }
+
     this.updateWeapons(dt);
     this.updateEnemies(dt);
     this.updateProjectiles(dt);

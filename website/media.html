@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Gallery - Cosmic Survivors</title>
+  <meta name="description" content="Screenshots, videos, and artwork from Cosmic Survivors. View gameplay, boss fights, weapon showcases, and concept art.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* Media Gallery Specific Styles */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .media-item {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      border: var(--border-subtle);
+    }
+
+    .media-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 40px rgba(0, 255, 255, 0.2);
+      border-color: rgba(0, 255, 255, 0.3);
+    }
+
+    /* CSS-only placeholder images with cosmic gradients */
+    .screenshot-placeholder {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screenshot-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-gradient);
+      opacity: 1;
+    }
+
+    .screenshot-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--pattern);
+      opacity: 0.3;
+    }
+
+    /* Unique gradients for each screenshot */
+    .screenshot-1 { --bg-gradient: radial-gradient(ellipse at 30% 50%, #ff0055, #8800ff, #000020); }
+    .screenshot-2 { --bg-gradient: radial-gradient(ellipse at 70% 40%, #00ffff, #0088ff, #001040); }
+    .screenshot-3 { --bg-gradient: radial-gradient(ellipse at 50% 50%, #ffaa00, #ff0088, #200010); }
+    .screenshot-4 { --bg-gradient: radial-gradient(ellipse at 20% 60%, #ff00ff, #6600ff, #100030); }
+    .screenshot-5 { --bg-gradient: radial-gradient(ellipse at 80% 30%, #00ff88, #0088ff, #002030); }
+    .screenshot-6 { --bg-gradient: radial-gradient(ellipse at 40% 70%, #8800ff, #ff0088, #000000); }
+    .screenshot-7 { --bg-gradient: radial-gradient(ellipse at 60% 20%, #ff3355, #ffaa00, #201000); }
+    .screenshot-8 { --bg-gradient: radial-gradient(ellipse at 10% 80%, #00ffff, #00ff88, #003020); }
+    .screenshot-9 { --bg-gradient: radial-gradient(ellipse at 90% 50%, #ff00ff, #ff0055, #300010); }
+    .screenshot-10 { --bg-gradient: radial-gradient(ellipse at 50% 10%, #0088ff, #8800ff, #100030); }
+    .screenshot-11 { --bg-gradient: radial-gradient(ellipse at 30% 90%, #ffaa00, #ff3355, #301000); }
+    .screenshot-12 { --bg-gradient: radial-gradient(ellipse at 70% 60%, #00ff88, #00ffff, #002030); }
+
+    /* Patterns */
+    .screenshot-placeholder {
+      --pattern: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+    }
+
+    .media-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 1rem 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+      color: var(--text-primary);
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+
+    .media-item:hover .media-label {
+      color: var(--accent-cyan);
+    }
+
+    /* Video items */
+    .video-item {
+      position: relative;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.4);
+      transition: all var(--transition-normal);
+      z-index: 1;
+    }
+
+    .video-item:hover .video-overlay {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .play-button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 255, 255, 0.2);
+      border: 3px solid var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--accent-cyan);
+      transition: all var(--transition-normal);
+    }
+
+    .video-item:hover .play-button {
+      transform: scale(1.1);
+      background: rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.3rem 0.6rem;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      z-index: 2;
+    }
+
+    /* Artwork items */
+    .artwork-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .artwork-item {
+      aspect-ratio: 4 / 5;
+    }
+
+    .artwork-1 { --bg-gradient: linear-gradient(135deg, #0088ff, #00ffff, #003050); }
+    .artwork-2 { --bg-gradient: linear-gradient(135deg, #ff0055, #ff00ff, #300020); }
+    .artwork-3 { --bg-gradient: linear-gradient(135deg, #8800ff, #ff0088, #200030); }
+    .artwork-4 { --bg-gradient: linear-gradient(135deg, #ffaa00, #ff3355, #301000); }
+    .artwork-5 { --bg-gradient: linear-gradient(135deg, #00ff88, #00ffff, #002030); }
+    .artwork-6 { --bg-gradient: linear-gradient(135deg, #ff00ff, #0088ff, #100030); }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-content {
+      max-width: 1200px;
+      max-height: 90vh;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: var(--border-glow);
+      position: relative;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      z-index: 10;
+    }
+
+    .lightbox-close:hover {
+      background: var(--accent-cyan);
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    .lightbox-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+      color: var(--text-primary);
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      z-index: 10;
+    }
+
+    /* Press Kit */
+    .press-kit-section {
+      background: var(--bg-card);
+      border: var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .press-kit-section h3 {
+      margin-bottom: 1rem;
+      color: var(--accent-cyan);
+    }
+
+    .factsheet {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .fact-item {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
+      border: var(--border-subtle);
+    }
+
+    .fact-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .fact-value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .download-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid var(--accent-cyan);
+      border-radius: var(--radius-md);
+      color: var(--accent-cyan);
+      font-weight: 600;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+    }
+
+    .contact-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--radius-md);
+      border: var(--border-subtle);
+    }
+
+    .contact-info p {
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-info a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+      .artwork-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .factsheet {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="text-gradient">Media Gallery</h1>
+      <p class="page-desc">Screenshots, videos, and artwork from Cosmic Survivors</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="section">
+      <div class="container">
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="screenshots">Screenshots</button>
+          <button class="tab-btn" data-tab="videos">Videos</button>
+          <button class="tab-btn" data-tab="artwork">Artwork</button>
+          <button class="tab-btn" data-tab="press">Press Kit</button>
+        </div>
+
+        <!-- Screenshots Tab -->
+        <div class="tab-content active" data-tab-content="screenshots">
+          <div class="media-grid">
+
+            <div class="media-item" data-lightbox="Intense Boss Fight">
+              <div class="screenshot-placeholder screenshot-1"></div>
+              <div class="media-label">Intense Boss Fight</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Weapon Evolution">
+              <div class="screenshot-placeholder screenshot-2"></div>
+              <div class="media-label">Weapon Evolution</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Bullet Storm in Action">
+              <div class="screenshot-placeholder screenshot-3"></div>
+              <div class="media-label">Bullet Storm in Action</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Nightmare Mode">
+              <div class="screenshot-placeholder screenshot-4"></div>
+              <div class="media-label">Nightmare Mode</div>
+            </div>
+
+            <div class="media-item" data-lightbox="4-Player Co-op">
+              <div class="screenshot-placeholder screenshot-5"></div>
+              <div class="media-label">4-Player Co-op</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Black Hole Weapon">
+              <div class="screenshot-placeholder screenshot-6"></div>
+              <div class="media-label">Black Hole Weapon</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Kill Streak x100">
+              <div class="screenshot-placeholder screenshot-7"></div>
+              <div class="media-label">Kill Streak x100</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Treasure Chest Drop">
+              <div class="screenshot-placeholder screenshot-8"></div>
+              <div class="media-label">Treasure Chest Drop</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Environmental Hazards">
+              <div class="screenshot-placeholder screenshot-9"></div>
+              <div class="media-label">Environmental Hazards</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Mini-Map View">
+              <div class="screenshot-placeholder screenshot-10"></div>
+              <div class="media-label">Mini-Map View</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Combo System x10">
+              <div class="screenshot-placeholder screenshot-11"></div>
+              <div class="media-label">Combo System x10</div>
+            </div>
+
+            <div class="media-item" data-lightbox="Game Over Stats">
+              <div class="screenshot-placeholder screenshot-12"></div>
+              <div class="media-label">Game Over Stats</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Videos Tab -->
+        <div class="tab-content" data-tab-content="videos">
+          <div class="media-grid">
+
+            <div class="media-item video-item">
+              <div class="screenshot-placeholder screenshot-1"></div>
+              <div class="video-overlay">
+                <div class="play-button">▶</div>
+              </div>
+              <div class="video-duration">3:24</div>
+              <div class="media-label">Official Gameplay Trailer</div>
+            </div>
+
+            <div class="media-item video-item">
+              <div class="screenshot-placeholder screenshot-3"></div>
+              <div class="video-overlay">
+                <div class="play-button">▶</div>
+              </div>
+              <div class="video-duration">5:12</div>
+              <div class="media-label">All 10 Weapons Showcase</div>
+            </div>
+
+            <div class="media-item video-item">
+              <div class="screenshot-placeholder screenshot-4"></div>
+              <div class="video-overlay">
+                <div class="play-button">▶</div>
+              </div>
+              <div class="video-duration">22:45</div>
+              <div class="media-label">Nightmare Mode Full Run</div>
+            </div>
+
+            <div class="media-item video-item">
+              <div class="screenshot-placeholder screenshot-6"></div>
+              <div class="video-overlay">
+                <div class="play-button">▶</div>
+              </div>
+              <div class="video-duration">15:30</div>
+              <div class="media-label">Developer Commentary</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Artwork Tab -->
+        <div class="tab-content" data-tab-content="artwork">
+          <div class="artwork-grid">
+
+            <div class="media-item artwork-item" data-lightbox="Player Ship Concept">
+              <div class="screenshot-placeholder artwork-1"></div>
+              <div class="media-label">Player Ship Concept</div>
+            </div>
+
+            <div class="media-item artwork-item" data-lightbox="Mothership Boss">
+              <div class="screenshot-placeholder artwork-2"></div>
+              <div class="media-label">Mothership Boss</div>
+            </div>
+
+            <div class="media-item artwork-item" data-lightbox="Destroyer Boss">
+              <div class="screenshot-placeholder artwork-3"></div>
+              <div class="media-label">Destroyer Boss</div>
+            </div>
+
+            <div class="media-item artwork-item" data-lightbox="Weapon Effects">
+              <div class="screenshot-placeholder artwork-4"></div>
+              <div class="media-label">Weapon Effects</div>
+            </div>
+
+            <div class="media-item artwork-item" data-lightbox="UI Design">
+              <div class="screenshot-placeholder artwork-5"></div>
+              <div class="media-label">UI Design</div>
+            </div>
+
+            <div class="media-item artwork-item" data-lightbox="Environment Concepts">
+              <div class="screenshot-placeholder artwork-6"></div>
+              <div class="media-label">Environment Concepts</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Press Kit Tab -->
+        <div class="tab-content" data-tab-content="press">
+
+          <div class="press-kit-section">
+            <h3>Game Factsheet</h3>
+            <div class="factsheet">
+              <div class="fact-item">
+                <div class="fact-label">Title</div>
+                <div class="fact-value">Cosmic Survivors</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Genre</div>
+                <div class="fact-value">Bullet Heaven / Roguelite</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Platforms</div>
+                <div class="fact-value">Web (Browser)</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Release Date</div>
+                <div class="fact-value">2026 Q2</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Developer</div>
+                <div class="fact-value">Cosmic Studios</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Engine</div>
+                <div class="fact-value">Phaser 4 + bitECS</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Players</div>
+                <div class="fact-value">1-4 (Co-op)</div>
+              </div>
+              <div class="fact-item">
+                <div class="fact-label">Price</div>
+                <div class="fact-value">Free to Play</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="press-kit-section">
+            <h3>Download Assets</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+              High-resolution logos, screenshots, and promotional materials for press and content creators.
+            </p>
+            <div class="download-list">
+              <a href="#" class="download-btn">
+                <span>📦</span>
+                <span>Logo Pack (PNG/SVG)</span>
+              </a>
+              <a href="#" class="download-btn">
+                <span>🖼️</span>
+                <span>Screenshots (4K)</span>
+              </a>
+              <a href="#" class="download-btn">
+                <span>🎨</span>
+                <span>Concept Art</span>
+              </a>
+              <a href="#" class="download-btn">
+                <span>🎬</span>
+                <span>Gameplay Videos</span>
+              </a>
+              <a href="#" class="download-btn">
+                <span>📄</span>
+                <span>Press Release (PDF)</span>
+              </a>
+              <a href="#" class="download-btn">
+                <span>💿</span>
+                <span>Complete Press Kit</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="press-kit-section">
+            <h3>Contact Information</h3>
+            <div class="contact-info">
+              <p><strong>Press Inquiries:</strong> <a href="mailto:press@cosmicsurvivors.game">press@cosmicsurvivors.game</a></p>
+              <p><strong>Business Contact:</strong> <a href="mailto:business@cosmicsurvivors.game">business@cosmicsurvivors.game</a></p>
+              <p><strong>Support:</strong> <a href="mailto:support@cosmicsurvivors.game">support@cosmicsurvivors.game</a></p>
+              <p><strong>Website:</strong> <a href="https://cosmicsurvivors.game">cosmicsurvivors.game</a></p>
+              <p><strong>Discord:</strong> <a href="#">discord.gg/cosmicsurvivors</a></p>
+              <p><strong>Twitter:</strong> <a href="#">@CosmicSurvivors</a></p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-content">
+      <div class="screenshot-placeholder" id="lightbox-image"></div>
+      <div class="lightbox-title" id="lightbox-title"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+    // Lightbox functionality
+    document.querySelectorAll('[data-lightbox]').forEach(item => {
+      item.addEventListener('click', () => {
+        const title = item.getAttribute('data-lightbox');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxImage = document.getElementById('lightbox-image');
+
+        // Copy the gradient class from clicked item
+        const placeholder = item.querySelector('.screenshot-placeholder');
+        if (placeholder) {
+          lightboxImage.className = placeholder.className;
+        }
+
+        lightboxTitle.textContent = title;
+        lightbox.classList.add('active');
+      });
+    });
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    // Close on background click
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') {
+        closeLightbox();
+      }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+
+</body>
+</html>

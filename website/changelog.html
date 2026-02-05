@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changelog - Cosmic Survivors</title>
+  <meta name="description" content="Development history and version updates for Cosmic Survivors - a Bullet Heaven roguelite game.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* Timeline-specific styles */
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.6rem 1.5rem;
+      background: var(--bg-card);
+      border: var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .filter-btn.active {
+      background: var(--gradient-primary);
+      color: #000;
+      border-color: transparent;
+      box-shadow: var(--shadow-glow-cyan);
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    /* Vertical line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 30px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        var(--accent-cyan) 0%,
+        var(--accent-magenta) 50%,
+        var(--accent-purple) 100%
+      );
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 3rem;
+      padding-left: 80px;
+      opacity: 0;
+      animation: fadeInTimeline 0.6s ease forwards;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes fadeInTimeline {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Version dot */
+    .timeline-dot {
+      position: absolute;
+      left: 20px;
+      top: 8px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      z-index: 2;
+    }
+
+    .timeline-dot.gold {
+      background: var(--accent-gold);
+      box-shadow: 0 0 20px var(--accent-gold), 0 0 40px rgba(255, 215, 0, 0.3);
+    }
+
+    .timeline-dot.purple {
+      background: var(--accent-purple);
+      box-shadow: 0 0 15px var(--accent-purple);
+    }
+
+    .timeline-dot.blue {
+      background: var(--accent-blue);
+      box-shadow: 0 0 15px var(--accent-blue);
+    }
+
+    .timeline-dot.green {
+      background: var(--accent-green);
+      box-shadow: 0 0 15px var(--accent-green);
+    }
+
+    .timeline-dot.orange {
+      background: var(--accent-orange);
+      box-shadow: 0 0 15px var(--accent-orange);
+    }
+
+    .timeline-dot.cyan {
+      background: var(--accent-cyan);
+      box-shadow: 0 0 15px var(--accent-cyan);
+    }
+
+    /* Version card */
+    .version-card {
+      background: var(--bg-card);
+      border: var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: all var(--transition-normal);
+    }
+
+    .version-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(0, 255, 255, 0.15);
+      transform: translateX(5px);
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .version-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .version-number {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .version-name {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    .version-date {
+      padding: 0.25rem 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .version-changes {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .version-changes li {
+      padding: 0.4rem 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .version-changes li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+    }
+
+    .version-changes li strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .latest-badge {
+      padding: 0.3rem 0.8rem;
+      background: var(--gradient-primary);
+      color: #000;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Roadmap section */
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .roadmap-item {
+      background: var(--bg-card);
+      border: var(--border-subtle);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      transition: all var(--transition-fast);
+    }
+
+    .roadmap-item:hover {
+      background: var(--bg-card-hover);
+      border-left-color: var(--accent-magenta);
+      transform: translateX(3px);
+    }
+
+    .roadmap-item h4 {
+      font-size: 1rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.25rem;
+    }
+
+    .roadmap-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      border-radius: 12px;
+      margin-left: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .category-badge.major { background: rgba(255, 215, 0, 0.2); color: var(--accent-gold); }
+    .category-badge.feature { background: rgba(51, 255, 136, 0.2); color: var(--accent-green); }
+    .category-badge.bugfix { background: rgba(255, 51, 85, 0.2); color: var(--accent-red); }
+
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 15px;
+      }
+
+      .timeline-item {
+        padding-left: 50px;
+      }
+
+      .timeline-dot {
+        left: 5px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .version-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .filter-btn {
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="text-gradient">Changelog</h1>
+      <p class="page-desc">Development history and version updates</p>
+    </div>
+  </header>
+
+  <!-- Changelog Section -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="major">Major</button>
+        <button class="filter-btn" data-filter="features">Features</button>
+        <button class="filter-btn" data-filter="bugfixes">Bug Fixes</button>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+
+        <!-- v0.6.0 -->
+        <div class="timeline-item" data-category="major features">
+          <div class="timeline-dot gold">✦</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-cyan">v0.6.0</span>
+              <span class="version-name">"Content Explosion"</span>
+              <span class="latest-badge">LATEST</span>
+              <span class="version-date">Feb 5, 2026</span>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+              Massive content update with 20 parallel agents adding extensive features across all systems.
+            </p>
+            <ul class="version-changes">
+              <li><strong>Weapons:</strong> 5 new weapons added - Lightning Chain, Orbital Blades, Missile Swarm, Freeze Ray, Black Hole</li>
+              <li><strong>Enemies:</strong> 5 new enemy types - Splitter, Teleporter, Shielder, Exploder, Healer</li>
+              <li><strong>Combo System:</strong> New multiplier system (1-10x) with visual feedback and decay</li>
+              <li><strong>Kill Streak:</strong> 5-tier reward system (Hot Streak, Rampage, Unstoppable, Godlike, Legendary)</li>
+              <li><strong>Power-Ups:</strong> 6 collectible types - Damage Boost, Speed Boost, Shield, Freeze Time, Magnet, Multi-Shot</li>
+              <li><strong>Treasure Chests:</strong> Bronze/Silver/Gold chests with scaling rewards</li>
+              <li><strong>Environmental Hazards:</strong> 5 types after wave 10 - Asteroids, Black Holes, Solar Flares, Ion Storms, Wormholes</li>
+              <li><strong>Boss Patterns:</strong> 5 attack patterns - Bullet Hell, Laser Sweep, Summon Minions, Ground Slam, Enrage</li>
+              <li><strong>Elite Modifiers:</strong> 5 elite variants - Vampiric, Fast, Giant, Shielded, Explosive</li>
+              <li><strong>Weapon Evolution:</strong> 3-stage evolution system with unique upgrades per weapon</li>
+              <li><strong>MiniMap:</strong> Radar system showing enemies, pickups, and hazards</li>
+              <li><strong>Damage Numbers:</strong> Comic-style floating damage text with critical indicators</li>
+              <li><strong>Screen Effects:</strong> Hit stop, slow motion, chromatic aberration, vignette</li>
+              <li><strong>Trail Effects:</strong> Afterimage trails and glow effects for player/projectiles</li>
+              <li><strong>Wave Announcer:</strong> Visual/audio announcements for wave starts and boss spawns</li>
+              <li><strong>Achievements:</strong> 10 new achievements with popup notifications</li>
+              <li><strong>Stats Screen:</strong> End-game statistics with DPS graph visualization</li>
+              <li><strong>Difficulty Modes:</strong> Easy, Normal, and Nightmare modes with scaling modifiers</li>
+              <li><strong>Passive Abilities:</strong> 8 new passive upgrades in talent pool</li>
+              <li><strong>Audio:</strong> SFX trigger system integrated with all new features</li>
+              <li><strong>Bug Fix:</strong> Fixed vignette effect persisting on Game Over screen</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.5.0 -->
+        <div class="timeline-item" data-category="major features">
+          <div class="timeline-dot purple">●</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-purple">v0.5.0</span>
+              <span class="version-name">"Meta Progression"</span>
+              <span class="version-date">Feb 3, 2026</span>
+            </div>
+            <ul class="version-changes">
+              <li><strong>Talent Tree:</strong> 26 talents across 4 branches (Offensive, Defensive, Utility, Special)</li>
+              <li><strong>Achievement System:</strong> 30 achievements with hidden unlock conditions</li>
+              <li><strong>Persistent Progression:</strong> Account-level stats and unlocks</li>
+              <li><strong>Save System:</strong> localStorage with cloud backup support</li>
+              <li><strong>Settings Manager:</strong> Volume controls, keybinds, graphics options</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.4.0 -->
+        <div class="timeline-item" data-category="major features">
+          <div class="timeline-dot blue">●</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-blue">v0.4.0</span>
+              <span class="version-name">"Multiplayer"</span>
+              <span class="version-date">Feb 2, 2026</span>
+            </div>
+            <ul class="version-changes">
+              <li><strong>Nakama Integration:</strong> Open-source multiplayer backend with authentication</li>
+              <li><strong>State Synchronization:</strong> Delta compression for efficient network updates</li>
+              <li><strong>Client-Side Prediction:</strong> Rollback system for smooth player movement</li>
+              <li><strong>Interpolation:</strong> 100ms buffer for remote player smoothing</li>
+              <li><strong>Match Handler:</strong> Lobby system with ready-up and host migration</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.3.0 -->
+        <div class="timeline-item" data-category="major features">
+          <div class="timeline-dot green">●</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-green">v0.3.0</span>
+              <span class="version-name">"Progression & UI"</span>
+              <span class="version-date">Feb 1, 2026</span>
+            </div>
+            <ul class="version-changes">
+              <li><strong>HUD System:</strong> Real-time display of health, XP, weapons, timer, kills</li>
+              <li><strong>Upgrade Screen:</strong> 3-card selection system with keyboard shortcuts (1/2/3)</li>
+              <li><strong>Pause & Game Over:</strong> Full screen system with stats and restart options</li>
+              <li><strong>Wave Generator:</strong> Boss spawns every 5 waves with escalating difficulty</li>
+              <li><strong>Difficulty Scaler:</strong> +5% per minute with adaptive challenge</li>
+              <li><strong>Loot & Pickups:</strong> XP orbs, health drops, and magnetic collection</li>
+              <li><strong>Audio Manager:</strong> SFX pooling, spatial audio, and music crossfading</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.2.0 -->
+        <div class="timeline-item" data-category="major features">
+          <div class="timeline-dot orange">●</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-orange">v0.2.0</span>
+              <span class="version-name">"Gameplay Core"</span>
+              <span class="version-date">Jan 30, 2026</span>
+            </div>
+            <ul class="version-changes">
+              <li><strong>Damage System:</strong> Armor, critical hits, and shield mechanics</li>
+              <li><strong>Projectile System:</strong> Pierce mechanics and lifetime management</li>
+              <li><strong>Weapon System:</strong> Auto-fire and intelligent targeting</li>
+              <li><strong>AI System:</strong> State machine with multiple behavior types</li>
+              <li><strong>Base Weapons:</strong> Magic Wand, Knife, Garlic, Whip, Fire Wand</li>
+              <li><strong>Base Enemies:</strong> Bat, Skeleton, Zombie, Ghost, Ogre</li>
+              <li><strong>Particle System:</strong> Phaser-based effects for impacts and trails</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- v0.1.0 -->
+        <div class="timeline-item" data-category="major">
+          <div class="timeline-dot cyan">●</div>
+          <div class="version-card">
+            <div class="version-header">
+              <span class="version-number text-cyan">v0.1.0</span>
+              <span class="version-name">"Foundation"</span>
+              <span class="version-date">Jan 28, 2026</span>
+            </div>
+            <ul class="version-changes">
+              <li><strong>Project Structure:</strong> 11-agent architecture with specialized domains</li>
+              <li><strong>bitECS Integration:</strong> 26 component definitions for entity system</li>
+              <li><strong>Phaser 4 Renderer:</strong> WebGPU with WebGL2 fallback</li>
+              <li><strong>Game Loop:</strong> Fixed timestep at 60Hz with delta accumulation</li>
+              <li><strong>Input System:</strong> WASD, mouse, and gamepad support</li>
+              <li><strong>Spatial Hash:</strong> 64px cell grid for broad-phase collision</li>
+              <li><strong>Physics System:</strong> Collision detection with raycasting support</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap Section -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="text-gradient">Coming Soon</h2>
+        <div class="section-divider"></div>
+        <p class="section-desc">Planned features and improvements</p>
+      </div>
+
+      <div class="roadmap-grid reveal">
+        <div class="roadmap-item">
+          <h4>More Weapons</h4>
+          <p>45 additional weapons with unique mechanics and evolution paths</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Character Classes</h4>
+          <p>Multiple playable characters with unique abilities and starting stats</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Boss Encounters</h4>
+          <p>Unique boss fights with distinct patterns and mechanics</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Tutorial System</h4>
+          <p>Interactive tutorial for new players with tooltips and hints</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Mobile Optimization</h4>
+          <p>Touch controls and performance improvements for mobile devices</p>
+        </div>
+        <div class="roadmap-item">
+          <h4>Localization</h4>
+          <p>Multi-language support with internationalization (i18n)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script>
+    // Filter functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const timelineItems = document.querySelectorAll('.timeline-item');
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter;
+
+          // Update active button
+          filterButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          // Filter timeline items
+          timelineItems.forEach(item => {
+            const categories = item.dataset.category.split(' ');
+
+            if (filter === 'all') {
+              item.style.display = 'block';
+            } else if (filter === 'major' && categories.includes('major')) {
+              item.style.display = 'block';
+            } else if (filter === 'features' && categories.includes('features')) {
+              item.style.display = 'block';
+            } else if (filter === 'bugfixes' && categories.includes('bugfixes')) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

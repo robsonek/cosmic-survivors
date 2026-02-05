@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestiary - Cosmic Survivors</title>
+  <meta name="description" content="Know your enemy. Study their patterns. Survive the cosmic threat.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="container">
+      <h1 class="text-gradient">Bestiary</h1>
+      <p class="page-desc">Know your enemy. Study their patterns. Survive.</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Tabs Navigation -->
+    <section class="section">
+      <div class="container">
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="all">All</button>
+          <button class="tab-btn" data-tab="minions">Minions</button>
+          <button class="tab-btn" data-tab="special">Special</button>
+          <button class="tab-btn" data-tab="bosses">Bosses</button>
+          <button class="tab-btn" data-tab="modifiers">Elite Modifiers</button>
+        </div>
+
+        <!-- Tab: All -->
+        <div class="tab-content active" data-tab-content="all">
+          <!-- Regular Enemies -->
+          <div class="section-header" style="text-align: left; margin-top: 2rem;">
+            <h2>Regular Enemies</h2>
+            <p class="section-desc" style="margin-left: 0;">Common threats that swarm from the void.</p>
+          </div>
+
+          <div class="card-grid reveal">
+            <!-- Drone -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">
+                <span style="font-size: 2.5rem;">🛸</span>
+              </div>
+              <h3>Drone</h3>
+              <span class="tag tag-green">Minion</span>
+              <p style="margin: 1rem 0;">Fast, simple movement. Swarms the player with speed.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">30</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 20%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">5</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 25%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">90</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 82%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charger -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 136, 51, 0.1);">
+                <span style="font-size: 2.5rem;">⚡</span>
+              </div>
+              <h3>Charger</h3>
+              <span class="tag tag-orange">Minion</span>
+              <p style="margin: 1rem 0;">Charges at the player with devastating force.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">25</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 17%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">15</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 75%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">70</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 64%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tank -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                <span style="font-size: 2.5rem;">🛡️</span>
+              </div>
+              <h3>Tank</h3>
+              <span class="tag tag-red">Minion</span>
+              <p style="margin: 1rem 0;">Slow but incredibly durable. Soaks massive damage.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">120</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 80%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">20</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">45</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 41%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shooter -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🎯</span>
+              </div>
+              <h3>Shooter</h3>
+              <span class="tag tag-blue">Minion</span>
+              <p style="margin: 1rem 0;">Keeps distance and attacks from range.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">45</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 30%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">12</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 60%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">55</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Swarm -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🦟</span>
+              </div>
+              <h3>Swarm</h3>
+              <span class="tag tag-cyan">Minion</span>
+              <p style="margin: 1rem 0;">Very fast but extremely weak. Dangerous in numbers.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">15</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 10%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">3</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 15%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">110</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Enemies -->
+          <div class="section-header" style="text-align: left; margin-top: 4rem;">
+            <h2>Special Enemies</h2>
+            <p class="section-desc" style="margin-left: 0;">Rare threats with unique abilities.</p>
+          </div>
+
+          <div class="card-grid reveal">
+            <!-- Splitter -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.1);">
+                <span style="font-size: 2.5rem;">💥</span>
+              </div>
+              <h3>Splitter</h3>
+              <span class="tag tag-magenta">Special</span>
+              <p style="margin: 1rem 0;">Splits into 2-3 mini versions on death. Multiply the threat.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">40</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 27%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-magenta);">Split</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Teleporter -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(170, 85, 255, 0.1);">
+                <span style="font-size: 2.5rem;">✨</span>
+              </div>
+              <h3>Teleporter</h3>
+              <span class="tag tag-purple">Special</span>
+              <p style="margin: 1rem 0;">Blinks every 3 seconds. Hard to predict and corner.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">35</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 23%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-purple);">Teleport</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shielder -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🔰</span>
+              </div>
+              <h3>Shielder</h3>
+              <span class="tag tag-blue">Special</span>
+              <p style="margin: 1rem 0;">120° frontal shield blocks all damage. Flank to defeat.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">50</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 33%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-blue);">Shield</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Exploder -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                <span style="font-size: 2.5rem;">💣</span>
+              </div>
+              <h3>Exploder</h3>
+              <span class="tag tag-red">Special</span>
+              <p style="margin: 1rem 0;">80 radius AOE explosion on death. Keep your distance.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">30</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 20%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">Explode</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Healer -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">
+                <span style="font-size: 2.5rem;">💚</span>
+              </div>
+              <h3>Healer</h3>
+              <span class="tag tag-green">Special</span>
+              <p style="margin: 1rem 0;">Heals nearby allies for 5 HP/s. Priority target.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">40</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 27%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">Heal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bosses -->
+          <div class="section-header" style="text-align: left; margin-top: 4rem;">
+            <h2>Bosses</h2>
+            <p class="section-desc" style="margin-left: 0;">Massive threats that require perfect execution to defeat.</p>
+          </div>
+
+          <div class="card-grid card-grid-2 reveal">
+            <!-- Mothership -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.15); width: 80px; height: 80px;">
+                <span style="font-size: 3rem;">🛸</span>
+              </div>
+              <h3 style="font-size: 1.5rem;">Mothership</h3>
+              <span class="tag tag-cyan" style="font-size: 0.85rem;">Boss</span>
+              <p style="margin: 1rem 0;">First boss encounter. Tests your dodging and DPS.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">HP</span>
+                  <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan);">1500</span>
+                </div>
+                <div class="stat-bar" style="height: 10px;">
+                  <div class="stat-bar-fill cyan" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 255, 255, 0.05); border-radius: var(--radius-md);">
+                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.75rem;">Attacks</h4>
+                <ul style="list-style: none; padding: 0;">
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Bullet Hell - Sprays projectiles in all directions</li>
+                  <li style="color: var(--text-secondary); font-size: 0.85rem;">⦿ Summon Minions - Spawns waves of Drones</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Destroyer -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.15); width: 80px; height: 80px;">
+                <span style="font-size: 3rem;">👾</span>
+              </div>
+              <h3 style="font-size: 1.5rem;">Destroyer</h3>
+              <span class="tag tag-magenta" style="font-size: 0.85rem;">Boss</span>
+              <p style="margin: 1rem 0;">Late-game boss. Extreme damage output and tankiness.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">HP</span>
+                  <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-magenta);">3000</span>
+                </div>
+                <div class="stat-bar" style="height: 10px;">
+                  <div class="stat-bar-fill magenta" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 0, 255, 0.05); border-radius: var(--radius-md);">
+                <h4 style="font-size: 0.9rem; color: var(--accent-magenta); margin-bottom: 0.75rem;">Attacks</h4>
+                <ul style="list-style: none; padding: 0;">
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Laser Sweep - Rotating beam of death</li>
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Ground Slam - AOE shockwave</li>
+                  <li style="color: var(--text-secondary); font-size: 0.85rem;">⦿ Enrage - 50% damage boost at 25% HP</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Elite Modifiers -->
+          <div class="section-header" style="text-align: left; margin-top: 4rem;">
+            <h2>Elite Modifiers</h2>
+            <p class="section-desc" style="margin-left: 0;">5% of enemies spawn with elite modifiers. They grant 3x XP.</p>
+          </div>
+
+          <div class="reveal" style="margin-bottom: 2rem;">
+            <div style="background: var(--bg-card); border: var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Modifier</th>
+                    <th>Effect</th>
+                    <th>Threat Level</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="highlight text-red">Vampiric</span></td>
+                    <td>Heals 20% of damage dealt</td>
+                    <td><span class="tag tag-red">High</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-cyan">Fast</span></td>
+                    <td>+50% movement speed</td>
+                    <td><span class="tag tag-orange">Medium</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-gold">Giant</span></td>
+                    <td>2x size, 2x HP</td>
+                    <td><span class="tag tag-gold">High</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-blue">Shielded</span></td>
+                    <td>Regenerating energy shield</td>
+                    <td><span class="tag tag-blue">Medium</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-magenta">Explosive</span></td>
+                    <td>Explodes on death (50 damage radius)</td>
+                    <td><span class="tag tag-red">High</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: var(--radius-sm);">
+                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
+                  <strong style="color: var(--accent-gold);">Elite Rewards:</strong> Killing elite enemies grants <span class="text-gold">3x XP</span> and has increased drop rates for rare items.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Comparison -->
+          <div class="section-header" style="text-align: left; margin-top: 4rem;">
+            <h2>Enemy Stats Comparison</h2>
+            <p class="section-desc" style="margin-left: 0;">Visual comparison of all regular enemy stats.</p>
+          </div>
+
+          <div class="reveal" style="margin-bottom: 2rem;">
+            <div style="background: var(--bg-card); border: var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Enemy</th>
+                    <th style="width: 30%;">Health</th>
+                    <th style="width: 30%;">Damage</th>
+                    <th style="width: 20%;">Speed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="highlight">Drone</span></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">30</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill cyan" style="width: 20%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">5</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill red" style="width: 25%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">90</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill green" style="width: 82%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Charger</span></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">25</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill cyan" style="width: 17%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">15</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill red" style="width: 75%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">70</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill green" style="width: 64%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Tank</span></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">120</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill cyan" style="width: 80%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">20</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill red" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">45</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill green" style="width: 41%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Shooter</span></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">45</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill cyan" style="width: 30%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">12</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill red" style="width: 60%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">55</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill green" style="width: 50%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Swarm</span></td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">15</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill cyan" style="width: 10%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">3</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill red" style="width: 15%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="min-width: 30px; font-size: 0.85rem;">110</span>
+                        <div class="stat-bar" style="flex: 1;">
+                          <div class="stat-bar-fill green" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Minions -->
+        <div class="tab-content" data-tab-content="minions">
+          <div class="card-grid reveal">
+            <!-- Copy of all minion cards from above -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">
+                <span style="font-size: 2.5rem;">🛸</span>
+              </div>
+              <h3>Drone</h3>
+              <span class="tag tag-green">Minion</span>
+              <p style="margin: 1rem 0;">Fast, simple movement. Swarms the player with speed.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">30</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 20%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">5</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 25%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">90</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 82%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 136, 51, 0.1);">
+                <span style="font-size: 2.5rem;">⚡</span>
+              </div>
+              <h3>Charger</h3>
+              <span class="tag tag-orange">Minion</span>
+              <p style="margin: 1rem 0;">Charges at the player with devastating force.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">25</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 17%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">15</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 75%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">70</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 64%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                <span style="font-size: 2.5rem;">🛡️</span>
+              </div>
+              <h3>Tank</h3>
+              <span class="tag tag-red">Minion</span>
+              <p style="margin: 1rem 0;">Slow but incredibly durable. Soaks massive damage.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">120</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 80%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">20</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">45</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 41%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🎯</span>
+              </div>
+              <h3>Shooter</h3>
+              <span class="tag tag-blue">Minion</span>
+              <p style="margin: 1rem 0;">Keeps distance and attacks from range.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">45</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 30%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">12</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 60%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">55</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🦟</span>
+              </div>
+              <h3>Swarm</h3>
+              <span class="tag tag-cyan">Minion</span>
+              <p style="margin: 1rem 0;">Very fast but extremely weak. Dangerous in numbers.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">15</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 10%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">DMG</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">3</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 15%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Speed</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">110</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Special -->
+        <div class="tab-content" data-tab-content="special">
+          <div class="card-grid reveal">
+            <!-- Copy of all special enemy cards -->
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.1);">
+                <span style="font-size: 2.5rem;">💥</span>
+              </div>
+              <h3>Splitter</h3>
+              <span class="tag tag-magenta">Special</span>
+              <p style="margin: 1rem 0;">Splits into 2-3 mini versions on death. Multiply the threat.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">40</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 27%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-magenta);">Split</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(170, 85, 255, 0.1);">
+                <span style="font-size: 2.5rem;">✨</span>
+              </div>
+              <h3>Teleporter</h3>
+              <span class="tag tag-purple">Special</span>
+              <p style="margin: 1rem 0;">Blinks every 3 seconds. Hard to predict and corner.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">35</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 23%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-purple);">Teleport</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                <span style="font-size: 2.5rem;">🔰</span>
+              </div>
+              <h3>Shielder</h3>
+              <span class="tag tag-blue">Special</span>
+              <p style="margin: 1rem 0;">120° frontal shield blocks all damage. Flank to defeat.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">50</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 33%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-blue);">Shield</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                <span style="font-size: 2.5rem;">💣</span>
+              </div>
+              <h3>Exploder</h3>
+              <span class="tag tag-red">Special</span>
+              <p style="margin: 1rem 0;">80 radius AOE explosion on death. Keep your distance.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">30</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 20%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-red);">Explode</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">
+                <span style="font-size: 2.5rem;">💚</span>
+              </div>
+              <h3>Healer</h3>
+              <span class="tag tag-green">Special</span>
+              <p style="margin: 1rem 0;">Heals nearby allies for 5 HP/s. Priority target.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">HP</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-cyan);">40</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 27%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.8rem; color: var(--text-secondary);">Ability</span>
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--accent-green);">Heal</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Bosses -->
+        <div class="tab-content" data-tab-content="bosses">
+          <div class="card-grid card-grid-2 reveal">
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.15); width: 80px; height: 80px;">
+                <span style="font-size: 3rem;">🛸</span>
+              </div>
+              <h3 style="font-size: 1.5rem;">Mothership</h3>
+              <span class="tag tag-cyan" style="font-size: 0.85rem;">Boss</span>
+              <p style="margin: 1rem 0;">First boss encounter. Tests your dodging and DPS.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">HP</span>
+                  <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan);">1500</span>
+                </div>
+                <div class="stat-bar" style="height: 10px;">
+                  <div class="stat-bar-fill cyan" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(0, 255, 255, 0.05); border-radius: var(--radius-md);">
+                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.75rem;">Attacks</h4>
+                <ul style="list-style: none; padding: 0;">
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Bullet Hell - Sprays projectiles in all directions</li>
+                  <li style="color: var(--text-secondary); font-size: 0.85rem;">⦿ Summon Minions - Spawns waves of Drones</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.15); width: 80px; height: 80px;">
+                <span style="font-size: 3rem;">👾</span>
+              </div>
+              <h3 style="font-size: 1.5rem;">Destroyer</h3>
+              <span class="tag tag-magenta" style="font-size: 0.85rem;">Boss</span>
+              <p style="margin: 1rem 0;">Late-game boss. Extreme damage output and tankiness.</p>
+
+              <div style="margin-top: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 600;">HP</span>
+                  <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-magenta);">3000</span>
+                </div>
+                <div class="stat-bar" style="height: 10px;">
+                  <div class="stat-bar-fill magenta" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(255, 0, 255, 0.05); border-radius: var(--radius-md);">
+                <h4 style="font-size: 0.9rem; color: var(--accent-magenta); margin-bottom: 0.75rem;">Attacks</h4>
+                <ul style="list-style: none; padding: 0;">
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Laser Sweep - Rotating beam of death</li>
+                  <li style="margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.85rem;">⦿ Ground Slam - AOE shockwave</li>
+                  <li style="color: var(--text-secondary); font-size: 0.85rem;">⦿ Enrage - 50% damage boost at 25% HP</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Elite Modifiers -->
+        <div class="tab-content" data-tab-content="modifiers">
+          <div class="reveal">
+            <div style="background: var(--bg-card); border: var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem;">
+              <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                <h2>Elite Modifiers</h2>
+                <p class="section-desc" style="margin-left: 0;">5% of enemies spawn with elite modifiers. They grant 3x XP.</p>
+              </div>
+
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Modifier</th>
+                    <th>Effect</th>
+                    <th>Threat Level</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="highlight text-red">Vampiric</span></td>
+                    <td>Heals 20% of damage dealt</td>
+                    <td><span class="tag tag-red">High</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-cyan">Fast</span></td>
+                    <td>+50% movement speed</td>
+                    <td><span class="tag tag-orange">Medium</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-gold">Giant</span></td>
+                    <td>2x size, 2x HP</td>
+                    <td><span class="tag tag-gold">High</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-blue">Shielded</span></td>
+                    <td>Regenerating energy shield</td>
+                    <td><span class="tag tag-blue">Medium</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight text-magenta">Explosive</span></td>
+                    <td>Explodes on death (50 damage radius)</td>
+                    <td><span class="tag tag-red">High</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: var(--radius-sm);">
+                <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
+                  <strong style="color: var(--accent-gold);">Elite Rewards:</strong> Killing elite enemies grants <span class="text-gold">3x XP</span> and has increased drop rates for rare items.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+</body>
+</html>

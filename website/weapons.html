@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arsenal - Cosmic Survivors</title>
+  <meta name="description" content="Master 10 unique weapons and unlock devastating evolutions in Cosmic Survivors">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-icon">✦</span>
+        COSMIC SURVIVORS
+      </a>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="weapons.html">Weapons</a></li>
+        <li><a href="enemies.html">Bestiary</a></li>
+        <li><a href="mechanics.html">Mechanics</a></li>
+        <li><a href="builds.html">Builds</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="changelog.html">Changelog</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="play.html" class="nav-cta">Play Now</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="stars-bg"></div>
+    <div class="container">
+      <h1 class="text-gradient">Arsenal</h1>
+      <p class="page-desc">Master 10 unique weapons and unlock devastating evolutions</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="section">
+      <div class="container">
+
+        <!-- Weapon Category Tabs -->
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="all">All Weapons</button>
+          <button class="tab-btn" data-tab="base">Base Weapons</button>
+          <button class="tab-btn" data-tab="advanced">Advanced Weapons</button>
+          <button class="tab-btn" data-tab="evolutions">Evolutions</button>
+        </div>
+
+        <!-- Tab Content: All Weapons -->
+        <div class="tab-content active" data-tab-content="all">
+          <div class="card-grid">
+
+            <!-- Base Weapon: Basic Laser -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">
+                🔫
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Basic Laser</h3>
+                <span class="tag tag-cyan">Projectile</span>
+              </div>
+              <p>Auto-targeting energy weapon with fast fire rate. Perfect for new survivors.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-cyan">60%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 60%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-cyan">80%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 80%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-cyan">70%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 70%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Base Weapon: Spread Shot -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                🎯
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Spread Shot</h3>
+                <span class="tag tag-blue">Area</span>
+              </div>
+              <p>Fires 5 projectiles in a fan pattern. Excellent for crowd control and covering wide areas.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-blue">50%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 50%; background: var(--accent-blue);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-blue">70%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 70%; background: var(--accent-blue);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-blue">85%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 85%; background: var(--accent-blue);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Base Weapon: Homing Missiles -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                🚀
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Homing Missiles</h3>
+                <span class="tag tag-red">Tracking</span>
+              </div>
+              <p>Smart missiles that automatically track and pursue enemies. Never miss your target.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-red">75%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 75%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-red">60%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 60%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-red">90%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 90%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Base Weapon: Plasma Cannon -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(255, 136, 51, 0.1);">
+                💥
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Plasma Cannon</h3>
+                <span class="tag tag-orange">Heavy</span>
+              </div>
+              <p>Slow but devastating plasma blasts. High damage output for experienced survivors.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-orange">95%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 95%; background: var(--accent-orange);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-orange">30%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 30%; background: var(--accent-orange);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-orange">65%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 65%; background: var(--accent-orange);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Base Weapon: Energy Shield -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">
+                🛡️
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Energy Shield</h3>
+                <span class="tag tag-green">Passive</span>
+              </div>
+              <p>Defensive aura that damages enemies on contact. Protects while dealing damage.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-green">40%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 40%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-green">100%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 100%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-green">25%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill green" style="width: 25%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Weapon: Lightning Chain -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">
+                ⚡
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Lightning Chain</h3>
+                <span class="tag tag-cyan">Chain</span>
+              </div>
+              <p>Electric discharge that chains between up to 4 enemies. Devastating against grouped foes.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-cyan">70%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 70%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-cyan">75%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 75%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-cyan">80%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 80%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Weapon: Orbital Blades -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.1);">
+                🔪
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Orbital Blades</h3>
+                <span class="tag tag-magenta">Orbital</span>
+              </div>
+              <p>Three energy blades orbit around you, slicing through anything that gets too close.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-magenta">65%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill magenta" style="width: 65%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-magenta">90%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill magenta" style="width: 90%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-magenta">35%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill magenta" style="width: 35%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Weapon: Missile Swarm -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">
+                🚀
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Missile Swarm</h3>
+                <span class="tag tag-red">Salvo</span>
+              </div>
+              <p>Launches 5 homing missiles in a devastating salvo. Overwhelming firepower.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-red">85%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 85%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-red">50%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 50%;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-red">95%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill red" style="width: 95%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Weapon: Freeze Ray -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">
+                ❄️
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Freeze Ray</h3>
+                <span class="tag tag-blue">Beam</span>
+              </div>
+              <p>Continuous beam weapon with 50% slow effect. Freeze enemies in their tracks.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-blue">55%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 55%; background: var(--accent-blue);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-blue">85%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 85%; background: var(--accent-blue);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-blue">75%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 75%; background: var(--accent-blue);"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Advanced Weapon: Black Hole -->
+            <div class="card reveal">
+              <div class="card-icon" style="background: rgba(170, 85, 255, 0.1);">
+                🌀
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Black Hole</h3>
+                <span class="tag tag-purple">Gravity</span>
+              </div>
+              <p>Creates a gravitational vortex that pulls enemies in and crushes them.</p>
+
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span>
+                  <span class="text-purple">80%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 80%; background: var(--accent-purple);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span>
+                  <span class="text-purple">40%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 40%; background: var(--accent-purple);"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span>
+                  <span class="text-purple">60%</span>
+                </div>
+                <div class="stat-bar">
+                  <div class="stat-bar-fill cyan" style="width: 60%; background: var(--accent-purple);"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab Content: Base Weapons -->
+        <div class="tab-content" data-tab-content="base">
+          <div class="card-grid">
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">🔫</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Basic Laser</h3>
+                <span class="tag tag-cyan">Projectile</span>
+              </div>
+              <p>Auto-targeting energy weapon with fast fire rate. Perfect for new survivors.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-cyan">60%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 60%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-cyan">80%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 80%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-cyan">70%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 70%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">🎯</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Spread Shot</h3>
+                <span class="tag tag-blue">Area</span>
+              </div>
+              <p>Fires 5 projectiles in a fan pattern. Excellent for crowd control and covering wide areas.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-blue">50%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 50%; background: var(--accent-blue);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-blue">70%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 70%; background: var(--accent-blue);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-blue">85%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 85%; background: var(--accent-blue);"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">🚀</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Homing Missiles</h3>
+                <span class="tag tag-red">Tracking</span>
+              </div>
+              <p>Smart missiles that automatically track and pursue enemies. Never miss your target.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-red">75%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 75%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-red">60%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 60%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-red">90%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 90%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 136, 51, 0.1);">💥</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Plasma Cannon</h3>
+                <span class="tag tag-orange">Heavy</span>
+              </div>
+              <p>Slow but devastating plasma blasts. High damage output for experienced survivors.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-orange">95%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 95%; background: var(--accent-orange);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-orange">30%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 30%; background: var(--accent-orange);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-orange">65%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 65%; background: var(--accent-orange);"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 255, 136, 0.1);">🛡️</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Energy Shield</h3>
+                <span class="tag tag-green">Passive</span>
+              </div>
+              <p>Defensive aura that damages enemies on contact. Protects while dealing damage.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-green">40%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill green" style="width: 40%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-green">100%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill green" style="width: 100%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-green">25%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill green" style="width: 25%;"></div></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab Content: Advanced Weapons -->
+        <div class="tab-content" data-tab-content="advanced">
+          <div class="card-grid">
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(0, 255, 255, 0.1);">⚡</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Lightning Chain</h3>
+                <span class="tag tag-cyan">Chain</span>
+              </div>
+              <p>Electric discharge that chains between up to 4 enemies. Devastating against grouped foes.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-cyan">70%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 70%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-cyan">75%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 75%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-cyan">80%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 80%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 0, 255, 0.1);">🔪</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Orbital Blades</h3>
+                <span class="tag tag-magenta">Orbital</span>
+              </div>
+              <p>Three energy blades orbit around you, slicing through anything that gets too close.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-magenta">65%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill magenta" style="width: 65%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-magenta">90%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill magenta" style="width: 90%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-magenta">35%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill magenta" style="width: 35%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(255, 51, 85, 0.1);">🚀</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Missile Swarm</h3>
+                <span class="tag tag-red">Salvo</span>
+              </div>
+              <p>Launches 5 homing missiles in a devastating salvo. Overwhelming firepower.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-red">85%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 85%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-red">50%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 50%;"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-red">95%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill red" style="width: 95%;"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(51, 136, 255, 0.1);">❄️</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Freeze Ray</h3>
+                <span class="tag tag-blue">Beam</span>
+              </div>
+              <p>Continuous beam weapon with 50% slow effect. Freeze enemies in their tracks.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span class="text-blue">55%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 55%; background: var(--accent-blue);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span class="text-blue">85%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 85%; background: var(--accent-blue);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span class="text-blue">75%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 75%; background: var(--accent-blue);"></div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-icon" style="background: rgba(170, 85, 255, 0.1);">🌀</div>
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3>Black Hole</h3>
+                <span class="tag tag-purple">Gravity</span>
+              </div>
+              <p>Creates a gravitational vortex that pulls enemies in and crushes them.</p>
+              <div style="margin-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                  <span>Damage</span><span style="color: var(--accent-purple);">80%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 80%; background: var(--accent-purple);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Speed</span><span style="color: var(--accent-purple);">40%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 40%; background: var(--accent-purple);"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem; margin-top: 0.5rem;">
+                  <span>Range</span><span style="color: var(--accent-purple);">60%</span>
+                </div>
+                <div class="stat-bar"><div class="stat-bar-fill cyan" style="width: 60%; background: var(--accent-purple);"></div></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tab Content: Evolutions -->
+        <div class="tab-content" data-tab-content="evolutions">
+
+          <div class="section-header" style="margin-bottom: 2rem;">
+            <h2>Weapon Evolutions</h2>
+            <p class="section-desc">Combine base weapons with specific upgrades to unlock devastating evolved forms</p>
+          </div>
+
+          <!-- Evolution Cards -->
+          <div class="card-grid card-grid-2" style="margin-bottom: 3rem;">
+
+            <!-- Death Ray Evolution -->
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">💀</div>
+                <div>
+                  <h3 class="text-gradient">Death Ray</h3>
+                  <span class="tag tag-gold">Evolution</span>
+                </div>
+              </div>
+              <p style="margin-bottom: 1rem;"><strong>Basic Laser + Damage Boost</strong></p>
+              <p>The ultimate beam weapon that penetrates through all enemies in its path. Nothing can escape the Death Ray's focused destruction.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: 4px;">
+                <p style="font-size: 0.85rem; margin: 0;"><strong>Special:</strong> Infinite pierce, +150% damage, increased beam width</p>
+              </div>
+            </div>
+
+            <!-- Bullet Storm Evolution -->
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">🌪️</div>
+                <div>
+                  <h3 class="text-gradient">Bullet Storm</h3>
+                  <span class="tag tag-gold">Evolution</span>
+                </div>
+              </div>
+              <p style="margin-bottom: 1rem;"><strong>Spread Shot + Multishot</strong></p>
+              <p>Creates an impenetrable wall of projectiles. Fires 20 projectiles in a massive arc, covering the entire screen with devastating firepower.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: 4px;">
+                <p style="font-size: 0.85rem; margin: 0;"><strong>Special:</strong> 20 projectiles, 360° coverage, +80% fire rate</p>
+              </div>
+            </div>
+
+            <!-- Smart Missiles Evolution -->
+            <div class="card">
+              <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="font-size: 2.5rem;">🎯</div>
+                <div>
+                  <h3 class="text-gradient">Smart Missiles</h3>
+                  <span class="tag tag-gold">Evolution</span>
+                </div>
+              </div>
+              <p style="margin-bottom: 1rem;"><strong>Homing Missiles + Piercing</strong></p>
+              <p>Advanced missiles with perfect tracking AI and explosive payloads. Each missile pierces through targets and explodes on impact.</p>
+              <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 215, 0, 0.05); border-left: 3px solid var(--accent-gold); border-radius: 4px;">
+                <p style="font-size: 0.85rem; margin: 0;"><strong>Special:</strong> Perfect tracking, explosion on hit, +200% damage, pierce 3</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Evolution Requirements Table -->
+          <div style="margin-top: 3rem;">
+            <h3 style="margin-bottom: 1.5rem; text-align: center;">Evolution Requirements</h3>
+            <div style="overflow-x: auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Base Weapon</th>
+                    <th>Required Upgrade</th>
+                    <th>Evolution</th>
+                    <th>Unlock Level</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="highlight">Basic Laser</span></td>
+                    <td>Damage Boost (Max Level)</td>
+                    <td class="text-gold">Death Ray</td>
+                    <td>Level 7</td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Spread Shot</span></td>
+                    <td>Multishot (Max Level)</td>
+                    <td class="text-gold">Bullet Storm</td>
+                    <td>Level 7</td>
+                  </tr>
+                  <tr>
+                    <td><span class="highlight">Homing Missiles</span></td>
+                    <td>Piercing (Max Level)</td>
+                    <td class="text-gold">Smart Missiles</td>
+                    <td>Level 7</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Weapon Stats Comparison Section -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Weapon Statistics</h2>
+          <p class="section-desc">Detailed comparison of all weapons</p>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Weapon Name</th>
+                <th>Type</th>
+                <th>Damage</th>
+                <th>Fire Rate</th>
+                <th>Special Ability</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="highlight">Basic Laser</span></td>
+                <td><span class="tag tag-cyan">Projectile</span></td>
+                <td>Medium</td>
+                <td>Fast</td>
+                <td>Auto-targeting</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Spread Shot</span></td>
+                <td><span class="tag tag-blue">Area</span></td>
+                <td>Low</td>
+                <td>Medium</td>
+                <td>5-way fan pattern</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Homing Missiles</span></td>
+                <td><span class="tag tag-red">Tracking</span></td>
+                <td>High</td>
+                <td>Slow</td>
+                <td>Perfect tracking</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Plasma Cannon</span></td>
+                <td><span class="tag tag-orange">Heavy</span></td>
+                <td>Very High</td>
+                <td>Very Slow</td>
+                <td>Splash damage</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Energy Shield</span></td>
+                <td><span class="tag tag-green">Passive</span></td>
+                <td>Low</td>
+                <td>Continuous</td>
+                <td>Contact damage</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Lightning Chain</span></td>
+                <td><span class="tag tag-cyan">Chain</span></td>
+                <td>Medium-High</td>
+                <td>Fast</td>
+                <td>Chains 4 enemies</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Orbital Blades</span></td>
+                <td><span class="tag tag-magenta">Orbital</span></td>
+                <td>Medium</td>
+                <td>Very Fast</td>
+                <td>Melee range</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Missile Swarm</span></td>
+                <td><span class="tag tag-red">Salvo</span></td>
+                <td>Very High</td>
+                <td>Slow</td>
+                <td>5 missile burst</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Freeze Ray</span></td>
+                <td><span class="tag tag-blue">Beam</span></td>
+                <td>Medium</td>
+                <td>Fast</td>
+                <td>50% slow effect</td>
+              </tr>
+              <tr>
+                <td><span class="highlight">Black Hole</span></td>
+                <td><span class="tag tag-purple">Gravity</span></td>
+                <td>High</td>
+                <td>Slow</td>
+                <td>Pull + crush</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: var(--bg-card); border-radius: var(--radius-lg); border: var(--border-glow);">
+          <h3 style="margin-bottom: 1rem;">Upgrade Tips</h3>
+          <div style="display: grid; gap: 1rem;">
+            <p><span class="text-cyan">⚡</span> <strong>Early Game:</strong> Focus on fire rate and projectile speed to quickly clear small enemies</p>
+            <p><span class="text-magenta">💎</span> <strong>Mid Game:</strong> Invest in damage multipliers and area-of-effect upgrades</p>
+            <p><span class="text-gold">✦</span> <strong>Late Game:</strong> Maximize evolution potential by getting required upgrades to max level</p>
+            <p><span class="text-red">🔥</span> <strong>Pro Tip:</strong> Combine high fire rate weapons with slow heavy hitters for balanced coverage</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo text-gradient">✦ COSMIC SURVIVORS</div>
+          <p>A Bullet Heaven roguelite set in deep space. Survive endless waves, collect weapons, and become the ultimate cosmic warrior.</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord">💬</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="YouTube">📺</a>
+            <a href="#" aria-label="Reddit">🔴</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Game</h4>
+          <ul>
+            <li><a href="about.html">About</a></li>
+            <li><a href="weapons.html">Weapons</a></li>
+            <li><a href="enemies.html">Bestiary</a></li>
+            <li><a href="mechanics.html">Mechanics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <ul>
+            <li><a href="builds.html">Builds</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="changelog.html">Changelog</a></li>
+            <li><a href="media.html">Media</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Play</h4>
+          <ul>
+            <li><a href="play.html">Play in Browser</a></li>
+            <li><a href="#">System Requirements</a></li>
+            <li><a href="#">Bug Report</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Cosmic Survivors. Built with Phaser 4 + bitECS. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
